@@ -24,3 +24,8 @@ void Item::setLimited(int newLimited)
 {
     limited = newLimited;
 }
+
+int Item::getId() const
+{
+    return id;
+}

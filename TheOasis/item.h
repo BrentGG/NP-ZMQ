@@ -17,14 +17,16 @@ public:
         MYTHIC // red
     };
 
-    Item(QString name, Rarity rarity, int ogValue, int limited = -1);
+    Item(int id, QString name, Rarity rarity, int ogValue, int limited = -1);
 
+    int getId() const;
     QString getName() const;
-    void setRarity(Rarity newRarity);
     int getOgValue() const;
-    void setLimited(int newLimited);
+    Rarity getRarity() const;
+    int getLimited() const;
 
 private:
+    int id;
     QString name;
     Rarity rarity;
     int ogValue;
