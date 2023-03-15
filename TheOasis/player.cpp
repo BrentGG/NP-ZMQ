@@ -4,3 +4,38 @@ Player::Player(QString name, int money, int health, int happiness, int satiation
 {
 
 }
+
+QString Player::getName() const
+{
+    return name;
+}
+
+int Player::getMoney() const
+{
+    return money;
+}
+
+int Player::getHealth() const
+{
+    return health;
+}
+
+int Player::getHappiness() const
+{
+    return happiness;
+}
+
+int Player::getSatiation() const
+{
+    return satiation;
+}
+
+int Player::getHydration() const
+{
+    return hydration;
+}
+
+QList<Item *> Player::getItems() const
+{
+    return items;
+}
