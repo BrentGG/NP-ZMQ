@@ -7,9 +7,7 @@
 class Item
 {
 public:
-    Item();
-
-    enum class Rarity {
+    enum Rarity {
         COMMON, // grey
         UNCOMMON, // green
         RARE, // light blue
@@ -18,6 +16,13 @@ public:
         LEGENDARY, // yellow
         MYTHIC // red
     };
+
+    Item(QString name, Rarity rarity, int ogValue, int limited = -1);
+
+    QString getName() const;
+    void setRarity(Rarity newRarity);
+    int getOgValue() const;
+    void setLimited(int newLimited);
 
 private:
     QString name;
