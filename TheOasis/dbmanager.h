@@ -13,6 +13,7 @@ public:
     DbManager(QString path);
 
     bool addPlayer(Player *player, QString password);
+
 private:
     QSqlDatabase db;
 };

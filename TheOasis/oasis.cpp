@@ -1,11 +1,12 @@
 #include "oasis.h"
 
 #include <iostream>
+#include <QDir>
 
 Oasis::Oasis(QCoreApplication *coreApp)
 {
     try {
-        dbManager = new DbManager("./theoasis.db");
+        dbManager = new DbManager(QDir("../TheOasis/oasis_db.db").absolutePath());
 
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
@@ -17,6 +18,9 @@ Oasis::Oasis(QCoreApplication *coreApp)
     }
 }
 
+/**
+ * @brief Runs the Oasis by connecting the pusher and subscriber, sub
+ */
 void Oasis::run()
 {
     try {
@@ -35,27 +39,44 @@ void Oasis::run()
     }
 }
 
+/**
+ * @brief Handles incoming messages and calls the appropriate method to deal with each message.
+ * @param messages: messages to process
+ */
 void Oasis::handleMessage(const QList<QByteArray> &messages)
 {
-    for( const QByteArray & message : messages ) {
+    for(const QByteArray &message : messages) {
         std::cout << "Recieved: " << message.toStdString() << std::endl;
-        /*QString msg = QString(message);
+        QString msg = QString::fromStdString(message.toStdString());
         QList<QString> parts = msg.split(">");
         if (parts.size() > 1) {
-            if (parts[1].compare("register") == 1) {
-
+            if (parts[1].compare("register?") == 0) {
+                registerPlayer(parts);
             }
-        }*/
+        }
     }
 }
 
-/*
+/**
+ * @brief Registers a player in the Oasis.
+ * @param request: the request to register, split into parts seperated by '>'
+ * @returns true if registering was successful, false if not
  * REQ: theoasis>register?>[username:string]>[password:string]>
  * RES: theoasis>register!>[username:string]>[success:bool]> (client should subscribe to topic including username they sent)
+ * TODO: Make password secure
  */
-bool registerPlayer(QList<QString> input) {
-    if (input.size() >= 4) {
-
+bool Oasis::registerPlayer(QList<QString> request) {
+    bool success = false;
+    if (request.size() >= 4) {
+        success = dbManager->addPlayer(new Player(request[2]), request[3]);
+        if (success) {
+            std::cout << "Registered new player: " << request[2].toStdString() << std::endl;
+        }
     }
-    return false;
+    QString response = QString("theoasis>register!>");
+    response.append(request[2] + ">" + (success ? "true" : "false") + ">");
+    std::cout << "Sent: " << response.toStdString() << std::endl;
+    nzmqt::ZMQMessage responseZmq = nzmqt::ZMQMessage(response.toUtf8());
+    pusher->sendMessage(responseZmq);
+    return success;
 }

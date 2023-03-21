@@ -19,7 +19,7 @@ bool DbManager::addPlayer(Player *player, QString password)
 {
     bool success = false;
     QSqlQuery query;
-    query.prepare("INSERT INTO players (name, password, money, health, happiness, satiation, hydration, items) VALUES (:name, :password, :money, :health, :happiness, :satiation, :hydration, :items)");
+    query.prepare("INSERT INTO Players (name, password, money, health, happiness, satiation, hydration, items) VALUES (:name, :password, :money, :health, :happiness, :satiation, :hydration, :items)");
     query.bindValue(":name", player->getName());
     query.bindValue(":password", password);
     query.bindValue(":money", player->getMoney());
@@ -27,10 +27,10 @@ bool DbManager::addPlayer(Player *player, QString password)
     query.bindValue(":happiness", player->getHappiness());
     query.bindValue(":satiation", player->getSatiation());
     query.bindValue(":hydration", player->getHydration());
-    query.bindValue(":items", ""); // TODO: convert item list to string
+    query.bindValue(":items", "0"); // TODO: convert item list to string
     if(query.exec())
        success = true;
     else
-        std::cout << "addPlayer error:" << query.lastError().text().toStdString() << std::endl;
+        std::cout << "addPlayer error: " << query.lastError().text().toStdString() << std::endl;
     return success;
 }
