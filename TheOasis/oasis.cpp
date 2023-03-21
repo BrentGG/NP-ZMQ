@@ -30,6 +30,7 @@ void Oasis::run()
             std::cerr << "Pusher and/or subscriber not connected." << std::endl;
         }
 
+        subscriber->subscribeTo("theoasis>help?>");
         subscriber->subscribeTo("theoasis>register?>");
 
         context->start();
@@ -50,15 +51,53 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
         QString msg = QString::fromStdString(message.toStdString());
         QList<QString> parts = msg.split(">");
         if (parts.size() > 1) {
-            if (parts[1].compare("register?") == 0) {
+            if (parts[1].compare("help?") == 0)
+                sendHelp();
+            else if (parts[1].compare("register?") == 0)
                 registerPlayer(parts);
-            }
         }
     }
 }
 
 /**
- * @brief Registers a player in the Oasis.
+ * @brief Sends a message using the pusher
+ * @param message: the message to be sent
+ */
+void Oasis::sendMessage(QString message)
+{
+    nzmqt::ZMQMessage responseZmq = nzmqt::ZMQMessage(message.toUtf8());
+    pusher->sendMessage(responseZmq);
+    std::cout << "Sent: " << message.toStdString() << std::endl;
+}
+
+/**
+ * @brief Sends a help message for those unfamiliar with The Oasis
+ */
+void Oasis::sendHelp()
+{
+    QString response = QString("\n \
+        Welcome To The Oasis!\n\n \
+        Here are the requests you can make to The Oasis, as well as the responses you can expect.\n \
+        The response might contain some variables, these will be indicated by square brackets '[]'.\n \
+        Additionally, curly brackets '{}' are used to signify which part of the response is the topic you should subscribe to.\n\n \
+        These requests are available to anyone:\n \
+        - Receive an informational message from The Oasis.\n \
+          REQ: theoasis>info?>\n \
+          RES: {theoasis>info!>}[info:string]>\n \
+        - Receive all the possible requests and responses (a.k.a. the message you're reading right now).\n \
+          REQ: theoasis>help?>\n \
+          RES: {theoasis>help!>}[help:string]>\n \
+        - Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false.\n \
+          REQ: theoasis>register?>[username:string]>[password:string]>\n \
+          RES: {theoasis>register!>[username:string]>}[success:bool]>\n \
+        These requests are only available after registering: \n \
+        W.I.P.\n \
+        ");
+    sendMessage(response);
+}
+
+/**
+ * @brief Registers a player in The Oasis.
  * @param request: the request to register, split into parts seperated by '>'
  * @returns true if registering was successful, false if not
  * REQ: theoasis>register?>[username:string]>[password:string]>
@@ -75,8 +114,6 @@ bool Oasis::registerPlayer(QList<QString> request) {
     }
     QString response = QString("theoasis>register!>");
     response.append(request[2] + ">" + (success ? "true" : "false") + ">");
-    std::cout << "Sent: " << response.toStdString() << std::endl;
-    nzmqt::ZMQMessage responseZmq = nzmqt::ZMQMessage(response.toUtf8());
-    pusher->sendMessage(responseZmq);
+    sendMessage(response);
     return success;
 }

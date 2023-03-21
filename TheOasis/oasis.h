@@ -18,6 +18,9 @@ public:
     void run();
 
     void handleMessage(const QList<QByteArray>& messages);
+    void sendMessage(QString message);
+
+    void sendHelp();
     bool registerPlayer(QList<QString> input);
 
 private:
