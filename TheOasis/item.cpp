@@ -1,8 +1,13 @@
 #include "item.h"
 
-Item::Item(QString name, Rarity rarity, int ogValue, int limited) : name(name), rarity(rarity), ogValue(ogValue), limited(limited)
+Item::Item(int id, QString name, Rarity rarity, int ogValue, int limited) : id(id), name(name), rarity(rarity), ogValue(ogValue), limited(limited)
 {
 
+}
+
+int Item::getId() const
+{
+    return id;
 }
 
 QString Item::getName() const
@@ -10,9 +15,9 @@ QString Item::getName() const
     return name;
 }
 
-void Item::setRarity(Rarity newRarity)
+Item::Rarity Item::getRarity() const
 {
-    rarity = newRarity;
+    return rarity;
 }
 
 int Item::getOgValue() const
@@ -20,12 +25,7 @@ int Item::getOgValue() const
     return ogValue;
 }
 
-void Item::setLimited(int newLimited)
+int Item::getLimited() const
 {
-    limited = newLimited;
-}
-
-int Item::getId() const
-{
-    return id;
+    return limited;
 }
