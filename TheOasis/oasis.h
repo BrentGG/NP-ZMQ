@@ -20,6 +20,7 @@ public:
     void handleMessage(const QList<QByteArray>& messages);
     void sendMessage(QString message);
 
+    void sendInfo();
     void sendHelp();
     bool registerPlayer(QList<QString> input);
 
