@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QTimer>
 #include <QCryptographicHash>
+#include <QDateTime>
 
 Oasis::Oasis(QCoreApplication *coreApp)
 {
@@ -16,10 +17,15 @@ Oasis::Oasis(QCoreApplication *coreApp)
 
         QObject::connect(subscriber, &nzmqt::ZMQSocket::messageReceived, this, &Oasis::handleMessage);
 
-        // Send ad every 3 minutes
-        QTimer *timer = new QTimer(this);
-        QObject::connect(timer, &QTimer::timeout, this, &Oasis::sendAd);
-        timer->start(60000 * 3);
+        // Send ad every X minutes
+        QTimer *adTimer = new QTimer(this);
+        QObject::connect(adTimer, &QTimer::timeout, this, &Oasis::sendAd);
+        adTimer->start(60000 * 3);
+
+        // Check online status
+        QTimer *statusTimer = new QTimer(this);
+        QObject::connect(statusTimer, &QTimer::timeout, this, &Oasis::checkStatus);
+        statusTimer->start(15 * 60 * 1000);
     }
     catch(nzmqt::ZMQException & ex) {
         std::cerr << "Caught an exception : " << ex.what();
@@ -189,10 +195,26 @@ bool Oasis::loginPlayer(QList<QString> request)
         if (player != nullptr) {
             std::cout << "Logged in player: " << request[2].toStdString() << std::endl;
             activePlayers.append(player);
+            player->setOnlineSince(QDateTime::currentSecsSinceEpoch());
         }
     }
     QString response = QString("theoasis>login!>");
     response.append(request[2] + ">" + (player != nullptr ? "true" : "false") + ">" + (player != nullptr ? "Successfully logged in! Welcome back to The Oasis!>" : "Login failed, wrong username and/or password.>"));
     sendMessage(response);
     return player != nullptr;
+}
+
+/**
+ * @brief Checks if any of the active players have gone inactive and removes those from the active list.
+ */
+void Oasis::checkStatus()
+{
+    int i = 0;
+    long long currentTime = QDateTime::currentSecsSinceEpoch();
+    while (i < activePlayers.size()) {
+        if (currentTime - activePlayers[i]->getOnlineSince() > 15 * 60)
+            activePlayers.remove(i);
+        else
+            ++i;
+    }
 }

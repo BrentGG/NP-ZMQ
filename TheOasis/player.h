@@ -19,6 +19,9 @@ public:
     int getSatiation() const;
     int getHydration() const;
     QList<Item *> getItems() const;
+    long long getOnlineSince() const;
+
+    void setOnlineSince(long long newOnlineSince);
 
 private:
     QString name;
@@ -28,6 +31,8 @@ private:
     int satiation;
     int hydration;
     QList<Item*> items;
+
+    long long onlineSince;
 };
 
 #endif // PLAYER_H

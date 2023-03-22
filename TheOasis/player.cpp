@@ -39,3 +39,13 @@ QList<Item *> Player::getItems() const
 {
     return items;
 }
+
+long long Player::getOnlineSince() const
+{
+    return onlineSince;
+}
+
+void Player::setOnlineSince(long long newOnlineSince)
+{
+    onlineSince = newOnlineSince;
+}
