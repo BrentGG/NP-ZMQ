@@ -1,6 +1,7 @@
 #include "item.h"
 
-Item::Item(int id, QString name, Rarity rarity, int ogValue, int limited) : id(id), name(name), rarity(rarity), ogValue(ogValue), limited(limited)
+Item::Item(int id, QString name, Rarity rarity, int ogValue, int limited, bool consumable, QString effectParam, int effectValue) :
+    id(id), name(name), rarity(rarity), ogValue(ogValue), limited(limited), consumable(consumable), effectParam(effectParam), effectValue(effectValue)
 {
 
 }
@@ -28,4 +29,19 @@ int Item::getOgValue() const
 int Item::getLimited() const
 {
     return limited;
+}
+
+bool Item::getConsumable() const
+{
+    return consumable;
+}
+
+const QString &Item::getEffectParam() const
+{
+    return effectParam;
+}
+
+int Item::getEffectValue() const
+{
+    return effectValue;
 }
