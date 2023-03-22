@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <QDir>
+#include <QTimer>
 
 Oasis::Oasis(QCoreApplication *coreApp)
 {
@@ -11,7 +12,13 @@ Oasis::Oasis(QCoreApplication *coreApp)
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
         subscriber = context->createSocket(nzmqt::ZMQSocket::TYP_SUB, context);
+
         QObject::connect(subscriber, &nzmqt::ZMQSocket::messageReceived, this, &Oasis::handleMessage);
+
+        // Send ad every 3 minutes
+        QTimer *timer = new QTimer(this);
+        QObject::connect(timer, &QTimer::timeout, this, &Oasis::sendAd);
+        timer->start(60000 * 3);
     }
     catch(nzmqt::ZMQException & ex) {
         std::cerr << "Caught an exception : " << ex.what();
@@ -60,6 +67,15 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                 registerPlayer(parts);
         }
     }
+}
+
+/**
+ * @brief Send out an ad for The Oasis
+ */
+void Oasis::sendAd()
+{
+    QString response = QString("Join The Oasis Now! Request 'theoasis>info?>' and subscribe to 'theoasis>info!>'.");
+    sendMessage(response);
 }
 
 /**

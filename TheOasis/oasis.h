@@ -17,12 +17,15 @@ public:
 
     void run();
 
-    void handleMessage(const QList<QByteArray>& messages);
     void sendMessage(QString message);
 
     void sendInfo();
     void sendHelp();
     bool registerPlayer(QList<QString> input);
+
+private slots:
+    void handleMessage(const QList<QByteArray>& messages);
+    void sendAd();
 
 private:
     DbManager *dbManager;
