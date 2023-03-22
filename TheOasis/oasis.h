@@ -21,7 +21,8 @@ public:
 
     void sendInfo();
     void sendHelp();
-    bool registerPlayer(QList<QString> input);
+    bool registerPlayer(QList<QString> request);
+    bool loginPlayer(QList<QString> request);
 
 private slots:
     void handleMessage(const QList<QByteArray>& messages);
@@ -33,6 +34,8 @@ private:
     nzmqt::ZMQContext *context;
     nzmqt::ZMQSocket *pusher;
     nzmqt::ZMQSocket *subscriber;
+
+    QList<Player*> activePlayers;
 };
 
 #endif // THEOASIS_H

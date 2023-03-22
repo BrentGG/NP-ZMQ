@@ -41,6 +41,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>info?>");
         subscriber->subscribeTo("theoasis>help?>");
         subscriber->subscribeTo("theoasis>register?>");
+        subscriber->subscribeTo("theoasis>login?>");
 
         context->start();
     }
@@ -66,6 +67,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                 sendHelp();
             else if (parts[1].compare("register?") == 0)
                 registerPlayer(parts);
+            else if (parts[1].compare("login?") == 0)
+                loginPlayer(parts);
         }
     }
 }
@@ -135,10 +138,13 @@ These requests are available to anyone:\n\
 - Receive all the possible requests and responses (a.k.a. the message you're reading right now).\n\
   REQ: theoasis>help?>\n\
   RES: {theoasis>help!>}[help:string]>\n\
-- Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false. The password must be MD5 hashed (see https://doc.qt.io/qt-5/qcryptographichash.html).\n\
+- Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false.\n\
   REQ: theoasis>register?>[username:string]>[password:string]>\n\
   RES: {theoasis>register!>[username:string]>}[success:bool]>[message:string]>\n\
-\nThese requests are only available after registering: \n\
+- Login to The Oasis. Must be registered first.\n\
+  REQ: theoasis>login?>[username:string]>[password:string]>\n\
+  RES: {theoasis>login!>[username:string]>}[success:bool]>[message:string]>\n\
+\nThese requests are only available after registering and logging in: \n\
 W.I.P.\n\
 ");
     sendMessage(response);
@@ -149,7 +155,7 @@ W.I.P.\n\
  * @param request: the request to register, split into parts seperated by '>'
  * @returns true if registering was successful, false if not
  * REQ: theoasis>register?>[username:string]>[password:string]>
- * RES: theoasis>register!>[username:string]>[success:bool]>[message:string]> (client should subscribe to topic including username they sent)
+ * RES: {theoasis>register!>[username:string]>}[success:bool]>[message:string]>
  * Passwords that are sent to the server should already be hashed but I hash them again just in case they werent hashed.
  */
 bool Oasis::registerPlayer(QList<QString> request) {
@@ -165,4 +171,28 @@ bool Oasis::registerPlayer(QList<QString> request) {
     response.append(request[2] + ">" + (success ? "true" : "false") + ">" + (success ? "Successfully registered! Welcome to The Oasis!>" : "Registration failed, try a different username.>"));
     sendMessage(response);
     return success;
+}
+
+/**
+ * @brief Login to The Oasis
+ * @param request: the request to loging, split into parts separated by '>'
+ * @return true if succesfully logged in, false if not
+ * REQ: theoasis>login?>[username:string]>[password:string]>
+ * RES: {theoasis>login!>[username:string]>}[success:bool]>[message:string]>
+ */
+bool Oasis::loginPlayer(QList<QString> request)
+{
+    Player *player = nullptr;
+    if (request.size() >= 4) {
+        QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
+        player = dbManager->getPlayerByNameAndPassword(request[2], hashedPassword);
+        if (player != nullptr) {
+            std::cout << "Logged in player: " << request[2].toStdString() << std::endl;
+            activePlayers.append(player);
+        }
+    }
+    QString response = QString("theoasis>login!>");
+    response.append(request[2] + ">" + (player != nullptr ? "true" : "false") + ">" + (player != nullptr ? "Successfully logged in! Welcome back to The Oasis!>" : "Login failed, wrong username and/or password.>"));
+    sendMessage(response);
+    return player != nullptr;
 }

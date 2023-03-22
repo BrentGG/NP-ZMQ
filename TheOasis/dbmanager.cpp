@@ -1,4 +1,5 @@
 #include "dbmanager.h"
+#include "player.h"
 
 #include <iostream>
 #include <QSqlQuery>
@@ -33,4 +34,19 @@ bool DbManager::addPlayer(Player *player, QString password)
     else
         std::cout << "addPlayer error: " << query.lastError().text().toStdString() << std::endl;
     return success;
+}
+
+Player* DbManager::getPlayerByNameAndPassword(QString name, QString password)
+{
+    QSqlQuery query;
+    query.prepare("SELECT * FROM Players WHERE name=:name AND password=:password");
+    query.bindValue(":name", name);
+    query.bindValue(":password", password);
+    if(query.exec()) {
+        query.first();
+        if (query.isValid())
+            return new Player(query.value(0).toString(), query.value(2).toInt(), query.value(3).toInt(), query.value(4).toInt(), query.value(5).toInt(), query.value(6).toInt());
+    }
+    std::cout << "addPlayer error: " << query.lastError().text().toStdString() << std::endl;
+    return nullptr;
 }
