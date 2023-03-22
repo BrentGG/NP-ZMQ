@@ -3,6 +3,7 @@
 #include <iostream>
 #include <QDir>
 #include <QTimer>
+#include <QCryptographicHash>
 
 Oasis::Oasis(QCoreApplication *coreApp)
 {
@@ -107,7 +108,8 @@ and become a powerful superhero, a world-renowned assassin, or anything in betwe
 Join us in The Oasis today and start living your best life. Don't let the monotony of reality hold you back any longer. \
 The Oasis is waiting for you. \n\n\
 To get an overview of all the possible request, send the following request 'theoasis>help?>' and subscribe to 'theoasis>help!>'.\n\
-To register to The Oasis, send the following request 'theoasis>register?>[username:string]>[password:string]>' and subscribe to 'theoasis>register!>[username:string]>'.\n\n\
+To register to The Oasis, send the following request 'theoasis>register?>[username:string]>[password:string]>' and subscribe to 'theoasis>register!>[username:string]>'. \
+Make sure to hash your password for your own security.\n\n\
 ");
     sendMessage(response);
 }
@@ -124,6 +126,8 @@ For some general information about what The Oasis is, send the following request
 Here are the requests you can make to The Oasis, as well as the responses you can expect.\n\
 The response might contain some variables, these will be indicated by square brackets '[]'.\n\
 Additionally, curly brackets '{}' are used to signify which part of the response is the topic you should subscribe to.\n\n\
+All passwords that are sent to the service should be hashed for your own security(see https://doc.qt.io/qt-5/qcryptographichash.html). \
+However, passwords will also be hashed again in the service.\n\n\
 These requests are available to anyone:\n\
 - Receive an informational message from The Oasis.\n\
   REQ: theoasis>info?>\n\
@@ -131,7 +135,7 @@ These requests are available to anyone:\n\
 - Receive all the possible requests and responses (a.k.a. the message you're reading right now).\n\
   REQ: theoasis>help?>\n\
   RES: {theoasis>help!>}[help:string]>\n\
-- Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false.\n\
+- Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false. The password must be MD5 hashed (see https://doc.qt.io/qt-5/qcryptographichash.html).\n\
   REQ: theoasis>register?>[username:string]>[password:string]>\n\
   RES: {theoasis>register!>[username:string]>}[success:bool]>\n\
 \nThese requests are only available after registering: \n\
@@ -146,12 +150,13 @@ W.I.P.\n\
  * @returns true if registering was successful, false if not
  * REQ: theoasis>register?>[username:string]>[password:string]>
  * RES: theoasis>register!>[username:string]>[success:bool]> (client should subscribe to topic including username they sent)
- * TODO: Make password secure
+ * Passwords that are sent to the server should already be hashed but I hash them again just in case they werent hashed.
  */
 bool Oasis::registerPlayer(QList<QString> request) {
     bool success = false;
     if (request.size() >= 4) {
-        success = dbManager->addPlayer(new Player(request[2]), request[3]);
+        QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
+        success = dbManager->addPlayer(new Player(request[2]), hashedPassword);
         if (success) {
             std::cout << "Registered new player: " << request[2].toStdString() << std::endl;
         }
