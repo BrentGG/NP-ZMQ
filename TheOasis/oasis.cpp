@@ -190,6 +190,14 @@ bool Oasis::loginPlayer(QList<QString> request)
 {
     Player *player = nullptr;
     if (request.size() >= 4) {
+        for (Player *p : activePlayers) {
+            if (p->getName().compare(request[2]) == 0) {
+                QString response = QString("theoasis>login!>");
+                response.append(request[2] + ">true>Already logged in.>");
+                sendMessage(response);
+                return p;
+            }
+        }
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
         player = dbManager->getPlayerByNameAndPassword(request[2], hashedPassword);
         if (player != nullptr) {
