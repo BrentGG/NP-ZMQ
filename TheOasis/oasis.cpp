@@ -106,19 +106,13 @@ void Oasis::sendInfo()
 {
     QString response = QString("\n\
 >>> The Oasis: Info <<<\n\n\
-Welcome to The Oasis, the ultimate virtual world experience where you can escape the drudgery \
-of reality and live out your wildest fantasies. With our cutting-edge technology, you'll even forget you're in a simulation.\n\
-Need a break from your mundane life? The Oasis is your ticket to an endless party where the fun never stops. No need to worry \
-about responsibilities or consequences, just immerse yourself in our virtual wonderland and forget about the real world.\n\
-Tired of being stuck in the same place all day? In The Oasis, you can explore entire galaxies and visit exotic planets, all \
-from the comfort of your own couch. Whether you're looking for adventure or relaxation, The Oasis has it all.\n\
-With our state-of-the-art customization options, you can be whoever you want to be in The Oasis. Shed your boring old self \
-and become a powerful superhero, a world-renowned assassin, or anything in between. The only limit is your imagination.\n\
-Join us in The Oasis today and start living your best life. Don't let the monotony of reality hold you back any longer. \
-The Oasis is waiting for you. \n\n\
-To get an overview of all the possible request, send the following request 'theoasis>help?>' and subscribe to 'theoasis>help!>'.\n\
-To register to The Oasis, send the following request 'theoasis>register?>[username:string]>[password:string]>' and subscribe to 'theoasis>register!>[username:string]>'. \
+Welcome to The Oasis, where your wildest fantasies become reality. Step into our virtual casino and leave behind the drudgery of \
+the real world. Our advanced technology allows you to experience the thrill of high-stakes gambling without ever leaving your home.\
+Don't let the mundane nature of your everyday life hold you back. Join us now and indulge in every desire you've ever had. \
+The Oasis – where reality is just a distant memory.\n\n\
+To join The Oasis, send the following request 'theoasis>register?>[username:string]>[password:string]>' and subscribe to 'theoasis>register!>[username:string]>'. \
 Make sure to hash your password for your own security.\n\n\
+To get an overview of all the possible request, send the following request 'theoasis>help?>' and subscribe to 'theoasis>help!>'.\n\
 ");
     sendMessage(response);
 }
@@ -131,8 +125,7 @@ void Oasis::sendHelp()
     QString response = QString("\n\
 >>> The Oasis: Help <<<\n\n\
 Welcome To The Oasis!\n\n\
-For some general information about what The Oasis is, send the following request 'theoasis>info?>' and subscribe to 'theoasis>info!>'\n\n\
-Here are the requests you can make to The Oasis, as well as the responses you can expect.\n\
+The Oasis is a virtual casino. Here are the requests you can make to The Oasis, as well as the responses you can expect.\n\
 The response might contain some variables, these will be indicated by square brackets '[]'.\n\
 Additionally, curly brackets '{}' are used to signify which part of the response is the topic you should subscribe to.\n\n\
 All passwords that are sent to the service should be hashed for your own security(see https://doc.qt.io/qt-5/qcryptographichash.html). \
