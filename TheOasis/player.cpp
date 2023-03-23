@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player(QString name, int money, int health, int happiness, int satiation, int hydration) : name(name), money(money), health(health), happiness(happiness), satiation(satiation), hydration(hydration)
+Player::Player(QString name, int credits) : name(name), credits(credits)
 {
 
 }
@@ -10,29 +10,9 @@ QString Player::getName() const
     return name;
 }
 
-int Player::getMoney() const
+int Player::getCredits() const
 {
-    return money;
-}
-
-int Player::getHealth() const
-{
-    return health;
-}
-
-int Player::getHappiness() const
-{
-    return happiness;
-}
-
-int Player::getSatiation() const
-{
-    return satiation;
-}
-
-int Player::getHydration() const
-{
-    return hydration;
+    return credits;
 }
 
 long long Player::getOnlineSince() const

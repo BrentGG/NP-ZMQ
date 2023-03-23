@@ -8,25 +8,17 @@
 class Player
 {
 public:
-    Player(QString name, int money = 1000, int health = 100, int happiness = 100, int satiation = 100, int hydration = 100);
+    Player(QString name, int credits = 1000);
 
     QString getName() const;
-    int getMoney() const;
-    int getHealth() const;
-    int getHappiness() const;
-    int getSatiation() const;
-    int getHydration() const;
+    int getCredits() const;
     long long getOnlineSince() const;
 
     void setOnlineSince(long long newOnlineSince);
 
 private:
     QString name;
-    int money;
-    int health;
-    int happiness;
-    int satiation;
-    int hydration;
+    int credits;
 
     long long onlineSince;
 };
