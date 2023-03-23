@@ -16,7 +16,6 @@ INCLUDEPATH += $$PWD/../include
 SOURCES += \
         main.cpp \
 		player.cpp \
-		item.cpp \
 		oasis.cpp \
 		dbmanager.cpp
 
@@ -27,6 +26,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
 		player.h \
-		item.h \
 		oasis.h \
 		dbmanager.h

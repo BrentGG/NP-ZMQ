@@ -4,8 +4,6 @@
 #include <QString>
 #include <QList>
 
-#include "item.h"
-
 
 class Player
 {
@@ -18,7 +16,6 @@ public:
     int getHappiness() const;
     int getSatiation() const;
     int getHydration() const;
-    QList<Item *> getItems() const;
     long long getOnlineSince() const;
 
     void setOnlineSince(long long newOnlineSince);
@@ -30,7 +27,6 @@ private:
     int happiness;
     int satiation;
     int hydration;
-    QList<Item*> items;
 
     long long onlineSince;
 };

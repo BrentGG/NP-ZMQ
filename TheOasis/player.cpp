@@ -35,11 +35,6 @@ int Player::getHydration() const
     return hydration;
 }
 
-QList<Item *> Player::getItems() const
-{
-    return items;
-}
-
 long long Player::getOnlineSince() const
 {
     return onlineSince;
