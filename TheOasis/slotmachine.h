@@ -9,8 +9,6 @@
 class SlotMachine
 {
 public:
-    SlotMachine();
-
     enum Symbols {
         BAR,
         CHERRY,
@@ -21,10 +19,14 @@ public:
         BLANK
     };
 
-    QList<Symbols> spin();
+    static int play(int bet);
+    static QList<Symbols> spin();
+    static int calcPayout(QList<Symbols> payline);
 
 private:
-
+    static bool threeInARow(QList<Symbols> payline, Symbols symbol);
+    static bool twoInARow(QList<Symbols> payline, Symbols symbol);
+    static bool any(QList<Symbols> payline, Symbols symbol);
 };
 
 #endif // SLOTMACHINE_H
