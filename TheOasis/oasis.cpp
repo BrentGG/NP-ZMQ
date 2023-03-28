@@ -248,8 +248,7 @@ bool Oasis::logoutPlayer(QList<QString> request)
             return true;
         }
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
-        Player *playerInDb = dbManager->getPlayerByNameAndPassword(request[2], hashedPassword);
-        if (playerInDb != nullptr) {
+        if (dbManager->checkPassword(request[2], hashedPassword)) {
             Player *player = activePlayers[request[2]];
             std::cout << "Logged out player: " << request[2].toStdString() << std::endl;
             std::cout << player->getCredits() << std::endl;

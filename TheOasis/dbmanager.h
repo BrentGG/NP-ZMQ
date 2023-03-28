@@ -14,6 +14,7 @@ public:
 
     bool addPlayer(Player *player, QString password);
     Player* getPlayerByNameAndPassword(QString name, QString password);
+    bool checkPassword(QString name, QString password);
     bool setCredits(QString username, int credits);
 
 private:

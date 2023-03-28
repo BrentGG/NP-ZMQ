@@ -41,9 +41,15 @@ Player* DbManager::getPlayerByNameAndPassword(QString name, QString password)
         query.first();
         if (query.isValid())
             return new Player(query.value(0).toString(), query.value(2).toInt());
+        return nullptr;
     }
     std::cout << "getPlayerByNameAndPassword error: " << query.lastError().text().toStdString() << std::endl;
     return nullptr;
+}
+
+bool DbManager::checkPassword(QString name, QString password)
+{
+    return getPlayerByNameAndPassword(name, password) != nullptr;
 }
 
 bool DbManager::setCredits(QString username, int credits)
