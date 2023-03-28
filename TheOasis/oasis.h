@@ -24,6 +24,7 @@ public:
     void sendHelp();
     bool registerPlayer(QList<QString> request);
     bool loginPlayer(QList<QString> request);
+    bool logoutPlayer(QList<QString> request);
     bool playSlotMachine(QList<QString> request);
 
 private slots:

@@ -49,6 +49,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>help?>");
         subscriber->subscribeTo("theoasis>register?>");
         subscriber->subscribeTo("theoasis>login?>");
+        subscriber->subscribeTo("theoasis>logout?>");
         subscriber->subscribeTo("theoasis>slotmachine?>");
 
         context->start();
@@ -77,6 +78,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                 registerPlayer(parts);
             else if (parts[1].compare("login?") == 0)
                 loginPlayer(parts);
+            else if (parts[1].compare("logout?") == 0)
+                logoutPlayer(parts);
             else if (parts[1].compare("slotmachine?") == 0)
                 playSlotMachine(parts);
         }
@@ -163,6 +166,9 @@ These requests are available to anyone:\n\
   REQ: theoasis>info?>slotmachine>\n\
   RES: {theoasis>info!>slotmachine>}\n\
 \nThese requests are only available after registering and logging in: \n\
+- Logout of The Oasis. Must be logged in.\n\
+  REQ: theoasis>logout?>[username:string]>[password:string]>\n\
+  RES: {theoasis>logout!>[username:string]>}[success:bool]>[message:string]>\n\
 - Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be lower than player's balance. The payline is the \
 three symbols you got. The payout is the amount of money you get back (if this is 0, you lost your bet).\n\
   REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>\n\
@@ -226,6 +232,42 @@ bool Oasis::loginPlayer(QList<QString> request)
 }
 
 /**
+ * @brief Logout of The Oasis
+ * @param request: the request to logout, split into parts separated by '>'
+ * @return true if succesfully logged out, false if not
+ * REQ: theoasis>logout?>[username:string]>[password:string]>
+ * RES: {theoasis>logout!>[username:string]>}[success:bool]>[message:string]>
+ */
+bool Oasis::logoutPlayer(QList<QString> request)
+{
+    if (request.size() >= 4) {
+        if (!activePlayers.contains(request[2])) {
+            QString response = QString("theoasis>logout!>");
+            response.append(request[2] + ">false>Not logged in.>");
+            sendMessage(response);
+            return true;
+        }
+        QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
+        Player *playerInDb = dbManager->getPlayerByNameAndPassword(request[2], hashedPassword);
+        if (playerInDb != nullptr) {
+            Player *player = activePlayers[request[2]];
+            std::cout << "Logged out player: " << request[2].toStdString() << std::endl;
+            std::cout << player->getCredits() << std::endl;
+            dbManager->setCredits(player->getName(), player->getCredits());
+            activePlayers.remove(player->getName());
+            QString response = QString("theoasis>logout!>");
+            response.append(request[2] + ">true>Successfully logged out, come back soon!");
+            sendMessage(response);
+            return true;
+        }
+    }
+    QString response = QString("theoasis>logout!>");
+    response.append(request[2] + ">false>Bad request>");
+    sendMessage(response);
+    return false;
+}
+
+/**
  * @brief Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be lower than player's balance. The payline is the
  * three symbols you got. The payout is the amount of money you get back (if this is 0, you lost your bet).
  * @param request: the request to play the slot machine, split into parts separated by '>'
@@ -268,8 +310,11 @@ void Oasis::checkStatus()
     long long currentTime = QDateTime::currentSecsSinceEpoch();
     QMap<QString, Player*>::iterator i = activePlayers.begin();
     while (i != activePlayers.end()) {
-        if (currentTime - i.value()->getOnlineSince() > 15 * 60)
+        if (currentTime - i.value()->getOnlineSince() > 15 * 60) {
+            std::cout << "Timed out player: " << i.value()->getName().toStdString() << std::endl;
+            dbManager->setCredits(i.value()->getName(), i.value()->getCredits());
             i = activePlayers.erase(i);
+        }
         else
             ++i;
     }

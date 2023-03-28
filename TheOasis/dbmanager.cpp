@@ -45,3 +45,17 @@ Player* DbManager::getPlayerByNameAndPassword(QString name, QString password)
     std::cout << "getPlayerByNameAndPassword error: " << query.lastError().text().toStdString() << std::endl;
     return nullptr;
 }
+
+bool DbManager::setCredits(QString username, int credits)
+{
+    bool success = false;
+    QSqlQuery query;
+    query.prepare("UPDATE Players SET credits=:credits WHERE name=:name");
+    query.bindValue(":name", username);
+    query.bindValue(":credits", credits);
+    if(query.exec())
+       success = true;
+    else
+        std::cout << "setCredits error: " << query.lastError().text().toStdString() << std::endl;
+    return success;
+}
