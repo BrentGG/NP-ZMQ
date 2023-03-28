@@ -16,6 +16,8 @@ public:
 
     void setOnlineSince(long long newOnlineSince);
 
+    void modifyCredits(int amount);
+
 private:
     QString name;
     int credits;

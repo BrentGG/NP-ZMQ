@@ -8,6 +8,7 @@
 #include <nzmqt/impl.hpp>
 #include <QObject>
 #include <QList>
+#include <QMap>
 
 
 class Oasis : public QObject
@@ -19,10 +20,11 @@ public:
 
     void sendMessage(QString message);
 
-    void sendInfo();
+    void sendInfo(QList<QString> request);
     void sendHelp();
     bool registerPlayer(QList<QString> request);
     bool loginPlayer(QList<QString> request);
+    bool playSlotMachine(QList<QString> request);
 
 private slots:
     void handleMessage(const QList<QByteArray>& messages);
@@ -36,7 +38,7 @@ private:
     nzmqt::ZMQSocket *pusher;
     nzmqt::ZMQSocket *subscriber;
 
-    QList<Player*> activePlayers;
+    QMap<QString, Player*> activePlayers;
 };
 
 #endif // THEOASIS_H

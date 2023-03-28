@@ -24,3 +24,8 @@ void Player::setOnlineSince(long long newOnlineSince)
 {
     onlineSince = newOnlineSince;
 }
+
+void Player::modifyCredits(int amount)
+{
+    credits += amount;
+}

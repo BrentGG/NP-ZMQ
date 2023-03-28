@@ -19,9 +19,11 @@ public:
         BLANK
     };
 
+    static QString getInfo();
     static int play(int bet);
     static QList<Symbols> spin();
-    static int calcPayout(QList<Symbols> payline);
+    static int calcPayout(QList<Symbols> payline, int bet);
+    static QList<QString> paylineToStringList(QList<Symbols> payline);
 
 private:
     static bool threeInARow(QList<Symbols> payline, Symbols symbol);
