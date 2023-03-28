@@ -9,11 +9,7 @@ DbManager::DbManager(QString path)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(path);
-
-    if (!db.open())
-      std::cout << "Failed to connect to database\n" << std::endl;
-    else
-      std::cout << "Connected to database" << std::endl;
+    db.open();
 }
 
 bool DbManager::addPlayer(Player *player, QString password)
@@ -64,4 +60,9 @@ bool DbManager::setCredits(QString username, int credits)
     else
         std::cout << "setCredits error: " << query.lastError().text().toStdString() << std::endl;
     return success;
+}
+
+bool DbManager::isConnected()
+{
+    return db.isOpen();
 }

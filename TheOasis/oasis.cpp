@@ -11,6 +11,12 @@ Oasis::Oasis(QCoreApplication *coreApp)
 {
     try {
         dbManager = new DbManager(QDir("../TheOasis/oasis_db.db").absolutePath());
+        if (dbManager->isConnected())
+            std::cout << "Connected to database." << std::endl;
+        else {
+            std::cout << "Could not connect to database." << std::endl;
+            exit(-1);
+        }
 
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);

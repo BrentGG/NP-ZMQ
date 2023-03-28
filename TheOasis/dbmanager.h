@@ -17,6 +17,8 @@ public:
     bool checkPassword(QString name, QString password);
     bool setCredits(QString username, int credits);
 
+    bool isConnected();
+
 private:
     QSqlDatabase db;
 };
