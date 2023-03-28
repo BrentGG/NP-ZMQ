@@ -27,7 +27,7 @@ Oasis::Oasis(QCoreApplication *coreApp)
         // Send ad every X minutes
         QTimer *adTimer = new QTimer(this);
         QObject::connect(adTimer, &QTimer::timeout, this, &Oasis::sendAd);
-        adTimer->start(60000 * 3);
+        //adTimer->start(60000 * 3);
 
         // Check online status
         QTimer *statusTimer = new QTimer(this);
