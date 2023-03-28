@@ -17,7 +17,8 @@ SOURCES += \
         main.cpp \
 		player.cpp \
 		oasis.cpp \
-		dbmanager.cpp
+		dbmanager.cpp \
+    slotmachine.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -27,4 +28,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
 		player.h \
 		oasis.h \
-		dbmanager.h
+		dbmanager.h \
+		slotmachine.h
