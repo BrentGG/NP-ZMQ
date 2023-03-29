@@ -56,6 +56,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>register?>");
         subscriber->subscribeTo("theoasis>login?>");
         subscriber->subscribeTo("theoasis>logout?>");
+        subscriber->subscribeTo("theoasis>balance?>");
         subscriber->subscribeTo("theoasis>slotmachine?>");
 
         context->start();
@@ -86,6 +87,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                 loginPlayer(parts);
             else if (parts[1].compare("logout?") == 0)
                 logoutPlayer(parts);
+            else if (parts[1].compare("balance?") == 0)
+                getBalance(parts);
             else if (parts[1].compare("slotmachine?") == 0)
                 playSlotMachine(parts);
         }
@@ -146,7 +149,7 @@ To get an overview of all the possible request, send the following request 'theo
  */
 void Oasis::sendHelp()
 {
-    QString response = QString("\n\
+    QString response = QString("theoasis>help!>\n\
 >>> The Oasis: Help <<<\n\n\
 Welcome To The Oasis!\n\n\
 The Oasis is a virtual casino. Here are the requests you can make to The Oasis, as well as the responses you can expect.\n\
@@ -175,6 +178,9 @@ These requests are available to anyone:\n\
 - Logout of The Oasis. Must be logged in.\n\
   REQ: theoasis>logout?>[username:string]>[password:string]>\n\
   RES: {theoasis>logout!>[username:string]>}[success:bool]>[message:string]>\n\
+- Get your credit balance.\n\
+  REQ: theoasis>balance?>[username:string]>\n\
+  RES: {theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]\n\
 - Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be lower than player's balance. The payline is the \
 three symbols you got. The payout is the amount of money you get back (if this is 0, you lost your bet).\n\
   REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>\n\
@@ -265,6 +271,33 @@ bool Oasis::logoutPlayer(QList<QString> request)
             sendMessage(response);
             return true;
         }
+    }
+    QString response = QString("theoasis>logout!>");
+    response.append(request[2] + ">false>Bad request>");
+    sendMessage(response);
+    return false;
+}
+
+/**
+ * @brief Get a player's credit balance.
+ * @param request: the request to get balance, split into parts separated by '>'
+ * @return true if success, false if not
+ * REQ: theoasis>balance?>[username:string]>
+ * RES: {theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]
+ */
+bool Oasis::getBalance(QList<QString> request)
+{
+    if (request.size() >= 3) {
+        if (!activePlayers.contains(request[2])) {
+            QString response = QString("theoasis>balance!>");
+            response.append(request[2] + ">false>Not logged in.>");
+            sendMessage(response);
+            return false;
+        }
+        QString response = QString("theoasis>balance!>");
+        response.append(request[2] + ">true>" + QString::number(activePlayers[request[2]]->getCredits()) + ">");
+        sendMessage(response);
+        return true;
     }
     QString response = QString("theoasis>logout!>");
     response.append(request[2] + ">false>Bad request>");
