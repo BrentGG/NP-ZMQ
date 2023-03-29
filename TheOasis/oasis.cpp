@@ -1,4 +1,5 @@
 #include "oasis.h"
+#include "failedrequest.h"
 #include "slotmachine.h"
 
 #include <iostream>
@@ -77,32 +78,33 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
         QString msg = QString::fromStdString(message.toStdString());
         QList<QString> request = msg.split(">");
         if (request.size() >= 2) {
-            // Request that can be made without logging in
-            if (request[1].compare("info?") == 0)
-                sendInfo(request);
-            else if (request[1].compare("help?") == 0)
-                sendHelp();
-            else if (request[1].compare("register?") == 0)
-                registerPlayer(request);
-            else if (request[1].compare("login?") == 0)
-                loginPlayer(request);
-            else {
-                // Request that can only be made when logged in
-                if (request.size() >= 3) {
-                    if (!activePlayers.contains(request[2])) {
-                        QString response = QString("theoasis>");
-                        response.append(request[1].remove('?') + "!>" + request[2] + ">false>Not logged in.>");
-                        sendMessage(response);
-                    }
-                    else {
-                        if (request[1].compare("logout?") == 0)
-                            logoutPlayer(request);
-                        else if (request[1].compare("balance?") == 0)
-                            getBalance(request);
-                        else if (request[1].compare("slotmachine?") == 0)
-                            playSlotMachine(request);
+            try {
+                // Request that can be made without logging in
+                if (request[1].compare("info?") == 0)
+                    sendInfo(request);
+                else if (request[1].compare("help?") == 0)
+                    sendHelp();
+                else if (request[1].compare("register?") == 0)
+                    registerPlayer(request);
+                else if (request[1].compare("login?") == 0)
+                    loginPlayer(request);
+                else {
+                    // Request that can only be made when logged in
+                    if (request.size() >= 3) {
+                        if (!activePlayers.contains(request[2]))
+                            sendMessage(QString("theoasis>" + request[1].remove('?') + "!>" + request[2] + ">false>Not logged in.>"));
+                        else {
+                            if (request[1].compare("logout?") == 0)
+                                logoutPlayer(request);
+                            else if (request[1].compare("balance?") == 0)
+                                getBalance(request);
+                            else if (request[1].compare("slotmachine?") == 0)
+                                playSlotMachine(request);
+                        }
                     }
                 }
+            } catch(FailedRequest e) {
+                sendMessage(e.what());
             }
         }
     }
@@ -113,8 +115,7 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
  */
 void Oasis::sendAd()
 {
-    QString response = QString("Join The Oasis Now! Request 'theoasis>info?>' and subscribe to 'theoasis>info!>'.");
-    sendMessage(response);
+    sendMessage(QString("Join The Oasis Now! Request 'theoasis>info?>' and subscribe to 'theoasis>info!>'."));
 }
 
 /**
@@ -140,7 +141,7 @@ void Oasis::sendMessage(QString message)
 void Oasis::sendInfo(QList<QString> request)
 {
     if (request.size() < 3 || request[2].compare("") == 0) {
-        QString response = QString("\n\
+        QString response = QString("theoasis>info!>\n\
 >>> The Oasis: Info <<<\n\n\
 Welcome to The Oasis, where your wildest fantasies become reality. Step into our virtual casino and leave behind the drudgery of \
 the real world. Our advanced technology allows you to experience the thrill of high-stakes gambling without ever leaving your home.\
@@ -212,18 +213,19 @@ get back (if this is 0, you lost your bet).\n\
  * Passwords that are sent to the server should already be hashed but I hash them again just in case they werent hashed.
  */
 bool Oasis::registerPlayer(QList<QString> request) {
-    bool success = false;
     if (request.size() >= 4) {
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
-        success = dbManager->addPlayer(new Player(request[2]), hashedPassword);
+        bool success = dbManager->addPlayer(new Player(request[2]), hashedPassword);
         if (success) {
             std::cout << "Registered new player: " << request[2].toStdString() << std::endl;
+            sendMessage(QString("theoasis>register!>" + request[2] + ">true>Successfully registered! Welcome to The Oasis!>"));
+            return true;
         }
+        else
+            throw FailedRequest(QString("theoasis>register!>" + request[2] + ">false>Registration failed, try a different username.>"));
     }
-    QString response = QString("theoasis>register!>");
-    response.append(request[2] + ">" + (success ? "true" : "false") + ">" + (success ? "Successfully registered! Welcome to The Oasis!>" : "Registration failed, try a different username.>"));
-    sendMessage(response);
-    return success;
+    throw FailedRequest(QString("theoasis>register!>" + request[2] + ">false>Bad request.>"));
+    return false;
 }
 
 /**
@@ -238,9 +240,7 @@ bool Oasis::loginPlayer(QList<QString> request)
     Player *player = nullptr;
     if (request.size() >= 4) {
         if (activePlayers.contains(request[2])) {
-            QString response = QString("theoasis>login!>");
-            response.append(request[2] + ">true>Already logged in.>");
-            sendMessage(response);
+            sendMessage(QString("theoasis>login!>" + request[2] + ">true>Already logged in.>"));
             return true;
         }
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
@@ -249,12 +249,14 @@ bool Oasis::loginPlayer(QList<QString> request)
             std::cout << "Logged in player: " << request[2].toStdString() << std::endl;
             activePlayers[player->getName()] = player;
             player->setOnlineSince(QDateTime::currentSecsSinceEpoch());
+            sendMessage(QString("theoasis>login!>" + request[2] + ">true>Successfully logged in! Welcome back to The Oasis!>"));
+            return true;
         }
+        else
+            throw FailedRequest(QString("theoasis>login!>" + request[2] + ">false>Login failed, wrong username and/or password.>"));
     }
-    QString response = QString("theoasis>login!>");
-    response.append(request[2] + ">" + (player != nullptr ? "true" : "false") + ">" + (player != nullptr ? "Successfully logged in! Welcome back to The Oasis!>" : "Login failed, wrong username and/or password.>"));
-    sendMessage(response);
-    return player != nullptr;
+    throw FailedRequest(QString("theoasis>login!>" + request[2] + ">false>Bad request.>"));
+    return false;
 }
 
 /**
@@ -274,15 +276,13 @@ bool Oasis::logoutPlayer(QList<QString> request)
             std::cout << player->getCredits() << std::endl;
             dbManager->setCredits(player->getName(), player->getCredits());
             activePlayers.remove(player->getName());
-            QString response = QString("theoasis>logout!>");
-            response.append(request[2] + ">true>Successfully logged out, come back soon!");
-            sendMessage(response);
+            sendMessage(QString("theoasis>logout!>" + request[2] + ">true>Successfully logged out, come back soon!"));
             return true;
         }
+        else
+            throw FailedRequest(QString("theoasis>logout!>" + request[2] + ">false>Wrong password.>"));
     }
-    QString response = QString("theoasis>logout!>");
-    response.append(request[2] + ">false>Bad request.>");
-    sendMessage(response);
+    throw FailedRequest(QString("theoasis>logout!>" + request[2] + ">false>Bad request.>"));
     return false;
 }
 
@@ -296,14 +296,10 @@ bool Oasis::logoutPlayer(QList<QString> request)
 bool Oasis::getBalance(QList<QString> request)
 {
     if (request.size() >= 3 && activePlayers.contains(request[2])) {
-        QString response = QString("theoasis>balance!>");
-        response.append(request[2] + ">true>" + QString::number(activePlayers[request[2]]->getCredits()) + ">");
-        sendMessage(response);
+        sendMessage(QString("theoasis>balance!>" + request[2] + ">true>" + QString::number(activePlayers[request[2]]->getCredits()) + ">"));
         return true;
     }
-    QString response = QString("theoasis>logout!>");
-    response.append(request[2] + ">false>Bad request.>");
-    sendMessage(response);
+    throw FailedRequest(QString("theoasis>getBalance!>" + request[2] + ">false>Bad request.>"));
     return false;
 }
 
@@ -335,10 +331,10 @@ bool Oasis::playSlotMachine(QList<QString> request)
             player->modifyCredits(payout);
             return true;
         }
+        else
+            throw FailedRequest(QString("theoasis>slotmachine!>" + request[2] + ">false>Invalid bet.>"));
     }
-    QString response = QString("theoasis>slotmachine!>");
-    response.append(request[2] + ">false>>>Bad Request.>");
-    sendMessage(response);
+    throw FailedRequest(QString("theoasis>slotmachine!>" + request[2] + ">false>Bad request.>"));
     return false;
 }
 
