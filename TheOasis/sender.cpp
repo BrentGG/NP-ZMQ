@@ -1,5 +1,6 @@
 #include "sender.h"
 #include "slotmachine.h"
+#include "roulette.h"
 
 #include <iostream>
 
@@ -44,6 +45,9 @@ To get an overview of all the possible request, send the following request 'theo
     }
     else if (request[2].compare("slotmachine") == 0) {
         sendMessage(SlotMachine::getInfo());
+    }
+    else if (request[2].compare("roulette") == 0) {
+        sendMessage(Roulette::getInfo());
     }
 }
 

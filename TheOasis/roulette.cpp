@@ -9,7 +9,34 @@ Roulette::Roulette()
 
 QString Roulette::getInfo()
 {
-    return QString("");
+    return QString("theoasis>info?>roulette>\n\
+>>> The Oasis: Roulette Info <<<\n\n\
+The roulette wheels are American, double-zero roulette wheels. This means the numbers on the wheel are 0-36 and 00.\
+Below are the possible bets, what they mean, and what their payouts are. The payout should be multiplied by the bet.\
+If the description starts with 'any', you must specify in the request which numbers you choose.\n\
+Bet Name                 Payout   Description\n\
+zero                     36       0\n\
+double zero              36       00\n\
+straight up              36       any number (1-36)\n\
+row                      18       0, 00\n\
+split                    18       any two adjacent numbers (1-36), e.g.: 1,2 or 11,14\n\
+street                   12       any three numbers horizontal (1-36), e.g.: 1,2,3 or 4,5,6 or 34,35,36\n\
+corner                   9        any four adjoining numbers in a block, e.g.: 4,5,7,8\n\
+basket                   7        0, 00, 1, 2, 3\n\
+double street            6        any two streets, e.g.: 1,2,3,34,35,36\n\
+first column             3        1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34\n\
+second column            3        2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35\n\
+third column             3        3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36\n\
+first dozen              3        1 to 12\n\
+second dozen             3        13 to 24\n\
+third dozen              3        25 to 36\n\
+odd                      2        odd numbers\n\
+even                     2        even numbers\n\
+red                      2        red numbers\n\
+black                    2        black numbers\n\
+one to eighteen          2        1 to 18\n\
+nineteen to thirty-six   2        19 to 36\n\
+    ");
 }
 
 int Roulette::play(int bet, BetName betName, QList<int> betNumbers)

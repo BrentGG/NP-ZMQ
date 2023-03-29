@@ -9,8 +9,8 @@
  */
 QString SlotMachine::getInfo()
 {
-    return QString("\n\
->>> The Oasis: Slotmachines Info <<<\n\
+    return QString("theoasis>info?>slotmachine>\n\
+>>> The Oasis: Slotmachines Info <<<\n\n\
 The slot machines are three-reel, single-payline slot machines. This means that there are three symbols that appear when the \
 slot machine is spun, and these three symbols determine the payout. The payouts are as follows (multiplied by the bet):\n\
 Combination              Payout\n\
