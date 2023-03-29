@@ -4,7 +4,9 @@
 #include <QString>
 #include <QList>
 
-
+/**
+ * @brief An American, double-zero roulette game.
+ */
 class Roulette
 {
 public:
@@ -37,7 +39,8 @@ public:
     static QString getInfo();
     static int play(int bet, BetName betName, QList<int> betNumbers);
     static int spin();
-    static int calcPayout(int bet, BetName betName, QList<int> betNumbers);
+    static int calcPayout(int rouletteNumbern, int bet, BetName betName, QList<int> betNumbers);
+    static bool areValidBetNumbers(BetName betName, QList<int> betNumbers);
 };
 
 #endif // ROULETTE_H
