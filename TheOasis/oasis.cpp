@@ -51,6 +51,7 @@ void Oasis::run()
         subscriber->connectTo("tcp://benternet.pxl-ea-ict.be:24042");
         if(!pusher->isConnected() || !subscriber->isConnected()) {
             std::cerr << "Pusher and/or subscriber not connected." << std::endl;
+            exit(-1);
         }
 
         subscriber->subscribeTo("theoasis>info?>");
