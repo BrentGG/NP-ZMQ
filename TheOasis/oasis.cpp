@@ -319,7 +319,7 @@ bool Oasis::playSlotMachine(QList<QString> request)
         Player* player = activePlayers[request[2]];
         bool isNumber = false;
         int bet = request[3].toInt(&isNumber);
-        if (isNumber && bet <= player->getCredits()) {
+        if (isNumber && bet > 0 && bet <= player->getCredits()) {
             player->modifyCredits(-1 * bet);
             QList<SlotMachine::Symbols> payline = SlotMachine::spin();
             int payout = SlotMachine::calcPayout(payline, bet);
