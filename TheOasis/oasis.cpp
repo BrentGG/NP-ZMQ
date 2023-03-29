@@ -92,8 +92,9 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                     // Request that can only be made when logged in
                     if (request.size() >= 3) {
                         if (!activePlayers.contains(request[2]))
-                            sendMessage(QString("theoasis>" + request[1].remove('?') + "!>" + request[2] + ">false>Not logged in.>"));
+                            throw FailedRequest(QString("theoasis>" + request[1].remove('?') + "!>" + request[2] + ">false>Not logged in.>"));
                         else {
+                            activePlayers[request[2]]->setOnlineSince(QDateTime::currentSecsSinceEpoch());
                             if (request[1].compare("logout?") == 0)
                                 logoutPlayer(request);
                             else if (request[1].compare("balance?") == 0)
