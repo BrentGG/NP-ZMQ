@@ -22,12 +22,13 @@ Oasis::Oasis(QCoreApplication *coreApp)
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
         subscriber = context->createSocket(nzmqt::ZMQSocket::TYP_SUB, context);
+        sender = new Sender(pusher);
 
         QObject::connect(subscriber, &nzmqt::ZMQSocket::messageReceived, this, &Oasis::handleMessage);
 
         // Send ad every X minutes
         QTimer *adTimer = new QTimer(this);
-        QObject::connect(adTimer, &QTimer::timeout, this, &Oasis::sendAd);
+        QObject::connect(adTimer, &QTimer::timeout, sender, &Sender::sendAd);
         //adTimer->start(60000 * 3);
 
         // Check online status
@@ -81,9 +82,9 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
             try {
                 // Request that can be made without logging in
                 if (request[1].compare("info?") == 0)
-                    sendInfo(request);
+                    sender->sendInfo(request);
                 else if (request[1].compare("help?") == 0)
-                    sendHelp();
+                    sender->sendHelp();
                 else if (request[1].compare("register?") == 0)
                     registerPlayer(request);
                 else if (request[1].compare("login?") == 0)
@@ -105,104 +106,10 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                     }
                 }
             } catch(FailedRequest e) {
-                sendMessage(e.what());
+                sender->sendMessage(e.what());
             }
         }
     }
-}
-
-/**
- * @brief Send out an ad for The Oasis
- */
-void Oasis::sendAd()
-{
-    sendMessage(QString("Join The Oasis Now! Request 'theoasis>info?>' and subscribe to 'theoasis>info!>'."));
-}
-
-/**
- * @brief Sends a message using the pusher.
- * @param message: the message to be sent
- */
-void Oasis::sendMessage(QString message)
-{
-    nzmqt::ZMQMessage responseZmq = nzmqt::ZMQMessage(message.toUtf8());
-    pusher->sendMessage(responseZmq);
-    std::cout << "Sent: " << message.toStdString() << std::endl;
-}
-
-/**
- * @brief Sends an informational message about The Oasis or one of its activities.
- * @param request: the request to register, split into parts seperated by '>'
- * REQ: theoasis>info?>\n\
- * RES: {theoasis>info!>}[info:string]>\n\
- * or
- * REQ: theoasis>info?>[about:string]\n\
- * RES: {theoasis>info!>[about:string]>}[info:string]>\n\
- */
-void Oasis::sendInfo(QList<QString> request)
-{
-    if (request.size() < 3 || request[2].compare("") == 0) {
-        QString response = QString("theoasis>info!>\n\
->>> The Oasis: Info <<<\n\n\
-Welcome to The Oasis, where your wildest fantasies become reality. Step into our virtual casino and leave behind the drudgery of \
-the real world. Our advanced technology allows you to experience the thrill of high-stakes gambling without ever leaving your home.\
-Don't let the mundane nature of your everyday life hold you back. Join us now and indulge in every desire you've ever had. \
-The Oasis – where reality is just a distant memory.\n\n\
-To join The Oasis, send the following request 'theoasis>register?>[username:string]>[password:string]>' and subscribe to 'theoasis>register!>[username:string]>'. \
-Make sure to hash your password for your own security.\n\n\
-To get an overview of all the possible request, send the following request 'theoasis>help?>' and subscribe to 'theoasis>help!>'.\n\
-");
-        sendMessage(response);
-    }
-    else if (request[2].compare("slotmachine") == 0) {
-        sendMessage(SlotMachine::getInfo());
-    }
-}
-
-/**
- * @brief Sends a help message for those unfamiliar with The Oasis.
- */
-void Oasis::sendHelp()
-{
-    QString response = QString("theoasis>help!>\n\
->>> The Oasis: Help <<<\n\n\
-Welcome To The Oasis!\n\n\
-The Oasis is a virtual casino. Here are the requests you can make to The Oasis, as well as the responses you can expect.\n\
-The response might contain some variables, these will be indicated by square brackets '[]'.\n\
-Additionally, curly brackets '{}' are used to signify which part of the response is the topic you should subscribe to.\n\
-Variables that are lists have the elements separated by a comma (,)\n\n\
-All passwords that are sent to the service should be hashed for your own security(see https://doc.qt.io/qt-5/qcryptographichash.html). \
-However, passwords will also be hashed again in the service.\n\n\
-These requests are available to anyone:\n\
-- Receive an informational message from The Oasis.\n\
-  REQ: theoasis>info?>\n\
-  RES: {theoasis>info!>}[info:string]>\n\
-- Receive all the possible requests and responses (a.k.a. the message you're reading right now).\n\
-  REQ: theoasis>help?>\n\
-  RES: {theoasis>help!>}[help:string]>\n\
-- Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false.\n\
-  REQ: theoasis>register?>[username:string]>[password:string]>\n\
-  RES: {theoasis>register!>[username:string]>}[success:bool]>[message:string]>\n\
-- Login to The Oasis. Must be registered first.\n\
-  REQ: theoasis>login?>[username:string]>[password:string]>\n\
-  RES: {theoasis>login!>[username:string]>}[success:bool]>[message:string]>\n\
-- Get more info on the slot machines.\n\
-  REQ: theoasis>info?>slotmachine>\n\
-  RES: {theoasis>info!>slotmachine>}\n\
-\nThese requests are only available after registering and logging in: \n\
-- Logout of The Oasis. Must be logged in.\n\
-  REQ: theoasis>logout?>[username:string]>[password:string]>\n\
-  RES: {theoasis>logout!>[username:string]>}[success:bool]>[message:string]>\n\
-- Get your credit balance.\n\
-  REQ: theoasis>balance?>[username:string]>\n\
-  RES: {theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]\n\
-- Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be \
-lower than player's balance and larger than 0. The payline is the three symbols you got. The payout is the amount of money you \
-get back (if this is 0, you lost your bet).\n\
-  REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>\n\
-  RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:string]>[payout:integer]>[message:string]>\n\
-");
-    sendMessage(response);
 }
 
 /**
@@ -219,7 +126,7 @@ bool Oasis::registerPlayer(QList<QString> request) {
         bool success = dbManager->addPlayer(new Player(request[2]), hashedPassword);
         if (success) {
             std::cout << "Registered new player: " << request[2].toStdString() << std::endl;
-            sendMessage(QString("theoasis>register!>" + request[2] + ">true>Successfully registered! Welcome to The Oasis!>"));
+            sender->sendMessage(QString("theoasis>register!>" + request[2] + ">true>Successfully registered! Welcome to The Oasis!>"));
             return true;
         }
         else
@@ -241,7 +148,7 @@ bool Oasis::loginPlayer(QList<QString> request)
     Player *player = nullptr;
     if (request.size() >= 4) {
         if (activePlayers.contains(request[2])) {
-            sendMessage(QString("theoasis>login!>" + request[2] + ">true>Already logged in.>"));
+            sender->sendMessage(QString("theoasis>login!>" + request[2] + ">true>Already logged in.>"));
             return true;
         }
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
@@ -250,7 +157,7 @@ bool Oasis::loginPlayer(QList<QString> request)
             std::cout << "Logged in player: " << request[2].toStdString() << std::endl;
             activePlayers[player->getName()] = player;
             player->setOnlineSince(QDateTime::currentSecsSinceEpoch());
-            sendMessage(QString("theoasis>login!>" + request[2] + ">true>Successfully logged in! Welcome back to The Oasis!>"));
+            sender->sendMessage(QString("theoasis>login!>" + request[2] + ">true>Successfully logged in! Welcome back to The Oasis!>"));
             return true;
         }
         else
@@ -277,7 +184,7 @@ bool Oasis::logoutPlayer(QList<QString> request)
             std::cout << player->getCredits() << std::endl;
             dbManager->setCredits(player->getName(), player->getCredits());
             activePlayers.remove(player->getName());
-            sendMessage(QString("theoasis>logout!>" + request[2] + ">true>Successfully logged out, come back soon!"));
+            sender->sendMessage(QString("theoasis>logout!>" + request[2] + ">true>Successfully logged out, come back soon!"));
             return true;
         }
         else
@@ -297,7 +204,7 @@ bool Oasis::logoutPlayer(QList<QString> request)
 bool Oasis::getBalance(QList<QString> request)
 {
     if (request.size() >= 3 && activePlayers.contains(request[2])) {
-        sendMessage(QString("theoasis>balance!>" + request[2] + ">true>" + QString::number(activePlayers[request[2]]->getCredits()) + ">"));
+        sender->sendMessage(QString("theoasis>balance!>" + request[2] + ">true>" + QString::number(activePlayers[request[2]]->getCredits()) + ">"));
         return true;
     }
     throw FailedRequest(QString("theoasis>getBalance!>" + request[2] + ">false>Bad request.>"));
@@ -328,7 +235,7 @@ bool Oasis::playSlotMachine(QList<QString> request)
             for (int i = 0; i < paylineStr.size(); ++i)
                 response.append(paylineStr[i] + (i < paylineStr.size() - 1 ? "," : ">"));
             response.append(QString::number(payout) + ">" + (payout != 0 ? "Congratulations, you won!>" : "You lost!>"));
-            sendMessage(response);
+            sender->sendMessage(response);
             player->modifyCredits(payout);
             return true;
         }

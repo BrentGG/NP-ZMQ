@@ -2,6 +2,7 @@
 #define THEOASIS_H
 
 #include "dbmanager.h"
+#include "sender.h"
 
 #include <QCoreApplication>
 #include <nzmqt/nzmqt.hpp>
@@ -40,6 +41,7 @@ private:
     nzmqt::ZMQSocket *pusher;
     nzmqt::ZMQSocket *subscriber;
 
+    Sender *sender;
     QMap<QString, Player*> activePlayers;
 };
 

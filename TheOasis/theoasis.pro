@@ -19,6 +19,7 @@ SOURCES += \
 		player.cpp \
 		oasis.cpp \
 		dbmanager.cpp \
+    sender.cpp \
     slotmachine.cpp
 
 # Default rules for deployment.
@@ -31,4 +32,5 @@ HEADERS += \
 		player.h \
 		oasis.h \
 		dbmanager.h \
+		sender.h \
 		slotmachine.h
