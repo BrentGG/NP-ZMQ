@@ -1,6 +1,7 @@
 #include "oasis.h"
 #include "failedrequest.h"
 #include "slotmachine.h"
+#include "roulette.h"
 
 #include <iostream>
 #include <QDir>
@@ -61,6 +62,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>logout?>");
         subscriber->subscribeTo("theoasis>balance?>");
         subscriber->subscribeTo("theoasis>slotmachine?>");
+        subscriber->subscribeTo("theoasis>roulette?>");
 
         context->start();
     }
@@ -103,6 +105,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                                 getBalance(request);
                             else if (request[1].compare("slotmachine?") == 0)
                                 playSlotMachine(request);
+                            else if (request[1].compare("roulette?") == 0)
+                                playRoulette(request);
                         }
                     }
                 }
@@ -213,8 +217,9 @@ bool Oasis::getBalance(QList<QString> request)
 }
 
 /**
- * @brief Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be lower than player's balance. The payline is the
- * three symbols you got. The payout is the amount of money you get back (if this is 0, you lost your bet).
+ * @brief Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be lower than player's
+ * balance and higher than 0. The payline is the three symbols you got. The payout is the amount of money you get back (if this is 0, you lost
+ * your bet).
  * @param request: the request to play the slot machine, split into parts separated by '>'
  * @param return: true if successful, false if not
  * REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>
@@ -224,20 +229,25 @@ bool Oasis::playSlotMachine(QList<QString> request)
 {
     if (request.size() >= 4 && activePlayers.contains(request[2])) {
         Player* player = activePlayers[request[2]];
+
+        // Checks
         bool isNumber = false;
         int bet = request[3].toInt(&isNumber);
         if (isNumber && bet > 0 && bet <= player->getCredits()) {
+
+            // Play roulette
             player->modifyCredits(-1 * bet);
             QList<SlotMachine::Symbols> payline = SlotMachine::spin();
             int payout = SlotMachine::calcPayout(payline, bet);
-            QString response = QString("theoasis>slotmachine!>");
-            response.append(request[2] + ">true>");
+            player->modifyCredits(payout);
+
+            // Send result
+            QString response = QString("theoasis>slotmachine!>" + request[2] + ">true>");
             QList<QString> paylineStr = SlotMachine::paylineToStringList(payline);
             for (int i = 0; i < paylineStr.size(); ++i)
                 response.append(paylineStr[i] + (i < paylineStr.size() - 1 ? "," : ">"));
             response.append(QString::number(payout) + ">" + (payout != 0 ? "Congratulations, you won!>" : "You lost!>"));
             sender->sendMessage(response);
-            player->modifyCredits(payout);
             return true;
         }
         else
@@ -245,6 +255,57 @@ bool Oasis::playSlotMachine(QList<QString> request)
     }
     throw FailedRequest(QString("theoasis>slotmachine!>" + request[2] + ">false>Bad request.>"));
     return false;
+}
+
+/**
+ * @brief Play American, double-zero roulette. Bet must be lower than player's balance and higher than 0. The betName is the name of the
+ * bet you're placing (list can be found in 'theoasis>info?>roulette>'). Some bets require you to specify some numbers, these should
+ * be provided in betNumbers.
+ * @param request: the request to play roulette, split into parts separated by '>'
+ * @return true if success, false if not
+ * REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list<int>]>
+ * RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]>
+ */
+bool Oasis::playRoulette(QList<QString> request)
+{
+    if (request.size() >= 5 && activePlayers.contains(request[2])) {
+        Player* player = activePlayers[request[2]];
+
+        // Checks
+        bool isNumber = false;
+        int bet = request[3].toInt(&isNumber);
+        if (!isNumber || bet <= 0 || bet > player->getCredits())
+            throw FailedRequest(QString("theoasis>roulette!>" + request[2] + ">false>Invalid bet.>"));
+        Roulette::BetName betName = Roulette::strToBetName(request[4]);
+        if (betName == Roulette::UNKNOWN)
+            throw FailedRequest(QString("theoasis>roulette!>" + request[2] + ">false>Invalid bet name.>"));
+        QList<int> betNumbers;
+        if (request.size() >= 6)
+            betNumbers = strToIntList(request[5]);
+        if (!Roulette::areValidBetNumbers(betName, betNumbers))
+            throw FailedRequest(QString("theoasis>roulette!>" + request[2] + ">false>Invalid bet numbers.>"));
+
+        // Play roulette
+        player->modifyCredits(-1 * bet);
+        int rouletteNumber = Roulette::spin();
+        int payout = Roulette::calcPayout(rouletteNumber, bet, betName, betNumbers);
+        player->modifyCredits(payout);
+
+        // Send result
+        QString response = QString("theoasis>roulette!>" + request[2] + ">true>" + QString::number(rouletteNumber) + ">" + QString::number(payout) + ">" + (payout > 0 ? "Congratulations, you won!" : "You lost!"));
+        sender->sendMessage(response);
+        return true;
+    }
+    throw FailedRequest(QString("theoasis>roulette!>" + request[2] + ">false>Bad request.>"));
+    return false;
+}
+
+QList<int> Oasis::strToIntList(QString str)
+{
+    QList<int> result;
+    for (QString element : str.split(','))
+        result.append(element.toInt());
+    return result;
 }
 
 /**

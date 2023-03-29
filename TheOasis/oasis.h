@@ -28,6 +28,8 @@ public:
     bool logoutPlayer(QList<QString> request);
     bool getBalance(QList<QString> request);
     bool playSlotMachine(QList<QString> request);
+    bool playRoulette(QList<QString> request);
+    QList<int> strToIntList(QString str);
 
 private slots:
     void handleMessage(const QList<QByteArray>& messages);

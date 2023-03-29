@@ -33,13 +33,15 @@ public:
         RED,                  // 32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3
         BLACK,                // 15, 4, 2, 17, 6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26
         ONE_TO_EIGHTEEN,      // 1, 2, 3, ..., 18
-        NINETEEN_TO_THIRTYSIX // 19, 20, 21, ..., 36
+        NINETEEN_TO_THIRTYSIX,// 19, 20, 21, ..., 36
+        UNKNOWN
     };
 
     static QString getInfo();
     static int play(int bet, BetName betName, QList<int> betNumbers);
     static int spin();
     static int calcPayout(int rouletteNumbern, int bet, BetName betName, QList<int> betNumbers);
+    static BetName strToBetName(QString betNameStr);
     static bool areValidBetNumbers(BetName betName, QList<int> betNumbers);
 };
 

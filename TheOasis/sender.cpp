@@ -93,6 +93,11 @@ lower than player's balance and larger than 0. The payline is the three symbols 
 get back (if this is 0, you lost your bet).\n\
   REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>\n\
   RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:string]>[payout:integer]>[message:string]>\n\
+- Play American, double-zero roulette. Bet must be lower than your balance and higher than 0. The betName is the name of the \
+bet you're placing (list can be found at 'theoasis>info?>roulette>'). Some bets require you to specify some numbers, these should \
+be provided in betNumbers.\n\
+  REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list<int>]>\n\
+  RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]>\n\
 ");
     sendMessage(response);
 }
