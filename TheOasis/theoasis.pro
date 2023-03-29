@@ -19,6 +19,7 @@ SOURCES += \
 		player.cpp \
 		oasis.cpp \
 		dbmanager.cpp \
+    roulette.cpp \
     sender.cpp \
     slotmachine.cpp
 
@@ -32,5 +33,6 @@ HEADERS += \
 		player.h \
 		oasis.h \
 		dbmanager.h \
+		roulette.h \
 		sender.h \
 		slotmachine.h
