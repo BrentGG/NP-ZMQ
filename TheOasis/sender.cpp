@@ -87,12 +87,12 @@ These requests are available to anyone:\n\
   RES: {theoasis>logout!>[username:string]>}[success:bool]>[message:string]>\n\
 - Get your credit balance.\n\
   REQ: theoasis>balance?>[username:string]>\n\
-  RES: {theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]\n\
+  RES: {theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]>\n\
 - Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be \
 lower than player's balance and larger than 0. The payline is the three symbols you got. The payout is the amount of money you \
 get back (if this is 0, you lost your bet).\n\
   REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>\n\
-  RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:string]>[payout:integer]>[message:string]>\n\
+  RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:list<string>]>[payout:integer]>[message:string]>\n\
 - Play American, double-zero roulette. Bet must be lower than your balance and higher than 0. The betName is the name of the \
 bet you're placing (list can be found at 'theoasis>info?>roulette>'). Some bets require you to specify some numbers, these should \
 be provided in betNumbers.\n\
