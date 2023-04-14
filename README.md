@@ -8,7 +8,7 @@ The 'Diagram' section shows a diagram of the service, client and Benternet. The 
 
 ## Diagram
 
-![Diagram of the Benternet and the Oasis service and client](./diagram.png?raw=true)
+![Diagram of the Benternet and the Oasis service and client](./media/diagram.png?raw=true)
 
 The Oasis and Trivia Time services communicate with the Benternet over ZMQ. The Oasis and Trivia Time clients in turn also communicate with the Benternet over ZMQ. Trivia Time uses the [Open Trivia Database](https://opentdb.com/) API for its trivia questions and communicates with it using HTTP.
 
@@ -78,7 +78,7 @@ Requests available only after logging in:
 ### Roulette
 The roulette tables are American, double-zero roulette tables. The table looks like this:
 
-![American, double-zero roulette table](./roulette_table.PNG?raw=true)
+![American, double-zero roulette table](./media/roulette_table.PNG?raw=true)
 
 The client must place a bet onto the table. This means that if the payout is 0, the client lost their bet. The ``betName`` should be one of the bet names in the table below, which also show the payout (which is multiplied by the bet) and the meaning of the bet name. If the description of the bet name starts with the word 'any', the client should provide a number or list of numbers (depending on the bet name), into the ``betNumber`` variable. The ``rouletteNumber`` in the response is the number that the roulette landed on (0-36 and 00).
 
