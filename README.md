@@ -37,6 +37,8 @@ When a bad request is made (e.g.: wrong username/password, not enough parameters
 
 ### General
 
+General requests that are not specific to a game.
+
 Requests available to anyone:
 | Description / Request / Response | Implemented |
 |---|---|
