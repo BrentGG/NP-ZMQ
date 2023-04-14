@@ -14,7 +14,7 @@ The Oasis and Trivia Time services communicate with the Benternet over ZMQ. The 
 
 ## Requests and Responses
 
-The 'Format' sections describes the format that is used for the requests and responses. The 'General' sections describes all the general requests that can be made together with their responses. The sections after that describe the request and responses per game that can be played in the casino. Some requests require the client to be logged in. Each table also shows whether a request has been implemented yet.
+The 'Format' sections describes the format that is used for the requests and responses. The 'General' sections describes all the general requests that can be made together with their responses. The sections after that describe the request and responses per game that can be played in the casino. Some requests require the client to be logged in. Each table also shows whether a request has been implemented yet. Every game section also contains an example of the requests and responses in a time-diagram fashion.
 
 ### Format
 
@@ -75,6 +75,10 @@ Requests available only after logging in:
 |---|---|
 | Play the slot machine. <br> REQ: theoasis>slotmachine?>[username:string]>[bet:integer]> <br> RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:list<string>]>[payout:integer]>[message:string]> | :heavy_check_mark: |
 
+Example:
+
+![Example of the slot machine](./media/slotmachine_time.png?raw=true)
+
 ### Roulette
 The roulette tables are American, double-zero roulette tables. The table looks like this:
 
@@ -115,3 +119,7 @@ Requests available only after logging in:
 | Description / Request / Response | Implemented |
 |---|---|
 | Play roulette. <br> REQ: theoasis>roulette?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list<int>]> <br> RES: {theoasis>roulette!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]> | :heavy_check_mark: |
+
+Example:
+
+![Example of the roulette table](./media/roulette_time.png?raw=true)
