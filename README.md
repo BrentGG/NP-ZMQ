@@ -10,7 +10,7 @@ The 'Diagram' section shows a diagram of the service, client and Benternet. The 
 
 ![Diagram of the Benternet and the Oasis service and client](./media/diagram.png?raw=true)
 
-The Oasis and Trivia Time services communicate with the Benternet over ZMQ. The Oasis and Trivia Time clients in turn also communicate with the Benternet over ZMQ. Trivia Time uses the [Open Trivia Database](https://opentdb.com/) API for its trivia questions and communicates with it using HTTP.
+The Oasis service communicates with the Benternet over ZMQ. The Oasis clients in turn also communicate with the Benternet over ZMQ. No external API is used.
 
 ## Requests and Responses
 
