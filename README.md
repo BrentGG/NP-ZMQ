@@ -4,7 +4,7 @@
 
 This project contains a ZMQ service called The Oasis, which is a virtual casino where clients can play a number of casino games. Clients must register once and then log in every time they wish to start a session. New clients start with 1000 credits. The client accounts, which includes their username, password, and credit amount, are stored in an SQLite database. Clients are automatically logged out after they've been inactive for at least 15 minutes.
 
-The 'Diagram' section shows a diagram of the service, client and Benternet. The 'Requests and Responses' sections describes all the available and planned requests and responses for the service and each of its games, as well as information on how to use them.
+The [Diagram](#diagram) section shows a diagram of the service, client and Benternet. The [Requests and Responses'](#requests-and-responses) section describes all the available and planned requests and responses for the service and each of its games, as well as information on how to use them.
 
 ## Diagram
 
@@ -14,7 +14,10 @@ The Oasis service communicates with the Benternet over ZMQ. The Oasis clients in
 
 ## Requests and Responses
 
-The 'Format' sections describes the format that is used for the requests and responses. The 'General' sections describes all the general requests that can be made together with their responses. The sections after that describe the request and responses per game that can be played in the casino. Some requests require the client to be logged in. Each table also shows whether a request has been implemented yet. Every game section also contains an example of the requests and responses in a time-diagram fashion.
+The [Format](#format) section describes the format that is used for the requests and responses. The [General](#general-1) section describes all the general requests that can be made together with their responses. The sections after that describe the request and responses per game that can be played in the casino. Some requests require the client to be logged in. Each table also shows whether a request has been implemented yet. Every game section also contains an example of the requests and responses in a time-diagram fashion. Below is a list of all the available games:
+
+- [Slot machine](#slot-machine)
+- [Roulette](#roulette)
 
 ### Format
 
