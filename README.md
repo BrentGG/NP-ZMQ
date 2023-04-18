@@ -56,8 +56,8 @@ Requests available to anyone:
 |---|---|
 | **Receive an informational message from The Oasis.** <br> REQ: theoasis>info?> <br> RES: {theoasis>info!>}[info:string]> | :heavy_check_mark: |
 | **Receive all the possible requests and responses.** <br> REQ: theoasis>help?> <br> RES: {theoasis>help!>}[help:string]> | :heavy_check_mark: |
-| **Register to The Oasis. A unique username is required.** <br> REQ: theoasis>register?>[username:string]>[password:string]> <br> RES: {theoasis>register!>[username:string]>}[success:bool]>[message:string]> | :heavy_check_mark: |
-| **Login to The Oasis. Must be registered first.** <br> REQ: theoasis>login?>[username:string]>[password:string]> <br> RES: {theoasis>login!>[username:string]>}[success:bool]>[message:string]> | :heavy_check_mark: |
+| **Register to The Oasis.** A unique username is required. <br> REQ: theoasis>register?>[username:string]>[password:string]> <br> RES: {theoasis>register!>[username:string]>}[success:bool]>[message:string]> | :heavy_check_mark: |
+| **Login to The Oasis.** Must be registered first. <br> REQ: theoasis>login?>[username:string]>[password:string]> <br> RES: {theoasis>login!>[username:string]>}[success:bool]>[message:string]> | :heavy_check_mark: |
 
 Requests available only after logging in:
 | Description / Request / Response | Implemented |
@@ -161,8 +161,8 @@ Requests available to anyone:
 Requests available only after logging in:
 | Description / Request / Response | Implemented |
 |---|---|
-| **Start a Blackjack game by placing a bet. The response contains the dealer's card, and the two player's cards.** <br> REQ: theoasis>blackjack?>[username:string]>[bet:integer]> <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]>v | :x: |
-| **Perform a Blackjack action: hit, stand, split, double, insurance. The action will only be performed if applicable. Actions should always be in the order of the player's hands. So if hit is requested, and then stand, hit applies to the first hand, stand to the second. Insurance bet is always half of the main bet. If the game ends after the action, the payout is added to the response.** <br> REQ: theoasis>blackjack?>[username:string]>[action:string]> <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]> <br> OR <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[payout:integer]>[message:string]> | :x: |
+| **Start a Blackjack game by placing a bet.** The response contains the dealer's card, and the two player's cards. <br> REQ: theoasis>blackjack?>[username:string]>[bet:integer]> <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]>v | :x: |
+| **Perform a Blackjack action: hit, stand, split, double, insurance.** The action will only be performed if applicable. Actions should always be in the order of the player's hands. So if hit is requested, and then stand, hit applies to the first hand, stand to the second. Insurance bet is always half of the main bet. If the game ends after the action, the payout is added to the response. <br> REQ: theoasis>blackjack?>[username:string]>[action:string]> <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]> <br> OR <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[payout:integer]>[message:string]> | :x: |
 
 Responses that are sent without a request:
 | Description / Request / Response | Implemented |
