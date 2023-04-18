@@ -2,7 +2,16 @@
 
 ## General
 
-This project contains a ZMQ service called The Oasis, which is a virtual casino where clients can play a number of casino games. Clients must register once and then log in every time they wish to start a session. New clients start with 1000 credits. The client accounts, which includes their username, password, and credit amount, are stored in an SQLite database. Clients are automatically logged out after they've been inactive for at least 15 minutes.
+This project contains a ZMQ service called The Oasis, which is a virtual casino where clients can play a number of casino games. The client accounts, which includes their username, password, and credit amount, are stored in an SQLite database.
+
+Some general rules of the casino:
+- Clients must register once and then log in every time they wish to start a session. New clients start with 1000 credits. 
+- Clients are automatically logged out after they've been inactive for at least 15 minutes.
+- If a player is logged out due to inactivity while in a game, they lose any bet.
+- Logging out manually is not possible while in a game.
+- Bets are always paid up front, which means once the bet has been made, the credits go out of the player's account. The payouts in the tables below are always multiplied by the bet.
+
+A client for the service will be made so players can easily explore the casino.
 
 The [Diagram](#diagram) section shows a diagram of the service, client and Benternet. The [Requests and Responses'](#requests-and-responses) section describes all the available and planned requests and responses for the service and each of its games, as well as information on how to use them.
 
@@ -14,14 +23,14 @@ The Oasis service communicates with the Benternet over ZMQ. The Oasis clients in
 
 ## Requests and Responses
 
-The [Format](#format) section describes the format that is used for the requests and responses. The [General](#general-1) section describes all the general requests that can be made together with their responses. The sections after that describe the request and responses per game that can be played in the casino. Some requests require the client to be logged in. Each table also shows whether a request has been implemented yet. Every game section also contains an example of the requests and responses in a time-diagram fashion. Below is a list of all the available games:
+The [Format](#format) section describes the format that is used for the requests and responses. The [General](#general-1) section describes all the general requests that can be made together with their responses. The sections after that describe the request and responses per game that can be played in the casino. Some requests require the client to be logged in. Some responses are sent without a request being set first. Each table also shows whether a request has been implemented yet. Every game section also contains an example of the requests and responses in a time-diagram fashion. Below is a list of all the available games:
 
 - [Slot machine](#slot-machine)
 - [Roulette](#roulette)
 
 ### Format
 
-Some requests and responses contain variables, a variable will be indicated by square brackets containing the name of the variable and its type, e.g. ``[username:string]``. When the type of a variable is ``list`` it means that this variable contains multiple values separated by a comma ``,``.
+Some requests and responses contain variables, a variable will be indicated by square brackets containing the name of the variable and its type, e.g. ``[username:string]``. When the type of a variable is ``list`` it means that this variable contains multiple values separated by a comma ``,``. Two-dimensional lists are separated by a dash ``-``.
 
 The responses show which part of the response the client should subscribe to. This is indicated by curly brackets ``{}``. For example, the following request (checking a client's balance):
 ```
@@ -34,6 +43,8 @@ Has the following response:
 This means that the client must subscribe to ``theoasis>balance!>[username:string]>``, where the username is the username that they passed to the request.
 
 When a bad request is made (e.g.: wrong username/password, not enough parameters, invalid parameter...) the ``message`` part of the response will be an error message. Depending on the error, this message can range from a generic message such as "bad request", to a more specific message like "invalid bet number". The ``success`` part of the response will also be "false".
+
+Whenever a cards is communicated, it will be in the format ``list(string, integer)``. This is a list of two items: the suit (spades, hearts, clubs, diamonds) and the number (1 being the ace, and 13 the king). A list of cards is simply a one-dimensional list consisting of a series of string and integer pairs.
 
 ### General
 
@@ -55,7 +66,7 @@ Requests available only after logging in:
 
 ### Slot Machine
 
-The slot machine is a three-reel, single-payline slot machine. The client must 'insert' a bet into the slot machine. This means that if the payout is 0, the client lost their bet. If the payout is larger than 0, the client earned their bet back, plus a certain amount depending on the payline. The payline is the three symbols that show up on the slot machine, these determine the size of the payout. All the possible symbols are: bar, cherry, plum, watermelon, orange, lemon, empty.
+The slot machine is a three-reel, single-payline slot machine. The payline is the three symbols that show up on the slot machine, these determine the size of the payout. All the possible symbols are: bar, cherry, plum, watermelon, orange, lemon, empty.
 
 The table below contains the paylines and their payouts, which is multiplied by the bet.
 | Payline | Payout |
@@ -78,7 +89,7 @@ Requests available to anyone:
 Requests available only after logging in:
 | Description / Request / Response | Implemented |
 |---|---|
-| Play the slot machine. <br> REQ: theoasis>slotmachine?>[username:string]>[bet:integer]> <br> RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:list<string>]>[payout:integer]>[message:string]> | :heavy_check_mark: |
+| Play the slot machine. <br> REQ: theoasis>slotmachine?>[username:string]>[bet:integer]> <br> RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:list(string)]>[payout:integer]>[message:string]> | :heavy_check_mark: |
 
 Example:
 
@@ -89,7 +100,7 @@ The roulette tables are American, double-zero roulette tables. The table looks l
 
 ![American, double-zero roulette table](./media/roulette_table.PNG?raw=true)
 
-The client must place a bet onto the table. This means that if the payout is 0, the client lost their bet. The ``betName`` should be one of the bet names in the table below, which also show the payout (which is multiplied by the bet) and the meaning of the bet name. If the description of the bet name starts with the word 'any', the client should provide a number or list of numbers (depending on the bet name), into the ``betNumber`` variable. The ``rouletteNumber`` in the response is the number that the roulette landed on (0-36 and 00).
+The ``betName`` should be one of the bet names in the table below, which also show the payout (which is multiplied by the bet) and the meaning of the bet name. If the description of the bet name starts with the word 'any', the client should provide a number or list of numbers (depending on the bet name), into the ``betNumber`` variable. The ``rouletteNumber`` in the response is the number that the roulette landed on (0-36 and 00).
 
 | Bet Name                 | Payout   | Description |
 | --- | --- | --- |
@@ -123,8 +134,40 @@ Requests available to anyone:
 Requests available only after logging in:
 | Description / Request / Response | Implemented |
 |---|---|
-| Play roulette. <br> REQ: theoasis>roulette?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list<int>]> <br> RES: {theoasis>roulette!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]> | :heavy_check_mark: |
+| Play roulette. <br> REQ: theoasis>roulette?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list(integer)]> <br> RES: {theoasis>roulette!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]> | :heavy_check_mark: |
 
 Example:
 
 ![Example of the roulette table](./media/roulette_time.png?raw=true)
+
+### Blackjack
+
+A standard game of blackjack consisting of a single deck.
+
+The payouts are as follows:
+| Event | Payout |
+|---|---|
+| Blackjack | 2.5 |
+| Win | 2 |
+| Push | 1 |
+| Loss | 0 |
+
+Requests available to anyone:
+| Description / Request / Response | Implemented |
+|---|---|
+| Get more info on Blackjack. <br> REQ: theoasis>info?>blackjack> <br> RES: {theoasis>info!>blackjack>} | :heavy_check_mark: |
+
+Requests available only after logging in:
+| Description / Request / Response | Implemented |
+|---|---|
+| Start a Blackjack game by placing a bet. The response contains the dealer's card, and the two player's cards <br> REQ: theoasis>blackjack?>[username:string]>[bet:integer]> <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]>v | :x: |
+| Perform a Blackjack action: hit, stand, split, double, insurance. The action will only be performed if applicable. Actions should always be in the order of the player's hands. So if hit is requested, and then stand, hit applies to the first hand, stand to the second. Insurance bet is always half of the main bet. If the game ends after the action, the payout is added to the response. <br> REQ: theoasis>blackjack?>[username:string]>[action:string]> <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]> <br> OR <br> RES: {theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[payout:integer]>[message:string]> | :x: |
+
+Responses that are sent without a request:
+| Description / Request / Response | Implemented |
+|---|---|
+| This response is sent when the deck is shuffled. <br> RES: theoasis>blackjack!>[username:string]>shuffled> | :x: |
+
+Example:
+
+![Example of a Blackjack game](./media/blackjack_time.png?raw=true)
