@@ -13,7 +13,7 @@ Some general rules of the casino:
 
 A client for the service will be made so players can easily explore the casino.
 
-The [Diagram](#diagram) section shows a diagram of the service, client and Benternet. The [Requests and Responses'](#requests-and-responses) section describes all the available and planned requests and responses for the service and each of its games, as well as information on how to use them.
+The [Diagram](#diagram) section shows a diagram of the service, client and Benternet. The [Requests and Responses](#requests-and-responses) section describes all the available and planned requests and responses for the service and each of its games, as well as information on how to use them.
 
 ## Diagram
 
@@ -27,6 +27,7 @@ The [Format](#format) section describes the format that is used for the requests
 
 - [Slot machine](#slot-machine)
 - [Roulette](#roulette)
+- [Blackjack](#blackjack)
 
 ### Format
 
@@ -155,7 +156,7 @@ The payouts are as follows:
 Requests available to anyone:
 | Description / Request / Response | Implemented |
 |---|---|
-| Get more info on Blackjack. <br> REQ: theoasis>info?>blackjack> <br> RES: {theoasis>info!>blackjack>} | :heavy_check_mark: |
+| Get more info on Blackjack. <br> REQ: theoasis>info?>blackjack> <br> RES: {theoasis>info!>blackjack>} | :x: |
 
 Requests available only after logging in:
 | Description / Request / Response | Implemented |
