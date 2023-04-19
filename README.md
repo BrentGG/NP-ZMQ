@@ -26,13 +26,9 @@ The Oasis service communicates with the Benternet over ZMQ. The Oasis clients in
 Some requests and responses contain variables, a variable will be indicated by square brackets containing the name of the variable and its type, e.g. ``[username:string]``. When the type of a variable is ``list`` it means that this variable contains multiple values separated by a comma ``,``. Two-dimensional lists are separated by a dash ``-``.
 
 The responses show which part of the response the client should subscribe to in italics. For example, the following request (checking a client's balance):
-<code>
-<i>theoasis>balance?></i>[username:string]>
-</code>
+<pre><code><i>theoasis>balance?></i>[username:string]></code></pre>
 Has the following response:
-<code>
-<i>theoasis>balance!>[username:string]></i>[success:bool]>[balance:int]>[message:string]
-</code>
+<pre><code><i>theoasis>balance!>[username:string]></i>[success:bool]>[balance:int]>[message:string]</code></pre>
 This means that the client must subscribe to ``theoasis>balance!>[username:string]>``, where the username is the username that they passed to the request. This is a suggestions, you can of course subscribe to a more general topic and do the parsing yourself.
 
 When a bad request is made (e.g.: wrong username/password, not enough parameters, invalid parameter...) the ``message`` part of the response will be an error message. Depending on the error, this message can range from a generic message such as "bad request", to a more specific message like "invalid bet number". The ``success`` part of the response will also be "false".
