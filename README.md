@@ -25,15 +25,15 @@ The Oasis service communicates with the Benternet over ZMQ. The Oasis clients in
 
 Some requests and responses contain variables, a variable will be indicated by square brackets containing the name of the variable and its type, e.g. ``[username:string]``. When the type of a variable is ``list`` it means that this variable contains multiple values separated by a comma ``,``. Two-dimensional lists are separated by a dash ``-``.
 
-The responses show which part of the response the client should subscribe to. This is indicated by curly brackets ``{}``. For example, the following request (checking a client's balance):
-```
-theoasis>balance?>[username:string]>
-```
+The responses show which part of the response the client should subscribe to in italics. For example, the following request (checking a client's balance):
+<code>
+<i>theoasis>balance?></i>[username:string]>
+</code>
 Has the following response:
-```
-{theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]
-```
-This means that the client must subscribe to ``theoasis>balance!>[username:string]>``, where the username is the username that they passed to the request.
+<code>
+<i>theoasis>balance!>[username:string]></i>[success:bool]>[balance:int]>[message:string]
+</code>
+This means that the client must subscribe to ``theoasis>balance!>[username:string]>``, where the username is the username that they passed to the request. This is a suggestions, you can of course subscribe to a more general topic and do the parsing yourself.
 
 When a bad request is made (e.g.: wrong username/password, not enough parameters, invalid parameter...) the ``message`` part of the response will be an error message. Depending on the error, this message can range from a generic message such as "bad request", to a more specific message like "invalid bet number". The ``success`` part of the response will also be "false".
 
@@ -55,7 +55,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Receive an informational message from The Oasis.</b> <br> 
             REQ: <code>theoasis>info?></code> <br> 
-            RES: <code>{theoasis>info!>}[info:string]></code>
+            RES: <code><i>theoasis>info!></i>[info:string]></code>
             </td>
             <td>:x:</td>
             <td>:heavy_check_mark:</td>
@@ -64,7 +64,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Receive all the possible requests and responses.</b> <br> 
             REQ: <code>theoasis>help?></code> <br> 
-            RES: <code>{theoasis>help!>}[help:string]></code>
+            RES: <code><i>theoasis>help!></i>[help:string]></code>
             </td>
             <td>:x:</td>
             <td>:heavy_check_mark:</td>
@@ -73,7 +73,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Register to The Oasis.</b> A unique username is required. <br> 
             REQ: <code>theoasis>register?>[username:string]>[password:string]></code> <br> 
-            RES: <code>{theoasis>register!>[username:string]>}[success:bool]>[message:string]></code>
+            RES: <code><i>theoasis>register!>[username:string]></i>[success:bool]>[message:string]></code>
             </td>
             <td>:x:</td>
             <td>:heavy_check_mark:</td>
@@ -82,7 +82,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Login to The Oasis.</b> Must be registered first. <br> 
             REQ: <code>theoasis>login?>[username:string]>[password:string]></code> <br> 
-            RES: <code>{theoasis>login!>[username:string]>}[success:bool]>[message:string]></code>
+            RES: <code><i>theoasis>login!>[username:string]></i>[success:bool]>[message:string]></code>
             </td>
             <td>:x:</td>
             <td>:heavy_check_mark:</td>
@@ -91,7 +91,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Logout of The Oasis.</b> <br> 
             REQ: <code>theoasis>logout?>[username:string]>[password:string]></code> <br> 
-            RES: <code>{theoasis>logout!>[username:string]>}[success:bool]>[message:string]></code>
+            RES: <code><i>theoasis>logout!>[username:string]></i>[success:bool]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
             <td>:heavy_check_mark:</td>
@@ -100,7 +100,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Get your credit balance.</b> <br> 
             REQ: <code>theoasis>balance?>[username:string]></code> <br> 
-            RES: <code>{theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]></code>
+            RES: <code><i>theoasis>balance!>[username:string]></i>[success:bool]>[balance:int]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
             <td>:heavy_check_mark:</td>
@@ -114,7 +114,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Get more info on the slot machines.</b> <br> 
             REQ: <code>theoasis>info?>slotmachine></code> <br> 
-            RES: <code>{theoasis>info!>slotmachine>}</code>
+            RES: <code><i>theoasis>info!>slotmachine></i></code>
             </td>
             <td>:x:</td>
             <td>:heavy_check_mark:</td>
@@ -123,7 +123,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Play the slot machine.</b> <br> 
             REQ: <code>theoasis>slotmachine?>[username:string]>[bet:integer]></code> <br> 
-            RES: <code>{theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:list(string)]>[payout:integer]>[message:string]></code>
+            RES: <code><i>theoasis>slotmachine!>[username:string]></i>[success:bool]>[payline:list(string)]>[payout:integer]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
             <td>:heavy_check_mark:</td>
@@ -137,7 +137,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Get more info on the roulette tables.</b> <br> 
             REQ: <code>theoasis>info?>roulette></code> <br> 
-            RES: <code>{theoasis>info!>roulette>}</code>
+            RES: <code><i>theoasis>info!>roulette></i></code>
             </td>
             <td>:x:</td>
             <td>:heavy_check_mark:</td>
@@ -146,7 +146,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Play roulette.</b> <br> 
             REQ: <code>theoasis>roulette?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list(integer)]></code> <br> 
-            RES: <code>{theoasis>roulette!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]></code>
+            RES: <code><i>theoasis>roulette!>[username:string]></i>[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
             <td>:heavy_check_mark:</td>
@@ -160,7 +160,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Get more info on Blackjack.</b> <br> 
             REQ: <code>theoasis>info?>blackjack></code> <br> 
-            RES: <code>{theoasis>info!>blackjack>}</code>
+            RES: <code><i>theoasis>info!>blackjack></i></code>
             </td>
             <td>:x:</td>
             <td>:x:</td>
@@ -169,7 +169,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Start a Blackjack game by placing a bet.</b> The response contains the dealer's card, and the two player's cards. <br> 
             REQ: <code>theoasis>blackjack?>[username:string]>[bet:integer]></code> <br> 
-            RES: <code>{theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]></code>
+            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
             <td>:x:</td>
@@ -178,9 +178,9 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>
             <b>Perform a Blackjack action: hit, stand, split, double, insurance.</b> The action will only be performed if applicable. Actions should always be in the order of the player's hands. So if hit is requested, and then stand, hit applies to the first hand, stand to the second. Insurance bet is always half of the main bet. If the game ends after the action, the payout is added to the response. <br> 
             REQ: <code>theoasis>blackjack?>[username:string]>[action:string]></code> <br> 
-            RES: <code>{theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]></code> <br> 
+            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]></code> <br> 
             OR <br> 
-            RES: <code>{theoasis>blackjack!>[username:string]>}[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[payout:integer]>[message:string]></code>
+            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[payout:integer]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
             <td>:x:</td>
