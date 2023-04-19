@@ -1,5 +1,14 @@
 # Network Programming - ZMQ Service
 
+## Todo
+
+- [ ] Add Blackjack
+- [ ] Add Chō-Han
+- [ ] Use another service for the Chō-Han dice
+- [ ] Make secure 
+- [ ] Add threads
+- [ ] Make client
+
 ## General
 
 This project contains a ZMQ service called The Oasis, which is a virtual casino where clients can play a number of casino games. The client accounts, which includes their username, password, and credit amount, are stored in an SQLite database.
