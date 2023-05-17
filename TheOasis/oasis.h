@@ -3,6 +3,7 @@
 
 #include "dbmanager.h"
 #include "sender.h"
+#include "blackjack.h"
 
 #include <QCoreApplication>
 #include <nzmqt/nzmqt.hpp>
@@ -10,7 +11,6 @@
 #include <QObject>
 #include <QList>
 #include <QMap>
-
 
 class Oasis : public QObject
 {
@@ -29,6 +29,7 @@ public:
     bool getBalance(QList<QString> request);
     bool playSlotMachine(QList<QString> request);
     bool playRoulette(QList<QString> request);
+    bool playBlackjack(QList<QString> request);
     QList<int> strToIntList(QString str);
 
 private slots:
@@ -45,6 +46,8 @@ private:
 
     Sender *sender;
     QMap<QString, Player*> activePlayers;
+
+    QList<Blackjack*> blackjackInstances;
 };
 
 #endif // THEOASIS_H

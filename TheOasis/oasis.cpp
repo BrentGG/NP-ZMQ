@@ -63,6 +63,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>balance?>");
         subscriber->subscribeTo("theoasis>slotmachine?>");
         subscriber->subscribeTo("theoasis>roulette?>");
+        subscriber->subscribeTo("theoasis>blackjack?>");
 
         context->start();
     }
@@ -107,6 +108,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                                 playSlotMachine(request);
                             else if (request[1].compare("roulette?") == 0)
                                 playRoulette(request);
+                            else if (request[1].compare("blackjack?") == 0)
+                                playBlackjack(request);
                         }
                     }
                 }
@@ -300,6 +303,25 @@ bool Oasis::playRoulette(QList<QString> request)
     return false;
 }
 
+bool Oasis::playBlackjack(QList<QString> request)
+{
+    if (request.size() >= 4 && activePlayers.contains(request[2])) {
+        Player* player = activePlayers.find(request[2]).value();
+        for (Blackjack* blackjack : blackjackInstances) {
+            if (blackjack->getPlayer() == player) {
+                QString response = blackjack->handleRequest(request);
+                sender->sendMessage(response);
+                return true;
+            }
+        }
+        blackjackInstances.append(new Blackjack(player, 2));
+        QString response = blackjackInstances.last()->handleRequest(request);
+        sender->sendMessage(response);
+        return true;
+    }
+    return false;
+}
+
 QList<int> Oasis::strToIntList(QString str)
 {
     QList<int> result;
@@ -309,7 +331,7 @@ QList<int> Oasis::strToIntList(QString str)
 }
 
 /**
- * @brief Checks if any of the active players have gone inactive and removes those from the active list.
+ * @brief Checks if any of the active players have gone inactive and removes those from the active list. Also removes any inactive blackjack instances.
  */
 void Oasis::checkStatus()
 {
@@ -323,5 +345,12 @@ void Oasis::checkStatus()
         }
         else
             ++i;
+    }
+    QList<Blackjack*>::iterator j = blackjackInstances.begin();
+    while (j != blackjackInstances.end()) {
+        if ((*j)->getPlayer() == nullptr || !activePlayers.contains((*j)->getPlayer()->getName()))
+            j = blackjackInstances.erase(j);
+        else
+            ++j;
     }
 }
