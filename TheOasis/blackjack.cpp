@@ -6,6 +6,7 @@
 Blackjack::Blackjack(Player* player, int decks) : player(player), decks(decks)
 {
     fillShoe();
+    currentHand = 0;
 }
 
 QString Blackjack::handleRequest(QList<QString> request)
@@ -28,17 +29,18 @@ QString Blackjack::handleRequest(QList<QString> request)
         }
         if (playerCards.size() > 0) {
             if (request[3].compare("hit") == 0)
-                return hit();
+                hit();
             else if (request[3].compare("stand") == 0)
-                return stand();
+                stand();
             else if (request[3].compare("split") == 0)
-                return split();
+                split();
             else if (request[3].compare("double") == 0)
-                return double_();
+                double_();
             else if (request[3].compare("insurance") == 0)
-                return insurance();
+                insurance();
             else
                 throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Unknown command.>"));
+            return respond();
         }
         else
             throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Place a bet first.>"));
@@ -57,16 +59,16 @@ void Blackjack::fillShoe()
     for (int i = 0; i < decks; ++i) {
         for (int k = 1; k < 14; ++k) {
             QPair<Suit, int> card = QPair<Suit, int>(SPADES, k);
-            if (!playerCards.contains(card) && !dealerCards.contains(card) && holeCard != card)
+            if (!checkCardUsed(card))
                 shoe.append(card);
             card = QPair<Suit, int>(HEARTS, k);
-            if (!playerCards.contains(card) && !dealerCards.contains(card) && holeCard != card)
+            if (!checkCardUsed(card))
                 shoe.append(card);
             card = QPair<Suit, int>(CLUBS, k);
-            if (!playerCards.contains(card) && !dealerCards.contains(card) && holeCard != card)
+            if (!checkCardUsed(card))
                 shoe.append(card);
             card = QPair<Suit, int>(DIAMONDS, k);
-            if (!playerCards.contains(card) && !dealerCards.contains(card) && holeCard != card)
+            if (!checkCardUsed(card))
                 shoe.append(card);
         }
     }
@@ -83,14 +85,15 @@ QPair<Blackjack::Suit, int> Blackjack::getCard()
 QString Blackjack::startRound()
 {
     if (playerCards.size() == 0) {
-        playerCards.append(getCard());
-        playerCards.append(getCard());
+        playerCards.append(QList<QPair<Suit, int>>());
+        playerCards[0].append(getCard());
+        playerCards[0].append(getCard());
         dealerCards.append(getCard());
         holeCard = getCard();
         shoe.removeFirst();
         player->modifyCredits(-bet);
 
-        int playerScore = calcScore(playerCards);
+        int playerScore = calcScore(playerCards[0]);
         dealerCards.append(holeCard);
         int dealerScore = calcScore(dealerCards);
         QString response = getResponseString();
@@ -116,115 +119,135 @@ QString Blackjack::startRound()
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Bet already placed.>"));
 }
 
-QString Blackjack::hit()
+void Blackjack::hit()
 {
-    playerCards.append(getCard());
-    QString response = getResponseString();
-    if (calcScore(playerCards) > 21) {
-        response.append("0>You bust!>");
-        endRound();
-    }
+    playerCards[currentHand].append(getCard());
     if (shoe.size() < 52)
         fillShoe();
-    if (calcScore(playerCards) == 21)
+    if (calcScore(playerCards[currentHand]) == 21)
         stand();
-    return response;
+    else if (calcScore(playerCards[currentHand]) > 21)
+        currentHand += 1;
 }
 
-QString Blackjack::stand()
+void Blackjack::stand()
 {
     dealerCards.append(holeCard);
     while (calcScore(dealerCards) < 17) {
         dealerCards.append(getCard());
         shoe.removeFirst();
     }
-    int dealerScore = calcScore(dealerCards);
-    int playerScore = calcScore(playerCards);
-    int payout = 0;
-    if (playerScore <= 21) {
-        if (dealerScore > playerScore && dealerScore <= 21)
-            payout = 0;
-        else if (dealerScore == playerScore)
-            payout = bet;
-        else
-            payout = 2 * bet;
-    }
-    else {
-        if (dealerScore > 21)
-            payout = bet;
-        else
-            payout = 0;
-    }
-    QString response = getResponseString();
-    response.append(QString::number(payout) + ">");
-    if (payout == 0)
-        response.append("You lost!>");
-    else if (payout == bet)
-        response.append("Push!>");
-    else
-        response.append("You won!>");
-    endRound();
+    currentHand += 1;
     if (shoe.size() < 52)
         fillShoe();
-    return response;
 }
 
-QString Blackjack::split()
+void Blackjack::split()
 {
 
 }
 
-QString Blackjack::double_()
+void Blackjack::double_()
 {
 
 }
 
-QString Blackjack::insurance()
+void Blackjack::insurance()
 {
 
 }
 
-QString Blackjack::suitEnumToString(Suit suit)
+QString Blackjack::cardToString(QPair<Suit, int> card)
 {
-    if (suit == SPADES)
-        return QString("spades");
-    else if (suit == HEARTS)
-        return QString("hearts");
-    else if (suit == CLUBS)
-        return QString("clubs");
-    else if (suit == DIAMONDS)
-        return QString("diamonds");
-    return "";
-}
-
-QString Blackjack::cardNumberToString(int number)
-{
-    if (number <= 10)
-        return QString::number(number);
-    else if (number == 11)
-        return "jack";
-    else if (number == 12)
-        return "queen";
-    else if (number == 13)
-        return "king";
-    return "";
+    QString cardStr = "";
+    if (card.first == SPADES)
+        cardStr.append("spades,");
+    else if (card.first == HEARTS)
+        cardStr.append("hearts,");
+    else if (card.first == CLUBS)
+        cardStr.append("clubs,");
+    else if (card.first == DIAMONDS)
+        cardStr.append("diamonds,");
+    if (card.second <= 10)
+        cardStr.append(QString::number(card.second));
+    else if (card.second == 11)
+        cardStr.append("J");
+    else if (card.second == 12)
+        cardStr.append("Q");
+    else if (card.second == 13)
+        cardStr.append("Q");
+    return cardStr;
 }
 
 QString Blackjack::getResponseString()
 {
     QString response = QString("theoasis>blackjack!>" + player->getName() + ">true>");
     for (int i = 0; i < dealerCards.size(); ++i) {
-        response.append(suitEnumToString(dealerCards[i].first) + "," + QString::number(dealerCards[i].second));
+        response.append(cardToString(dealerCards[i]));
         if (i < dealerCards.size() - 1)
             response.append(",");
     }
     response.append(">" + QString::number(calcScore(dealerCards)) + ">");
     for (int i = 0; i < playerCards.size(); ++i) {
-        response.append(suitEnumToString(playerCards[i].first) + "," + QString::number(playerCards[i].second));
+        for (int j = 0; j < playerCards[i].size(); ++j) {
+            response.append(cardToString(playerCards[i][j]));
+            if (j < playerCards[i].size() - 1)
+                response.append(",");
+        }
         if (i < playerCards.size() - 1)
             response.append(",");
     }
-    response.append(">" + QString::number(calcScore(playerCards)) + ">");
+    response.append(">");
+    for (int i = 0; i < playerCards.size(); ++i) {
+        response.append(QString::number(calcScore(playerCards[i])));
+        if (i < playerCards.size() - 1)
+            response.append(",");
+    }
+    response.append(">");
+    return response;
+}
+
+QString Blackjack::respond()
+{
+    QString response = getResponseString();
+    QString feedback = "";
+    int dealerScore = calcScore(dealerCards);
+    int totalPayout = 0;
+    if (currentHand >= playerCards.size()) {
+        for (int i = 0; i < playerCards.size(); ++i) {
+            int playerScore = calcScore(playerCards[i]);
+            int payout = 0;
+            if (playerScore <= 21) {
+                if (dealerScore > playerScore && dealerScore <= 21)
+                    payout = 0;
+                else if (dealerScore == playerScore)
+                    payout = bet;
+                else
+                    payout = 2 * bet;
+            }
+            else {
+                if (dealerScore > 21)
+                    payout = bet;
+                else
+                    payout = 0;
+            }
+            totalPayout += payout;
+            response.append(QString::number(payout));
+            if (payout == 0)
+                feedback.append("Hand lost.");
+            else if (payout == bet)
+                feedback.append("Push.");
+            else
+                feedback.append("Hand won!");
+            if (i < playerCards.size() - 1) {
+                response.append(",");
+                feedback.append(",");
+            }
+        }
+        response.append(">" + feedback + ">");
+        player->modifyCredits(totalPayout);
+        endRound();
+    }
     return response;
 }
 
@@ -249,4 +272,18 @@ void Blackjack::endRound()
     bet = 0;
     dealerCards.clear();
     playerCards.clear();
+    currentHand = 0;
+}
+
+bool Blackjack::checkCardUsed(QPair<Suit, int> card)
+{
+    for (QList<QPair<Suit, int>> hand : playerCards) {
+        if (hand.contains(card))
+            return true;
+    }
+    if (dealerCards.contains(card))
+        return true;
+    if (holeCard == card)
+        return true;
+    return false;
 }
