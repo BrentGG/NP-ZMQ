@@ -127,47 +127,47 @@ int Roulette::calcPayout(int rouletteNumber, int bet, BetName betName, QList<int
 Roulette::BetName Roulette::strToBetName(QString betNameStr)
 {
     betNameStr = betNameStr.toLower();
-    if (betNameStr.compare("zero") == 0)
+    if (betNameStr.toLower().compare("zero") == 0)
         return ZERO;
-    else if (betNameStr.compare("double zero") == 0)
+    else if (betNameStr.toLower().compare("double zero") == 0)
         return DOUBLE_ZERO;
-    else if (betNameStr.compare("straight up") == 0)
+    else if (betNameStr.toLower().compare("straight up") == 0)
         return STRAIGHT_UP;
-    else if (betNameStr.compare("row") == 0)
+    else if (betNameStr.toLower().compare("row") == 0)
         return ROW;
-    else if (betNameStr.compare("split") == 0)
+    else if (betNameStr.toLower().compare("split") == 0)
         return SPLIT;
-    else if (betNameStr.compare("street") == 0)
+    else if (betNameStr.toLower().compare("street") == 0)
         return STREET;
-    else if (betNameStr.compare("corner") == 0)
+    else if (betNameStr.toLower().compare("corner") == 0)
         return CORNER;
-    else if (betNameStr.compare("basket") == 0)
+    else if (betNameStr.toLower().compare("basket") == 0)
         return BASKET;
-    else if (betNameStr.compare("double street") == 0)
+    else if (betNameStr.toLower().compare("double street") == 0)
         return DOUBLE_STREET;
-    else if (betNameStr.compare("first column") == 0)
+    else if (betNameStr.toLower().compare("first column") == 0)
         return FIRST_COLUMN;
-    else if (betNameStr.compare("second column") == 0)
+    else if (betNameStr.toLower().compare("second column") == 0)
         return SECOND_COLUMN;
-    else if (betNameStr.compare("third column") == 0)
+    else if (betNameStr.toLower().compare("third column") == 0)
         return THIRD_COLUMN;
-    else if (betNameStr.compare("first dozen") == 0)
+    else if (betNameStr.toLower().compare("first dozen") == 0)
         return FIRST_DOZEN;
-    else if (betNameStr.compare("second dozen") == 0)
+    else if (betNameStr.toLower().compare("second dozen") == 0)
         return SECOND_DOZEN;
-    else if (betNameStr.compare("third dozen") == 0)
+    else if (betNameStr.toLower().compare("third dozen") == 0)
         return THIRD_DOZEN;
-    else if (betNameStr.compare("odd") == 0)
+    else if (betNameStr.toLower().compare("odd") == 0)
         return ODD;
-    else if (betNameStr.compare("even") == 0)
+    else if (betNameStr.toLower().compare("even") == 0)
         return EVEN;
-    else if (betNameStr.compare("red") == 0)
+    else if (betNameStr.toLower().compare("red") == 0)
         return RED;
-    else if (betNameStr.compare("black") == 0)
+    else if (betNameStr.toLower().compare("black") == 0)
         return BLACK;
-    else if (betNameStr.compare("one to eighteen") == 0)
+    else if (betNameStr.toLower().compare("one to eighteen") == 0)
         return ONE_TO_EIGHTEEN;
-    else if (betNameStr.compare("nineteen to thirty-six") == 0)
+    else if (betNameStr.toLower().compare("nineteen to thirty-six") == 0)
         return NINETEEN_TO_THIRTYSIX;
     return UNKNOWN;
 }

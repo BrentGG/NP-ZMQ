@@ -191,6 +191,8 @@ void Blackjack::double_()
     if (playerCards[currentHand].size() == 2 && playerCards.size() == 1) {
         playerCards[currentHand].append(getCard());
         stand();
+        player->modifyCredits(-bet);
+        bet *= 2;
     }
     else
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't double right now.>"));
@@ -319,7 +321,7 @@ QString Blackjack::endTurn()
             }
 
             if (insured && dealerScore == 21)
-                totalPayout += bet / 2;
+                totalPayout += bet;
             response.append(QString::number(payout));
         }
 
