@@ -7,6 +7,10 @@ Roulette::Roulette()
 {
 }
 
+/**
+ * @brief Return a string containing info about the roulette game.
+ * @return The string
+ */
 QString Roulette::getInfo()
 {
     return QString("theoasis>info?>roulette>\n\
@@ -39,16 +43,35 @@ nineteen to thirty-six   2        19 to 36\n\
     ");
 }
 
+/**
+ * @brief Play a roulette game
+ * @param bet: the bet amount
+ * @param betName: the name of the bet
+ * @param betNumbers: some bets require specifying numbers
+ * @return The payout
+ */
 int Roulette::play(int bet, BetName betName, QList<int> betNumbers)
 {
     return calcPayout(spin(), bet, betName, betNumbers);
 }
 
+/**
+ * @brief Spin the roulette wheel (a.k.a. return a random number on the roulette wheel)
+ * @return The number the roulette landed on, 37 being 00.
+ */
 int Roulette::spin()
 {
     return QRandomGenerator::global()->bounded(0, 38); // 0-36 + 00
 }
 
+/**
+ * @brief Calculate the payout given the number the reoulette landed on, the bet, betname and betnumbers
+ * @param rouletteNumber: the number the roulette landed on
+ * @param bet: the bet amount
+ * @param betName: the name of the bet
+ * @param betNumbers: some bets require specifying numbers
+ * @return The payout
+ */
 int Roulette::calcPayout(int rouletteNumber, int bet, BetName betName, QList<int> betNumbers)
 {
     if (betName == ZERO && rouletteNumber == 0)
@@ -96,6 +119,11 @@ int Roulette::calcPayout(int rouletteNumber, int bet, BetName betName, QList<int
     return bet * 0;
 }
 
+/**
+ * @brief Convert the string of a bet name to the enum of the bet name
+ * @param betNameStr: the bet name as a string
+ * @return The bet name as an enum
+ */
 Roulette::BetName Roulette::strToBetName(QString betNameStr)
 {
     betNameStr = betNameStr.toLower();
@@ -144,6 +172,12 @@ Roulette::BetName Roulette::strToBetName(QString betNameStr)
     return UNKNOWN;
 }
 
+/**
+ * @brief Check whether the given bet numbers are valid for a given bet name
+ * @param betName: the name of a bet
+ * @param betNumbers: the given numbers of the bet
+ * @return True if the numbers are valid
+ */
 bool Roulette::areValidBetNumbers(BetName betName, QList<int> betNumbers)
 {
     if (betNumbers.size() > 0) {

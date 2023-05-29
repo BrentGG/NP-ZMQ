@@ -6,6 +6,9 @@
 #include <QList>
 #include <QPair>
 
+/**
+ * @brief A blackjack game. There should only be one instance per player, this simulates the player sitting at a blackjack table.
+ */
 class Blackjack
 {
 public:
@@ -41,11 +44,11 @@ private:
     void split();
     void double_();
     void insurance();
+    int calcScore(QList<QPair<Suit, int>> cards);
+    QString endTurn();
+    void endRound();
     QString cardToString(QPair<Suit, int> card);
     QString getResponseCards();
-    QString endTurn();
-    int calcScore(QList<QPair<Suit, int>> cards);
-    void endRound();
     bool checkCardUsed(QPair<Suit, int> card);
 };
 

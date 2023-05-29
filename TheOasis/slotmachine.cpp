@@ -123,6 +123,11 @@ int SlotMachine::calcPayout(QList<Symbols> payline, int bet)
         return 0 * bet;
 }
 
+/**
+ * @brief Convert the payline, which is a list of enums, to a list of strings, so it can be sent
+ * @param payline: the payline list
+ * @return The string list
+ */
 QList<QString> SlotMachine::paylineToStringList(QList<Symbols> payline)
 {
     QList<QString> strList;
@@ -143,16 +148,34 @@ QList<QString> SlotMachine::paylineToStringList(QList<Symbols> payline)
     return strList;
 }
 
+/**
+ * @brief Check whether the payline has three in a row of a given symbol
+ * @param payline: the payline
+ * @param symbol: the symbol
+ * @return True if the payline has three of the symbol in a row
+ */
 bool SlotMachine::threeInARow(QList<Symbols> payline, Symbols symbol)
 {
     return payline[0] == symbol && payline[1] == symbol && payline[2] == symbol;
 }
 
+/**
+ * @brief Check whether the payline has two in a row of a given symbol
+ * @param payline: the payline
+ * @param symbol: the symbol
+ * @return True if the payline has two of the symbol in a row
+ */
 bool SlotMachine::twoInARow(QList<Symbols> payline, Symbols symbol)
 {
     return (payline[0] == symbol && payline[1] == symbol) || (payline[1] == symbol && payline[2] == symbol);
 }
 
+/**
+ * @brief Check if the payline contains the symbol
+ * @param payline: the payline
+ * @param symbol: the symbol
+ * @return True if the payline contains the symbol
+ */
 bool SlotMachine::any(QList<Symbols> payline, Symbols symbol)
 {
     return payline[0] == symbol || payline[1] == symbol || payline[2] == symbol;

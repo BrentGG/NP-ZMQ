@@ -10,6 +10,11 @@ Blackjack::Blackjack(Player* player, int decks) : player(player), decks(decks)
     insured = false;
 }
 
+/**
+ * @brief Handle a request made to the blackjack game
+ * @param request: the request that is made, split into parts separated by '>'
+ * @return The response that must be sent
+ */
 QString Blackjack::handleRequest(QList<QString> request)
 {
     bool isNumber = false;
@@ -49,11 +54,18 @@ QString Blackjack::handleRequest(QList<QString> request)
     return "";
 }
 
+/**
+ * @brief Return the player that this blackjack instance belongs to
+ * @return the player
+ */
 Player *Blackjack::getPlayer()
 {
     return player;
 }
 
+/**
+ * @brief Initiate the shoe (a.k.a. all the available cards)
+ */
 void Blackjack::fillShoe()
 {
     shoe.clear();
@@ -75,6 +87,10 @@ void Blackjack::fillShoe()
     }
 }
 
+/**
+ * @brief Take a random card from the shoe
+ * @return the card
+ */
 QPair<Blackjack::Suit, int> Blackjack::getCard()
 {
     int index = QRandomGenerator::global()->bounded(0, shoe.size());
@@ -83,6 +99,10 @@ QPair<Blackjack::Suit, int> Blackjack::getCard()
     return card;
 }
 
+/**
+ * @brief Start a blackjack round
+ * @return the response that should be sent back
+ */
 QString Blackjack::startRound()
 {
     if (playerCards.size() == 0) {
@@ -120,6 +140,9 @@ QString Blackjack::startRound()
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Bet already placed.>"));
 }
 
+/**
+ * @brief Do a hit: add a card to the player's current hand
+ */
 void Blackjack::hit()
 {
     playerCards[currentHand].append(getCard());
@@ -131,6 +154,9 @@ void Blackjack::hit()
         currentHand += 1;
 }
 
+/**
+ * @brief Stand: finish the current hand
+ */
 void Blackjack::stand()
 {
     currentHand += 1;
@@ -138,6 +164,9 @@ void Blackjack::stand()
         fillShoe();
 }
 
+/**
+ * @brief Split: if the two initial cards of a hand have the same value, split them into two separate hands that both get an extra card.
+ */
 void Blackjack::split()
 {
     if (playerCards[currentHand].size() == 2 && (
@@ -154,6 +183,9 @@ void Blackjack::split()
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't split right now.>"));
 }
 
+/**
+ * @brief Double down: add one extra card to the initial hand and then stand, the bet is doubled.
+ */
 void Blackjack::double_()
 {
     if (playerCards[currentHand].size() == 2 && playerCards.size() == 1) {
@@ -164,6 +196,10 @@ void Blackjack::double_()
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't double right now.>"));
 }
 
+/**
+ * @brief Insurance: insure against the dealers hand being a blackjack when their first card is an ace. The insurance costs half the bet and if the dealer has a blackjack,
+ * the player gains 2 * insurance on top of whatever they gained.
+ */
 void Blackjack::insurance()
 {
     if (!insured && playerCards[currentHand].size() == 2 && playerCards.size() == 1 && dealerCards[0].second == 1) {
@@ -174,6 +210,11 @@ void Blackjack::insurance()
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't insure right now.>"));
 }
 
+/**
+ * @brief Convert a card to a string so it can be sent
+ * @param card: the card to be converted
+ * @return the string
+ */
 QString Blackjack::cardToString(QPair<Suit, int> card)
 {
     QString cardStr = "";
@@ -196,6 +237,10 @@ QString Blackjack::cardToString(QPair<Suit, int> card)
     return cardStr;
 }
 
+/**
+ * @brief Return the first part of the response string containing the dealer cards, dealer score, player hands, player scores and index of the current hand.
+ * @return the first part of the response string
+ */
 QString Blackjack::getResponseCards()
 {
     QString response = QString("theoasis>blackjack!>" + player->getName() + ">true>");
@@ -226,6 +271,10 @@ QString Blackjack::getResponseCards()
     return response;
 }
 
+/**
+ * @brief End the player's turn. Should be called after every player action.
+ * @return The response to be sent.
+ */
 QString Blackjack::endTurn()
 {
     QString response;
@@ -283,6 +332,11 @@ QString Blackjack::endTurn()
     return response;
 }
 
+/**
+ * @brief Calculate the score of a list of cards
+ * @param cards: the cards to calculate the score of
+ * @return the score
+ */
 int Blackjack::calcScore(QList<QPair<Suit, int> > cards)
 {
     int score = 0;
@@ -299,6 +353,9 @@ int Blackjack::calcScore(QList<QPair<Suit, int> > cards)
     return score;
 }
 
+/**
+ * @brief End the round, reset for the next round.
+ */
 void Blackjack::endRound()
 {
     bet = 0;
@@ -308,6 +365,11 @@ void Blackjack::endRound()
     insured = false;
 }
 
+/**
+ * @brief Check whether a card is currently in the dealer's hand or in one of the player's hands
+ * @param card: the card to check.
+ * @return True if the card is already in use.
+ */
 bool Blackjack::checkCardUsed(QPair<Suit, int> card)
 {
     for (QList<QPair<Suit, int>> hand : playerCards) {
