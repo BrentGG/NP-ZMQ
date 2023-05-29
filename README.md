@@ -2,7 +2,7 @@
 
 ## Todo
 
-- [ ] Add Blackjack
+- [x] Add Blackjack
 - [ ] Add Chō-Han
 - [ ] Use another service for the Chō-Han dice
 - [ ] Make client
@@ -166,35 +166,36 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             RES: <code><i>theoasis>info!>blackjack></i></code>
             </td>
             <td>:x:</td>
-            <td>:x:</td>
+            <td>:heavy_check_mark:</td>
         </tr>
         <tr>
             <td>
-            <b>Start a Blackjack game by placing a bet.</b> The response contains the dealer's card, and the two player's cards. <br> 
+            <b>Start a Blackjack game by placing a bet.</b> The response contains the dealer's card, the score of the dealer's card, the two player's cards, the score of the player's cards and the index of the current hand (0 in this case). <br> 
             REQ: <code>theoasis>blackjack?>[username:string]>[bet:integer]></code> <br> 
-            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]></code>
+            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[dealerscore:integer]>[playercards:list(list(string, integer))]>[dealerscore:list(integer)]>[currenthand:integer]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
-            <td>:x:</td>
+            <td>:heavy_check_mark:</td>
         </tr>
         <tr>
             <td>
-            <b>Perform a Blackjack action: hit, stand, split, double, insurance.</b> The action will only be performed if applicable. Actions should always be in the order of the player's hands. So if hit is requested, and then stand, hit applies to the first hand, stand to the second. Insurance bet is always half of the main bet. If the game ends after the action, the payout is added to the response. <br> 
+            <b>Perform a Blackjack action: hit, stand, split, double, insurance.</b> The action will only be performed if applicable. The actions applies to the current active hand. Insurance bet is always half of the main bet. If the game ends after the action, the payout (per hand) is added to the response. <br> 
             REQ: <code>theoasis>blackjack?>[username:string]>[action:string]></code> <br> 
-            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[message:string]></code> <br> 
+            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[dealerscore:integer]>[playercards:list(list(string, integer))]>[dealerscore:list(integer)]>[currenthand:integer]>[message:string]></code> <br> 
             OR <br> 
-            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[playercards:list(list(string, integer))]>[payout:integer]>[message:string]></code>
+            RES: <code><i>theoasis>blackjack!>[username:string]></i>[success:bool]>[dealercards:list(string, integer)]>[dealerscore:integer]>[playercards:list(list(string, integer))]>[dealerscore:list(integer)]>[currenthand:integer]>[payout:list(integer)]>[message:string]></code>
             </td>
             <td>:heavy_check_mark:</td>
-            <td>:x:</td>
+            <td>:heavy_check_mark:</td>
         </tr>
         <tr>
             <td>
-            <b>This response is sent when the deck is shuffled.</b> <br> 
-            RES: <code>theoasis>blackjack!>[username:string]>shuffled></code>
+            <b>Get the amount of cards that are still in the deck. The deck is shuffled around the point when there is only one deck left.</b> <br> 
+            REQ: <code>theoasis>blackjack?>[username:string]>shoesize></code> <br> 
+            RES: <code>theoasis>blackjack!>[username:string]>[shoesize:integer]></code>
             </td>
             <td>:heavy_check_mark:</td>
-            <td>:x:</td>
+            <td>:heavy_check_mark:</td>
         </tr>
     </tbody>
 </table>
