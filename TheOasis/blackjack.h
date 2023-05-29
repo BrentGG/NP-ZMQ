@@ -41,8 +41,8 @@ private:
     void double_();
     void insurance();
     QString cardToString(QPair<Suit, int> card);
-    QString getResponseString();
-    QString respond();
+    QString getResponseCards();
+    QString endTurn();
     int calcScore(QList<QPair<Suit, int>> cards);
     void endRound();
     bool checkCardUsed(QPair<Suit, int> card);

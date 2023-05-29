@@ -40,7 +40,7 @@ QString Blackjack::handleRequest(QList<QString> request)
                 insurance();
             else
                 throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Unknown command.>"));
-            return respond();
+            return endTurn();
         }
         else
             throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Place a bet first.>"));
@@ -96,7 +96,7 @@ QString Blackjack::startRound()
         int playerScore = calcScore(playerCards[0]);
         dealerCards.append(holeCard);
         int dealerScore = calcScore(dealerCards);
-        QString response = getResponseString();
+        QString response = getResponseCards();
         if (playerScore == 21 && dealerScore != 21) {
             response.append(QString::number(bet * 2.5) + ">Blackjack!>");
             player->modifyCredits(2.5 * bet);
@@ -113,7 +113,7 @@ QString Blackjack::startRound()
             return response;
         }
         dealerCards.removeLast();
-        return getResponseString();
+        return getResponseCards();
     }
     else
         throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Bet already placed.>"));
@@ -132,11 +132,6 @@ void Blackjack::hit()
 
 void Blackjack::stand()
 {
-    dealerCards.append(holeCard);
-    while (calcScore(dealerCards) < 17) {
-        dealerCards.append(getCard());
-        shoe.removeFirst();
-    }
     currentHand += 1;
     if (shoe.size() < 52)
         fillShoe();
@@ -144,7 +139,18 @@ void Blackjack::stand()
 
 void Blackjack::split()
 {
-
+    if (playerCards[currentHand].size() == 2 && (
+                (playerCards[currentHand][0].second == playerCards[currentHand][1].second) || // equal card number
+                ((playerCards[currentHand][0].second >= 10 || playerCards[currentHand][0].second == 1) && // both cards value 10
+                 (playerCards[currentHand][1].second >= 10 || playerCards[currentHand][1].second == 1)))) {
+        int secondHand = playerCards.size();
+        playerCards.append(QList<QPair<Suit, int>>());
+        playerCards[secondHand].append(playerCards[currentHand][1]);
+        playerCards[currentHand][1] = getCard();
+        playerCards[secondHand].append(getCard());
+    }
+    else
+        throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't split right now.>"));
 }
 
 void Blackjack::double_()
@@ -179,7 +185,7 @@ QString Blackjack::cardToString(QPair<Suit, int> card)
     return cardStr;
 }
 
-QString Blackjack::getResponseString()
+QString Blackjack::getResponseCards()
 {
     QString response = QString("theoasis>blackjack!>" + player->getName() + ">true>");
     for (int i = 0; i < dealerCards.size(); ++i) {
@@ -195,7 +201,7 @@ QString Blackjack::getResponseString()
                 response.append(",");
         }
         if (i < playerCards.size() - 1)
-            response.append(",");
+            response.append(";");
     }
     response.append(">");
     for (int i = 0; i < playerCards.size(); ++i) {
@@ -204,16 +210,24 @@ QString Blackjack::getResponseString()
             response.append(",");
     }
     response.append(">");
+    if (currentHand < playerCards.size())
+        response.append(QString::number(currentHand) + ">");
     return response;
 }
 
-QString Blackjack::respond()
+QString Blackjack::endTurn()
 {
-    QString response = getResponseString();
-    QString feedback = "";
-    int dealerScore = calcScore(dealerCards);
-    int totalPayout = 0;
+    QString response;
     if (currentHand >= playerCards.size()) {
+        QString feedback = "";
+        int totalPayout = 0;
+        dealerCards.append(holeCard);
+        int dealerScore = calcScore(dealerCards);
+        while (dealerScore < 17) {
+            dealerCards.append(getCard());
+            dealerScore = calcScore(dealerCards);
+        }
+        response = getResponseCards();
         for (int i = 0; i < playerCards.size(); ++i) {
             int playerScore = calcScore(playerCards[i]);
             int payout = 0;
@@ -248,6 +262,8 @@ QString Blackjack::respond()
         player->modifyCredits(totalPayout);
         endRound();
     }
+    else
+        response = getResponseCards();
     return response;
 }
 
