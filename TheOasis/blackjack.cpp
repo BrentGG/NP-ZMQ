@@ -10,6 +10,22 @@ Blackjack::Blackjack(Player* player, int decks) : player(player), decks(decks)
     insured = false;
 }
 
+QString Blackjack::getInfo()
+{
+    return QString("theoasis>info!>blackjack>\n\
+>>> The Oasis: Blackjack Info <<<\n\n\
+The Blackjack game is an American style Blackjack game. You can hit, stand, split, double and insure. When doubling down, the bet is doubled. \
+When insuring, half of the bet is played for the insurance. If the dealer has Blackjack and the player has insured, the player receives 2 * insurance bet. \
+The Blackjack game is peristent, meaning that the player sits at the same table (playing with the same shoe), until they leave. \
+The payouts are as follows (multiplied by the bet):\n\
+Result              Payout\n\
+Player Blackjack    2.5\n\
+Player wins         2\n\
+Push                1\n\
+Dealer wins         0\n\
+    ");
+}
+
 /**
  * @brief Handle a request made to the blackjack game
  * @param request: the request that is made, split into parts separated by '>'

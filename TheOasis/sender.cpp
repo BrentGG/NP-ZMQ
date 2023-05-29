@@ -1,6 +1,8 @@
 #include "sender.h"
 #include "slotmachine.h"
 #include "roulette.h"
+#include "blackjack.h"
+#include "failedrequest.h"
 
 #include <iostream>
 
@@ -43,12 +45,14 @@ To get an overview of all the possible request, send the following request 'theo
 ");
         sendMessage(response);
     }
-    else if (request[2].compare("slotmachine") == 0) {
+    else if (request[2].compare("slotmachine") == 0)
         sendMessage(SlotMachine::getInfo());
-    }
-    else if (request[2].compare("roulette") == 0) {
+    else if (request[2].compare("roulette") == 0)
         sendMessage(Roulette::getInfo());
-    }
+    else if (request[2].compare("blackjack") == 0)
+        sendMessage(Blackjack::getInfo());
+    else
+        throw FailedRequest(QString("theoasis>info!>" + request[2] + ">false>No info on this subject.>"));
 }
 
 /**

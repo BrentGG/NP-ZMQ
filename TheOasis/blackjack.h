@@ -21,6 +21,7 @@ public:
         DIAMONDS
     };
 
+    static QString getInfo();
     QString handleRequest(QList<QString> request);
     Player* getPlayer();
 
