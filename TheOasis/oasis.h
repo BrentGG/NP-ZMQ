@@ -4,6 +4,7 @@
 #include "dbmanager.h"
 #include "sender.h"
 #include "blackjack.h"
+#include "player.h"
 
 #include <QCoreApplication>
 #include <nzmqt/nzmqt.hpp>
@@ -27,10 +28,9 @@ public:
     bool loginPlayer(QList<QString> request);
     bool logoutPlayer(QList<QString> request);
     bool getBalance(QList<QString> request);
-    bool playSlotMachine(QList<QString> request);
-    bool playRoulette(QList<QString> request);
-    bool playBlackjack(QList<QString> request);
-    QList<int> strToIntList(QString str);
+    void playSlotMachine(QList<QString> request);
+    void playRoulette(QList<QString> request);
+    void playBlackjack(QList<QString> request);
 
 private slots:
     void handleMessage(const QList<QByteArray>& messages);

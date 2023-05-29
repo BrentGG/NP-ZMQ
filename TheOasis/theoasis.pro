@@ -16,10 +16,10 @@ INCLUDEPATH += $$PWD/../include
 SOURCES += \
     blackjack.cpp \
     failedrequest.cpp \
-        main.cpp \
-		player.cpp \
-		oasis.cpp \
-		dbmanager.cpp \
+    main.cpp \
+    player.cpp \
+    oasis.cpp \
+    dbmanager.cpp \
     roulette.cpp \
     sender.cpp \
     slotmachine.cpp
@@ -30,11 +30,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-		blackjack.h \
-		failedrequest.h \
-		player.h \
-		oasis.h \
-		dbmanager.h \
-		roulette.h \
-		sender.h \
-		slotmachine.h
+    blackjack.h \
+    failedrequest.h \
+    player.h \
+    oasis.h \
+    dbmanager.h \
+    roulette.h \
+    sender.h \
+    slotmachine.h

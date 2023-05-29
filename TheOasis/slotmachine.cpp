@@ -1,4 +1,5 @@
 #include "slotmachine.h"
+#include "failedrequest.h"
 
 #include <QRandomGenerator>
 
@@ -9,7 +10,7 @@
  */
 QString SlotMachine::getInfo()
 {
-    return QString("theoasis>info?>slotmachine>\n\
+    return QString("theoasis>info!>slotmachine>\n\
 >>> The Oasis: Slotmachines Info <<<\n\n\
 The slot machines are three-reel, single-payline slot machines. This means that there are three symbols that appear when the \
 slot machine is spun, and these three symbols determine the payout. The payouts are as follows (multiplied by the bet):\n\
@@ -26,9 +27,37 @@ Any other                0\n\
     ");
 }
 
-int SlotMachine::play(int bet)
+/**
+ * @brief Handle a slot machine request
+ * @param player: the player making the request
+ * @param request: the request
+ * @return the response
+ */
+QString SlotMachine::handleRequest(Player* player, QList<QString> request)
 {
-    return calcPayout(spin(), bet);
+    if (request.size() >= 4) {
+        // Checks
+        bool isNumber = false;
+        int bet = request[3].toInt(&isNumber);
+        if (isNumber && bet > 0 && bet <= player->getCredits()) {
+            // Play roulette
+            player->modifyCredits(-1 * bet);
+            QList<SlotMachine::Symbols> payline = SlotMachine::spin();
+            int payout = SlotMachine::calcPayout(payline, bet);
+            player->modifyCredits(payout);
+
+            // Make response
+            QString response = QString("theoasis>slotmachine!>" + request[2] + ">true>");
+            QList<QString> paylineStr = SlotMachine::paylineToStringList(payline);
+            for (int i = 0; i < paylineStr.size(); ++i)
+                response.append(paylineStr[i] + (i < paylineStr.size() - 1 ? "," : ">"));
+            response.append(QString::number(payout) + ">" + (payout != 0 ? "Congratulations, you won!>" : "You lost!>"));
+            return response;
+        }
+        else
+            throw FailedRequest(QString("theoasis>slotmachine!>" + request[2] + ">false>Invalid bet.>"));
+    }
+    throw FailedRequest(QString("theoasis>slotmachine!>" + request[2] + ">false>Bad request.>"));
 }
 
 /**

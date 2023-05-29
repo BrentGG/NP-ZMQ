@@ -1,6 +1,8 @@
 #ifndef ROULETTE_H
 #define ROULETTE_H
 
+#include "player.h"
+
 #include <QString>
 #include <QList>
 
@@ -38,11 +40,12 @@ public:
     };
 
     static QString getInfo();
-    static int play(int bet, BetName betName, QList<int> betNumbers);
+    static QString handleRequest(Player* player, QList<QString> request);
     static int spin();
-    static int calcPayout(int rouletteNumbern, int bet, BetName betName, QList<int> betNumbers);
+    static int calcPayout(int rouletteNumber, int bet, BetName betName, QList<int> betNumbers);
     static BetName strToBetName(QString betNameStr);
     static bool areValidBetNumbers(BetName betName, QList<int> betNumbers);
+    static QList<int> strToIntList(QString str);
 };
 
 #endif // ROULETTE_H
