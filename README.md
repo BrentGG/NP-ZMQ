@@ -5,8 +5,6 @@
 - [ ] Add Blackjack
 - [ ] Add Chō-Han
 - [ ] Use another service for the Chō-Han dice
-- [ ] Make secure 
-- [ ] Add threads
 - [ ] Make client
 
 ## General
