@@ -62,6 +62,8 @@ QString Blackjack::handleRequest(QList<QString> request)
                 insurance();
             else
                 throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Unknown command.>"));
+            if (shoe.size() < 52)
+                fillShoe();
             return endTurn();
         }
         else
@@ -162,8 +164,6 @@ QString Blackjack::startRound()
 void Blackjack::hit()
 {
     playerCards[currentHand].append(getCard());
-    if (shoe.size() < 52)
-        fillShoe();
     if (calcScore(playerCards[currentHand]) == 21)
         stand();
     else if (calcScore(playerCards[currentHand]) > 21)
@@ -176,8 +176,6 @@ void Blackjack::hit()
 void Blackjack::stand()
 {
     currentHand += 1;
-    if (shoe.size() < 52)
-        fillShoe();
 }
 
 /**
