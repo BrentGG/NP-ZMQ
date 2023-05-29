@@ -21,23 +21,23 @@ QString Blackjack::handleRequest(QList<QString> request)
         return startRound();
     }
     else {
-        if (request[3].compare("leave") == 0) {
+        if (request[3].toLower().compare("leave") == 0) {
             player = nullptr;
             return QString("theoasis>blackjack!>" + request[2] + ">true>Left the Blackjack game.>");
         }
-        else if (request[3].compare("shoesize") == 0) {
+        else if (request[3].toLower().compare("shoesize") == 0) {
             return QString("theoasis>blackjack!>" + request[2] + ">true>" + QString::number(shoe.size()) + ">");
         }
         if (playerCards.size() > 0) {
-            if (request[3].compare("hit") == 0)
+            if (request[3].toLower().compare("hit") == 0)
                 hit();
-            else if (request[3].compare("stand") == 0)
+            else if (request[3].toLower().compare("stand") == 0)
                 stand();
-            else if (request[3].compare("split") == 0)
+            else if (request[3].toLower().compare("split") == 0)
                 split();
-            else if (request[3].compare("double") == 0)
+            else if (request[3].toLower().compare("double") == 0)
                 double_();
-            else if (request[3].compare("insurance") == 0)
+            else if (request[3].toLower().compare("insurance") == 0)
                 insurance();
             else
                 throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Unknown command.>"));
