@@ -184,7 +184,7 @@ bool Oasis::loginPlayer(QList<QString> request)
  */
 bool Oasis::logoutPlayer(QList<QString> request)
 {
-    if (request.size() >= 4 && activePlayers.contains(request[2])) {
+    if (request.size() >= 4) {
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
         if (dbManager->checkPassword(request[2], hashedPassword)) {
             Player *player = activePlayers[request[2]];
@@ -211,7 +211,7 @@ bool Oasis::logoutPlayer(QList<QString> request)
  */
 bool Oasis::getBalance(QList<QString> request)
 {
-    if (request.size() >= 3 && activePlayers.contains(request[2])) {
+    if (request.size() >= 3) {
         sender->sendMessage(QString("theoasis>balance!>" + request[2] + ">true>" + QString::number(activePlayers[request[2]]->getCredits()) + ">"));
         return true;
     }
@@ -230,7 +230,7 @@ bool Oasis::getBalance(QList<QString> request)
  */
 bool Oasis::playSlotMachine(QList<QString> request)
 {
-    if (request.size() >= 4 && activePlayers.contains(request[2])) {
+    if (request.size() >= 4) {
         Player* player = activePlayers[request[2]];
 
         // Checks
@@ -271,7 +271,7 @@ bool Oasis::playSlotMachine(QList<QString> request)
  */
 bool Oasis::playRoulette(QList<QString> request)
 {
-    if (request.size() >= 5 && activePlayers.contains(request[2])) {
+    if (request.size() >= 5) {
         Player* player = activePlayers[request[2]];
 
         // Checks
@@ -305,7 +305,7 @@ bool Oasis::playRoulette(QList<QString> request)
 
 bool Oasis::playBlackjack(QList<QString> request)
 {
-    if (request.size() >= 4 && activePlayers.contains(request[2])) {
+    if (request.size() >= 4) {
         Player* player = activePlayers.find(request[2]).value();
         for (Blackjack* blackjack : blackjackInstances) {
             if (blackjack->getPlayer() == player) {
