@@ -31,6 +31,7 @@ private:
     int decks;
     QPair<Suit, int> holeCard;
     int currentHand;
+    bool insured;
 
     void fillShoe();
     QPair<Suit, int> getCard();

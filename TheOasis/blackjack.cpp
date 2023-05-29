@@ -7,6 +7,7 @@ Blackjack::Blackjack(Player* player, int decks) : player(player), decks(decks)
 {
     fillShoe();
     currentHand = 0;
+    insured = false;
 }
 
 QString Blackjack::handleRequest(QList<QString> request)
@@ -165,7 +166,12 @@ void Blackjack::double_()
 
 void Blackjack::insurance()
 {
-
+    if (!insured && playerCards[currentHand].size() == 2 && playerCards.size() == 1 && dealerCards[0].second == 1) {
+        insured = true;
+        player->modifyCredits(-(bet / 2));
+    }
+    else
+        throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't insure right now.>"));
 }
 
 QString Blackjack::cardToString(QPair<Suit, int> card)
@@ -233,6 +239,7 @@ QString Blackjack::endTurn()
             dealerScore = calcScore(dealerCards);
         }
         response = getResponseCards();
+
         for (int i = 0; i < playerCards.size(); ++i) {
             int playerScore = calcScore(playerCards[i]);
             int payout = 0;
@@ -251,7 +258,6 @@ QString Blackjack::endTurn()
                     payout = 0;
             }
             totalPayout += payout;
-            response.append(QString::number(payout));
             if (payout == 0)
                 feedback.append("Hand lost.");
             else if (payout == bet)
@@ -262,7 +268,12 @@ QString Blackjack::endTurn()
                 response.append(",");
                 feedback.append(",");
             }
+
+            if (insured && dealerScore == 21)
+                totalPayout += bet / 2;
+            response.append(QString::number(payout));
         }
+
         response.append(">" + feedback + ">");
         player->modifyCredits(totalPayout);
         endRound();
@@ -294,6 +305,7 @@ void Blackjack::endRound()
     dealerCards.clear();
     playerCards.clear();
     currentHand = 0;
+    insured = false;
 }
 
 bool Blackjack::checkCardUsed(QPair<Suit, int> card)
