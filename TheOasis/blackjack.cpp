@@ -155,7 +155,12 @@ void Blackjack::split()
 
 void Blackjack::double_()
 {
-
+    if (playerCards[currentHand].size() == 2 && playerCards.size() == 1) {
+        playerCards[currentHand].append(getCard());
+        stand();
+    }
+    else
+        throw FailedRequest(QString("theoasis>blackjack!>" + player->getName() + ">false>Can't double right now.>"));
 }
 
 void Blackjack::insurance()
