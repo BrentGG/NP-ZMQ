@@ -19,6 +19,7 @@ void Sender::sendMessage(QString message)
     nzmqt::ZMQMessage messageZmq = nzmqt::ZMQMessage(message.toUtf8());
     pusher->sendMessage(messageZmq);
     std::cout << "Sent: " << message.toStdString() << std::endl;
+    sendLog(message, false);
 }
 
 /**
@@ -53,6 +54,15 @@ To get an overview of all the possible request, send the following request 'theo
         sendMessage(Blackjack::getInfo());
     else
         throw FailedRequest(QString("theoasis>info!>" + request[2] + ">false>No info on this subject.>"));
+}
+
+void Sender::sendLog(QString message, bool received)
+{
+    QString logMsg = QString("theoasis>log!>");
+    logMsg.append(received ? "received>" : "sent>");
+    logMsg.append("[" + message + "]>");
+    nzmqt::ZMQMessage logMsgZmq = nzmqt::ZMQMessage(logMsg.toUtf8());
+    pusher->sendMessage(logMsgZmq);
 }
 
 /**

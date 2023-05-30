@@ -86,6 +86,7 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
     for(const QByteArray &message : messages) {
         std::cout << "Received: " << message.toStdString() << std::endl;
         QString msg = QString::fromStdString(message.toStdString());
+        sender->sendLog(msg, true);
         QList<QString> request = msg.split(">");
         if (request.size() >= 2) {
             try {

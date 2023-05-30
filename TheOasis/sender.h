@@ -16,6 +16,7 @@ public:
     void sendHelp();
     void sendAd();
     void sendInfo(QList<QString> request);
+    void sendLog(QString message, bool received);
 
 private:
     nzmqt::ZMQSocket *pusher;
