@@ -152,6 +152,7 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
                 waiting = false;
             } catch(...) {
                 printf("An unexpected error occured.\n");
+                waiting = false;
             }
         }
     }
