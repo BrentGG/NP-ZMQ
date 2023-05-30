@@ -52,11 +52,11 @@ void Sender::sendInfo(QList<QString> request)
 
 void Sender::sendLog(QString message, bool received)
 {
-    QString logMsg = QString("theoasis>log!>");
+    /*QString logMsg = QString("theoasis>log!>");
     logMsg.append(received ? "received>" : "sent>");
     logMsg.append("[" + message + "]>");
     nzmqt::ZMQMessage logMsgZmq = nzmqt::ZMQMessage(logMsg.toUtf8());
-    pusher->sendMessage(logMsgZmq);
+    pusher->sendMessage(logMsgZmq);*/
 }
 
 /**

@@ -29,6 +29,7 @@ private:
     bool infoRequested;
     QString infoTopic;
     int balance;
+    bool inProgress;
 
     int getMenuInput(int min, int max);
     void sendMessage(QString message);
@@ -50,6 +51,9 @@ private:
     void completeRoulette(QList<QString> response);
     QList<QString> rouletteBets;
     QString getRouletteNumbers(int amount);
+    void blackjack();
+    void completeBlackjack(QList<QString> response);
+    QList<QString> blackjackActions;
 };
 
 #endif // OASISCLIENT_H

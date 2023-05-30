@@ -282,8 +282,7 @@ QString Blackjack::getResponseCards()
             response.append(",");
     }
     response.append(">");
-    if (currentHand < playerCards.size())
-        response.append(QString::number(currentHand) + ">");
+    response.append(QString::number(currentHand) + ">");
     return response;
 }
 

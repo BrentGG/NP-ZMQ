@@ -275,6 +275,7 @@ void Oasis::playBlackjack(QList<QString> request)
             if (blackjack->getPlayer() == player) {
                 QString response = blackjack->handleRequest(request);
                 sender->sendMessage(response);
+                return;
             }
         }
         blackjackInstances.append(new Blackjack(player, 2));

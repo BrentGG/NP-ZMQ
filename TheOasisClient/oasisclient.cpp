@@ -14,6 +14,8 @@ OasisClient::OasisClient(QCoreApplication *coreApp)
         infoTopic = "";
         balance = -1;
         rouletteBets = QList<QString>({"zero", "double zero", "straight up", "row", "split", "street", "corner", "basket", "double street", "first column", "second column", "third column", "first dozen", "second dozen", "third dozen", "odd", "even", "red", "black", "one to eighteen", "nineteen to thirty-six"});
+        blackjackActions = QList<QString>({"hit", "stand", "split", "double", "insurance"});
+        inProgress = false;
 
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
@@ -47,27 +49,31 @@ void OasisClient::run()
             QTextStream s(stdin);
             while(1)
             {
-                std::cout << "\nWhat would you like to do?\n(1) Help\n(2) Info\n(3) Register\n(4) Login\n(5) Logout\n(6) Play slotmachine\n(7) Play Roulette\n(8) Play Blackjack\n(9) Play Cho-Han\n(10) Exit\n";
-                int choice = getMenuInput(1, 10);
-                if (choice == 1)
-                    this->help();
-                else if (choice == 2)
-                    this->info();
-                else if (choice == 3)
-                    this->register_();
-                else if (choice == 4)
-                    this->login();
-                else if (loggedIn) {
-                    if (choice == 5)
-                        this->logout();
-                    else if (choice == 6)
-                        this->slotmachine();
-                    else if (choice == 7)
-                        this->roulette();
+                if (!inProgress) {
+                    std::cout << "\nWhat would you like to do?\n(1) Help\n(2) Info\n(3) Register\n(4) Login\n(5) Logout\n(6) Play slotmachine\n(7) Play Roulette\n(8) Play Blackjack\n(9) Play Cho-Han\n(10) Exit\n";
+                    int choice = getMenuInput(1, 10);
+                    if (choice == 1)
+                        this->help();
+                    else if (choice == 2)
+                        this->info();
+                    else if (choice == 3)
+                        this->register_();
+                    else if (choice == 4)
+                        this->login();
+                    else if (loggedIn) {
+                        if (choice == 5)
+                            this->logout();
+                        else if (choice == 6)
+                            this->slotmachine();
+                        else if (choice == 7)
+                            this->roulette();
+                        else if (choice == 8)
+                            this->blackjack();
+                    }
+                    else
+                        std::cout << "Log in first before doing this.\n";
+                    while (waiting) {};
                 }
-                else
-                    std::cout << "Log in first before doing this.\n";
-                while (waiting) {};
             }
         });
         thread->start();
@@ -130,6 +136,8 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
                     completeSlotmachine(response);
                 else if (response[1].compare("roulette!") == 0)
                     completeRoulette(response);
+                else if (response[1].compare("blackjack!") == 0)
+                    completeBlackjack(response);
                 else
                     continue;
                 waiting = false;
@@ -390,4 +398,72 @@ QString OasisClient::getRouletteNumbers(int amount)
             numbers += ",";
     }
     return numbers;
+}
+
+void OasisClient::blackjack()
+{
+    std::cout << "\n>>> Blackjack <<<\n";
+    std::cout << "Balance: " << balance << " credits\n";
+    std::cout << "Bet: ";
+    QTextStream s(stdin);
+    bool isNumber = false;
+    int bet;
+    while (1) {
+        QString input = s.readLine();
+        bet = input.toInt(&isNumber);
+        if (!isNumber || bet <= 0 || bet > balance)
+            std::cout << "Please type in a bet that is higher than 0 and doesn't exceed your balance.\n";
+        else
+            break;
+    }
+    sendMessage("theoasis>blackjack?>" + username + ">" + QString::number(bet) + ">");
+    waiting = true;
+    inProgress = true;
+}
+
+void OasisClient::completeBlackjack(QList<QString> response)
+{
+    if (response.size() > 3) {
+        if (response[3].compare("true") != 0)
+            std::cout << response[response.size() - 2].toStdString() << "\n";
+        if (response.size() > 9) {
+            std::cout << "Dealer hand: " << response[4].toStdString() << "\n" << "Dealer score: " << response[5].toStdString() << "\n";
+            std::cout << "Player hand(s):\n";
+            QList<QString> playerHands = response[6].split(";");
+            for (int i = 0; i < playerHands.size(); ++i)
+                std::cout << "  " << i + 1 << ": " << playerHands[i].toStdString() << "\n";
+            std::cout << "Player score(s):\n";
+            QList<QString> playerScores = response[7].split(",");
+            for (int i = 0; i < playerScores.size(); ++i)
+                std::cout << "  " << i + 1 << ": " << playerScores[i].toStdString() << "\n";
+        }
+        if (response.size() > 11) {
+            std::cout << "Round result(s):\n";
+            QList<QString> results = response[10].split(",");
+            for (int i = 0; i < results.size(); ++i)
+                std::cout << "  " << i + 1 << ": " << results[i].toStdString() << "\n";
+            std::cout << "Payout(s):\n";
+            QList<QString> payouts = response[9].split(",");
+            int totalPayout = 0;
+            for (int i = 0; i < results.size(); ++i) {
+                std::cout << "  " << i + 1 << ": " << payouts[i].toStdString() << "\n";
+                totalPayout += payouts[i].toInt();
+            }
+            std::cout << "Total payout: " << totalPayout << "\n";
+            getBalance();
+            inProgress = false;
+        }
+        else {
+            if (response.size() > 8)
+                std::cout << "Current hand: " << response[8].toInt() + 1 << "\n";
+            QString request = QString("theoasis>blackjack?>Brent>");
+            std::cout << "\nWhat would you like to do?\n(1) Hit\n(2) Stand\n(3) Split\n(4) Double\n(5) Insurance\n";
+            int choice = getMenuInput(1, 5);
+            request.append(blackjackActions[choice - 1] + ">");
+            sendMessage(request);
+            waiting = true;
+        }
+    }
+    else
+        throw FailedRequest(response[response.size() - 2]);
 }
