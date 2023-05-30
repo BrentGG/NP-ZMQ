@@ -38,15 +38,11 @@ void OasisClient::run()
             while(1)
             {
                 std::cout << "What would you like to do?\n(1) Help\n(2) Info\n(3) Login\n(4) Register\n(5) Logout\n(6) Play slotmachine\n(7) Play Roulette\n(8) Play Blackjack\n(9) Play Cho-Han\n(10) Exit\n";
-                QString input = s.readLine();
-                bool isNumber = false;
-                int choice = input.toInt(&isNumber);
-                if (!isNumber) {
-                    std::cout << "Please type in one of the numbers in the menu to choose an option.\n";
-                    continue;
-                }
+                int choice = getMenuInput(1, 10);
                 if (choice == 1)
                     this->help();
+                else if (choice == 2)
+                    this->info();
                 while (waiting) {};
             }
         });
@@ -94,10 +90,12 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
         QList<QString> response = msg.split(">");
         if (response.size() >= 2) {
             try {
-                if (response[1].compare("login!") == 0)
-                    completeLogin(response);
-                else if (response[1].compare("help!") == 0 && helpRequested)
+                if (response[1].compare("help!") == 0 && helpRequested)
                     completeHelp(msg);
+                else if (response[1].compare("info!") == 0 && infoRequested && response[2].compare(infoTopic) == 0)
+                    completeInfo(msg);
+                else if (response[1].compare("login!") == 0)
+                    completeLogin(response);
                 else
                     continue;
                 waiting = false;
@@ -110,11 +108,24 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
     }
 }
 
+int OasisClient::getMenuInput(int min, int max)
+{
+    QTextStream s(stdin);
+    bool isNumber = false;
+    while (1) {
+        QString input = s.readLine();
+        int choice = input.toInt(&isNumber);
+        if (!isNumber || choice < min || choice > max)
+            std::cout << "Please type in one of the numbers in the menu to choose an option.\n";
+        else
+            return choice;
+    }
+}
+
 void OasisClient::sendMessage(QString message)
 {
     nzmqt::ZMQMessage messageZmq = nzmqt::ZMQMessage(message.toUtf8());
     pusher->sendMessage(messageZmq);
-    std::cout << "Sent: " << message.toStdString() << std::endl;
 }
 
 void OasisClient::help()
@@ -128,6 +139,32 @@ void OasisClient::completeHelp(QString response)
 {
     helpRequested = false;
     std::cout << response.last(response.size() - QString("theoasis>help!>").size()).toStdString() << std::endl;
+}
+
+void OasisClient::info()
+{
+    std::cout << "What part of The Oasis would you like to know more about?\n(1) Slotmachines\n(2) Roulette\n(3) Blackjack\n(4) Cho-Han\n";
+    int choice = getMenuInput(1, 4);
+    QString request = QString("theoasis>info?>");
+    if (choice == 1)
+        infoTopic = "slotmachine";
+    else if (choice == 2)
+        infoTopic = "roulette";
+    else if (choice == 3)
+        infoTopic = "blackjack";
+    else if (choice == 4)
+        infoTopic = "cho-han";
+    request.append(infoTopic + ">");
+    waiting = true;
+    infoRequested = true;
+    sendMessage(request);
+}
+
+void OasisClient::completeInfo(QString response)
+{
+    infoRequested = false;
+    infoTopic = "";
+    std::cout << response.last(response.size() - (response.indexOf(">", QString("theoasis>info!>").size()) + 1)).toStdString() << std::endl;
 }
 
 void OasisClient::login()

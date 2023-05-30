@@ -29,9 +29,12 @@ private:
     bool infoRequested;
     QString infoTopic;
 
+    int getMenuInput(int min, int max);
     void sendMessage(QString message);
     void help();
     void completeHelp(QString response);
+    void info();
+    void completeInfo(QString response);
     void login();
     void completeLogin(QList<QString> response);
 };
