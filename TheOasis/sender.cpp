@@ -2,6 +2,7 @@
 #include "slotmachine.h"
 #include "roulette.h"
 #include "blackjack.h"
+#include "chohan.h"
 #include "failedrequest.h"
 
 #include <iostream>
@@ -52,6 +53,8 @@ To get an overview of all the possible request, send the following request 'theo
         sendMessage(Roulette::getInfo());
     else if (request[2].compare("blackjack") == 0)
         sendMessage(Blackjack::getInfo());
+    else if (request[2].compare("cho-han") == 0)
+        sendMessage(ChoHan::getInfo());
     else
         throw FailedRequest(QString("theoasis>info!>" + request[2] + ">false>No info on this subject.>"));
 }
