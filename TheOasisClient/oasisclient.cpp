@@ -33,6 +33,14 @@ void OasisClient::run()
     try {
         connect();
 
+        std::cout << "Welcome to \n\
+ _______ _             ____            _     \n\
+|__   __| |           / __ \\          (_)    \n\
+   | |  | |__   ___  | |  | | __ _ ___ _ ___ \n\
+   | |  | '_ \\ / _ \\ | |  | |/ _` / __| / __| \n\
+   | |  | | | |  __/ | |__| | (_| \\__ \\ \\__ \\ \n\
+   |_|  |_| |_|\\___|  \\____/ \\__,_|___/_|___/ \n\
+\n";
         QThread *thread = QThread::create([this]{
             QTextStream s(stdin);
             while(1)
