@@ -145,6 +145,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
  */
 bool Oasis::registerPlayer(QList<QString> request) {
     if (request.size() >= 4) {
+        if (request[3].compare("") == 0)
+            throw FailedRequest(QString("theoasis>register!>" + request[2] + ">false>Registration failed, you must provide a password.>"));
         QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
         bool success = dbManager->addPlayer(new Player(request[2]), hashedPassword);
         if (success) {
