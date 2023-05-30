@@ -107,7 +107,7 @@ be provided in betNumbers.\n\
 }
 
 /**
- * @brief Send out an ad for The Oasis
+ * @brief Send out an ad for The Oasis (unused)
  */
 void Sender::sendAd()
 {

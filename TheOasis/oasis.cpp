@@ -29,10 +29,10 @@ Oasis::Oasis(QCoreApplication *coreApp)
 
         QObject::connect(subscriber, &nzmqt::ZMQSocket::messageReceived, this, &Oasis::handleMessage);
 
-        // Send ad every X minutes
-        QTimer *adTimer = new QTimer(this);
-        QObject::connect(adTimer, &QTimer::timeout, sender, &Sender::sendAd);
-        //adTimer->start(60000 * 3);
+        // Send heartbeat every X minutes
+        QTimer *heartbeatTimer = new QTimer(this);
+        QObject::connect(heartbeatTimer, &QTimer::timeout, this, &Oasis::heartbeat);
+        heartbeatTimer->start(60000 * 0.5);
 
         // Check online status
         QTimer *statusTimer = new QTimer(this);
@@ -89,7 +89,6 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
         QList<QString> request = msg.split(">");
         if (request.size() >= 2) {
             try {
-                request[10] = "";
                 // Request that can be made without logging in
                 if (request[1].compare("info?") == 0)
                     sender->sendInfo(request);
@@ -316,4 +315,13 @@ void Oasis::checkStatus()
         else
             ++j;
     }
+}
+
+/**
+ * @brief Send out a heartbeat
+ */
+void Oasis::heartbeat()
+{
+    QString msg = QString("theoasis>heartbeat!>" + QDateTime::currentDateTime().toString() + ">" + QString::number(activePlayers.size()) + ">");
+    sender->sendMessage(msg);
 }

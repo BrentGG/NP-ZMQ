@@ -35,8 +35,8 @@ public:
 
 private slots:
     void handleMessage(const QList<QByteArray>& messages);
-    void sendAd();
     void checkStatus();
+    void heartbeat();
 
 private:
     DbManager *dbManager;
