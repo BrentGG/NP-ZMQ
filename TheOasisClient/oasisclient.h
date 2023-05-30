@@ -5,6 +5,9 @@
 #include <nzmqt/nzmqt.hpp>
 #include <nzmqt/impl.hpp>
 
+/**
+ * @brief A CLI client for The Oasis.
+ */
 class OasisClient : public QObject
 {
 public:

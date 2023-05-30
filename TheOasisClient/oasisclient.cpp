@@ -158,6 +158,12 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
     }
 }
 
+/**
+ * @brief Ask the user to input a number to choose a menu item
+ * @param min: the lowest menu item
+ * @param max: the highest menu item
+ * @return the chosen item
+ */
 int OasisClient::getMenuInput(int min, int max)
 {
     QTextStream s(stdin);
@@ -172,6 +178,10 @@ int OasisClient::getMenuInput(int min, int max)
     }
 }
 
+/**
+ * @brief Ask the user to input a valid bet
+ * @return the bet
+ */
 int OasisClient::getBet()
 {
     std::cout << "Bet: ";
@@ -188,12 +198,19 @@ int OasisClient::getBet()
     }
 }
 
+/**
+ * @brief Send a message
+ * @param message: the message
+ */
 void OasisClient::sendMessage(QString message)
 {
     nzmqt::ZMQMessage messageZmq = nzmqt::ZMQMessage(message.toUtf8());
     pusher->sendMessage(messageZmq);
 }
 
+/**
+ * @brief Ask The Oasis for help
+ */
 void OasisClient::help()
 {
     waiting = true;
@@ -201,12 +218,19 @@ void OasisClient::help()
     sendMessage("theoasis>help?>");
 }
 
+/**
+ * @brief Process the help response
+ * @param response: the response
+ */
 void OasisClient::completeHelp(QString response)
 {
     helpRequested = false;
     std::cout << response.last(response.size() - QString("theoasis>help!>").size()).toStdString() << std::endl;
 }
 
+/**
+ * @brief Ask the oasis for info
+ */
 void OasisClient::info()
 {
     std::cout << "What part of The Oasis would you like to know more about?\n(1) Slotmachines\n(2) Roulette\n(3) Blackjack\n(4) Cho-Han\n";
@@ -226,6 +250,10 @@ void OasisClient::info()
     sendMessage(request);
 }
 
+/**
+ * @brief Process the info response
+ * @param response: the response
+ */
 void OasisClient::completeInfo(QString response)
 {
     infoRequested = false;
@@ -233,6 +261,9 @@ void OasisClient::completeInfo(QString response)
     std::cout << response.last(response.size() - (response.indexOf(">", QString("theoasis>info!>").size()) + 1)).toStdString() << std::endl;
 }
 
+/**
+ * @brief Register to the oasis
+ */
 void OasisClient::register_()
 {
     if (!loggedIn) {
@@ -249,6 +280,10 @@ void OasisClient::register_()
         throw FailedRequest("You are already logged in. Logout first if you want to register a new account.");
 }
 
+/**
+ * @brief Process the register response
+ * @param response: the response
+ */
 void OasisClient::completeRegister(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0)
@@ -257,6 +292,9 @@ void OasisClient::completeRegister(QList<QString> response)
         throw FailedRequest("Register attempt failed. Try using a different username.");
 }
 
+/**
+ * @brief Login to the oasis
+ */
 void OasisClient::login()
 {
     if (!loggedIn) {
@@ -273,6 +311,10 @@ void OasisClient::login()
         throw FailedRequest("You are already logged in.");
 }
 
+/**
+ * @brief Process the login response
+ * @param response: the response
+ */
 void OasisClient::completeLogin(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0) {
@@ -291,6 +333,9 @@ void OasisClient::completeLogin(QList<QString> response)
         throw FailedRequest("Login attempt failed.");
 }
 
+/**
+ * @brief Logout of the oasis
+ */
 void OasisClient::logout()
 {
     std::cout << "Are you sure you want to log out of The Oasis?\n(1) Yes, I hate having fun and I want to leave.\n(2) No, I am smart and I love having fun, keep me logged in.\n";
@@ -301,6 +346,10 @@ void OasisClient::logout()
     }
 }
 
+/**
+ * @brief Process the logout response
+ * @param response: the response
+ */
 void OasisClient::completeLogout(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0) {
@@ -311,18 +360,28 @@ void OasisClient::completeLogout(QList<QString> response)
         throw FailedRequest("Logout attempt failed.");
 }
 
+/**
+ * @brief Ask the oasis for your balance
+ */
 void OasisClient::getBalance()
 {
     this->sendMessage("theoasis>balance?>" + username + ">");
     waiting = true;
 }
 
+/**
+ * @brief Process the balance response
+ * @param response: the response
+ */
 void OasisClient::completeBalance(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0)
         balance = response[4].toInt();
 }
 
+/**
+ * @brief Play the slot machine game
+ */
 void OasisClient::slotmachine()
 {
     std::cout << "\n>>> Slot Machine <<<\n";
@@ -332,6 +391,10 @@ void OasisClient::slotmachine()
     waiting = true;
 }
 
+/**
+ * @brief Process the slot machine response
+ * @param response: the response
+ */
 void OasisClient::completeSlotmachine(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0) {
@@ -342,6 +405,9 @@ void OasisClient::completeSlotmachine(QList<QString> response)
         throw FailedRequest(response[response.size() - 2]);
 }
 
+/**
+ * @brief Play the roulette game
+ */
 void OasisClient::roulette()
 {
     std::cout << "\n>>> Roulette <<<\n";
@@ -367,6 +433,10 @@ void OasisClient::roulette()
     waiting = true;
 }
 
+/**
+ * @brief Process the roulette response
+ * @param response: the response
+ */
 void OasisClient::completeRoulette(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0) {
@@ -377,6 +447,11 @@ void OasisClient::completeRoulette(QList<QString> response)
         throw FailedRequest(response[response.size() - 2]);
 }
 
+/**
+ * @brief Ask the user to input the roulette numbers that correspond with their bet type
+ * @param amount: the amount of numbers to ask
+ * @return a string representing a list of numbers
+ */
 QString OasisClient::getRouletteNumbers(int amount)
 {
     std::cout << "Please provide the numbers for this bet type.\n";
@@ -401,6 +476,9 @@ QString OasisClient::getRouletteNumbers(int amount)
     return numbers;
 }
 
+/**
+ * @brief Play a blackjack game
+ */
 void OasisClient::blackjack()
 {
     std::cout << "\n>>> Blackjack <<<\n";
@@ -411,6 +489,10 @@ void OasisClient::blackjack()
     inProgress = true;
 }
 
+/**
+ * @brief Process the blackjack response
+ * @param response: the response
+ */
 void OasisClient::completeBlackjack(QList<QString> response)
 {
     if (response.size() > 3) {
@@ -458,6 +540,9 @@ void OasisClient::completeBlackjack(QList<QString> response)
         throw FailedRequest(response[response.size() - 2]);
 }
 
+/**
+ * @brief Play a cho-han game
+ */
 void OasisClient::choHan()
 {
     std::cout << "\n>>> Cho-Han <<<\n";
@@ -469,6 +554,10 @@ void OasisClient::choHan()
     waiting = true;
 }
 
+/**
+ * @brief Process the cho-han response
+ * @param response: the response
+ */
 void OasisClient::completeChoHan(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0) {
@@ -479,6 +568,9 @@ void OasisClient::completeChoHan(QList<QString> response)
         throw FailedRequest(response[response.size() - 2]);
 }
 
+/**
+ * @brief Exit the client
+ */
 void OasisClient::exitClient()
 {
     sendMessage("theoasis>logout?>" + username + ">" + password + ">");
