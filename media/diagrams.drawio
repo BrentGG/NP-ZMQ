@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-04-18T19:13:03.933Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="fUhXm77XANB3HKeIiFBb" version="21.1.8" type="device" pages="4">
+<mxfile host="app.diagrams.net" modified="2023-05-30T21:59:06.457Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="YGTKtDVSnVjjHk3Rh0Q_" version="21.3.5" type="device" pages="5">
   <diagram name="general" id="AdSP3V9QLK1olVL9tDRn">
     <mxGraphModel dx="1434" dy="796" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -39,86 +39,86 @@
     </mxGraphModel>
   </diagram>
   <diagram id="OUGAHfs0UGZvDzdYrHnZ" name="slot machine">
-    <mxGraphModel dx="1389" dy="910" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1834" dy="1196" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="ti3flShPVTaEEyljA2WG-1" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-1" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="150" as="sourcePoint" />
             <mxPoint x="-80" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-2" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-2" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="320" y="150" as="sourcePoint" />
             <mxPoint x="320" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-3" value="Bob (client)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-3" value="Bob (client)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-120" y="-30" width="80" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-4" value="The Oasis" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-4" value="The Oasis" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="280" y="-30" width="80" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-5" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="40" as="sourcePoint" />
             <mxPoint x="320" y="80" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-7" value="theoasis&gt;slotmachine?&gt;Bob&gt;100&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5.5;" vertex="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-7" value="theoasis&gt;slotmachine?&gt;Bob&gt;100&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5.5;" parent="1" vertex="1">
           <mxGeometry x="10" y="30" width="230" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-8" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-8" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="320" y="110" as="sourcePoint" />
             <mxPoint x="-80" y="150" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-9" value="theoasis&gt;slotmachine!&gt;Bob&gt;true&gt;lemon,empty,orange&gt;0&gt;You lost!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354.5;" vertex="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-9" value="theoasis&gt;slotmachine!&gt;Bob&gt;true&gt;lemon,empty,orange&gt;0&gt;You lost!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354.5;" parent="1" vertex="1">
           <mxGeometry x="-75.38" y="100" width="400.76" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-11" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-11" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="200" as="sourcePoint" />
             <mxPoint x="-80" y="150" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-13" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-13" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="319.66" y="200" as="sourcePoint" />
             <mxPoint x="319.66" y="150" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-15" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-15" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="330" as="sourcePoint" />
             <mxPoint x="-80" y="200" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-16" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-16" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="320" y="330" as="sourcePoint" />
             <mxPoint x="320" y="200" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-17" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-17" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="200" as="sourcePoint" />
             <mxPoint x="320" y="240" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-18" value="theoasis&gt;slotmachine?&gt;Bob&gt;300&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5.5;" vertex="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-18" value="theoasis&gt;slotmachine?&gt;Bob&gt;300&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5.5;" parent="1" vertex="1">
           <mxGeometry x="10" y="190" width="230" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-19" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-19" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="320" y="270" as="sourcePoint" />
             <mxPoint x="-80" y="310" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ti3flShPVTaEEyljA2WG-20" value="theoasis&gt;slotmachine!&gt;Bob&gt;true&gt;plum,plum,plum&gt;60000&gt;You won!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354.5;" vertex="1" parent="1">
+        <mxCell id="ti3flShPVTaEEyljA2WG-20" value="theoasis&gt;slotmachine!&gt;Bob&gt;true&gt;plum,plum,plum&gt;60000&gt;You won!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354.5;" parent="1" vertex="1">
           <mxGeometry x="-75.38" y="260" width="400.76" height="30" as="geometry" />
         </mxCell>
       </root>
@@ -211,177 +211,263 @@
     </mxGraphModel>
   </diagram>
   <diagram id="PQ2yFiyrDlRZfpSoyMe0" name="blackjack">
-    <mxGraphModel dx="1766" dy="1158" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1834" dy="1196" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="BzcTvPraR9bfcKngZZib-1" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-1" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="520" as="sourcePoint" />
             <mxPoint x="-80" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-2" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-2" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="480" y="520" as="sourcePoint" />
             <mxPoint x="480" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-3" value="Bob (client)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-3" value="Bob (client)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-120" y="-30" width="80" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-4" value="The Oasis" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-4" value="The Oasis" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="440" y="-30" width="80" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-5" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="40" as="sourcePoint" />
             <mxPoint x="480" y="90" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-6" value="theoasis&gt;blackjack?&gt;Bob&gt;200&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-6" value="theoasis&gt;blackjack?&gt;Bob&gt;200&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.09" y="40.49" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-7" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="480" y="120" as="sourcePoint" />
             <mxPoint x="-80.19" y="180" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-8" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-8" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.5" y="570" as="sourcePoint" />
             <mxPoint x="-80.5" y="520" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-9" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-9" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="479.78" y="570" as="sourcePoint" />
             <mxPoint x="479.78" y="520" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-10" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;hearts,6&gt;clubs,5,diamonds,4&gt;Game started.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-10" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;hearts,6&gt;6&gt;clubs,5,diamonds,4&gt;9&gt;0&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
           <mxGeometry x="-69.87" y="120" width="549.65" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-17" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-17" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.19" y="210" as="sourcePoint" />
             <mxPoint x="480" y="260" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-18" value="theoasis&gt;blackjack?&gt;Bob&gt;hit&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-18" value="theoasis&gt;blackjack?&gt;Bob&gt;hit&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.090000000000003" y="210" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-19" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-19" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="480" y="290" as="sourcePoint" />
             <mxPoint x="-79.95" y="350" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-20" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;hearts,7&gt;clubs,5,diamonds,4,diamonds,10&gt;Hit.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-20" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;hearts,6&gt;6&gt;clubs,5,diamonds,4,diamonds,10&gt;19&gt;0&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
           <mxGeometry x="-69.87" y="290" width="549.65" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-21" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-21" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.19" y="380" as="sourcePoint" />
             <mxPoint x="480" y="430" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-22" value="theoasis&gt;blackjack?&gt;Bob&gt;stand&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-22" value="theoasis&gt;blackjack?&gt;Bob&gt;stand&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.090000000000003" y="380" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-23" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-23" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="480" y="460" as="sourcePoint" />
             <mxPoint x="-79.71000000000001" y="520" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-24" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;hearts,7,spades,13&gt;clubs,5,diamonds,4,diamonds,10&gt;400&gt;You won!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
-          <mxGeometry x="-69.87" y="460" width="549.65" height="30" as="geometry" />
+        <mxCell id="BzcTvPraR9bfcKngZZib-24" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;hearts,7,spades,K&gt;17&gt;clubs,5,diamonds,4,diamonds,10&gt;19&gt;1&gt;400&gt;&#xa;You won!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
+          <mxGeometry x="-70.09" y="450" width="549.65" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-27" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-27" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.22" y="570" as="sourcePoint" />
             <mxPoint x="479.78" y="620" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-28" value="theoasis&gt;blackjack?&gt;Bob&gt;100&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-28" value="theoasis&gt;blackjack?&gt;Bob&gt;100&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.310000000000002" y="570.49" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-29" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-29" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="479.78" y="650" as="sourcePoint" />
             <mxPoint x="-80.41" y="710" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-30" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2&gt;hearts,8,clubs,8&gt;Game started.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-30" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2&gt;2&gt;hearts,8,clubs,8&gt;16&gt;0&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
           <mxGeometry x="-70.09" y="650" width="549.65" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-31" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-31" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.41" y="740" as="sourcePoint" />
             <mxPoint x="479.78" y="790" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-32" value="theoasis&gt;blackjack?&gt;Bob&gt;split&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-32" value="theoasis&gt;blackjack?&gt;Bob&gt;split&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.310000000000002" y="740" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-33" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-33" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="479.78" y="820" as="sourcePoint" />
             <mxPoint x="-80.17" y="880" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-34" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2&gt;hearts,8,diamonds,10-clubs,8,spades,4&gt;Split.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-34" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2&gt;2&gt;hearts,8,diamonds,10;clubs,8,spades,4&gt;18,12&gt;0&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
           <mxGeometry x="-70.09" y="820" width="549.65" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-35" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-35" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.41" y="910" as="sourcePoint" />
             <mxPoint x="479.78" y="960" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-36" value="theoasis&gt;blackjack?&gt;Bob&gt;stand&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-36" value="theoasis&gt;blackjack?&gt;Bob&gt;stand&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.310000000000002" y="910" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-37" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-37" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="479.78" y="990" as="sourcePoint" />
             <mxPoint x="-79.93" y="1050" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-39" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-39" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80" y="1240" as="sourcePoint" />
             <mxPoint x="-80.5" y="570.49" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-40" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-40" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="479" y="1240" as="sourcePoint" />
             <mxPoint x="478.56" y="570.49" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-41" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2&gt;hearts,8,diamonds,10-clubs,8,spades,4&gt;Stand.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-41" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2&gt;2&gt;hearts,8,diamonds,10;clubs,8,spades,4&gt;18,12&gt;1&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
           <mxGeometry x="-69.87" y="990" width="549.65" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-42" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-42" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-80.41" y="1080" as="sourcePoint" />
             <mxPoint x="479.78" y="1130" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-43" value="theoasis&gt;blackjack?&gt;Bob&gt;hit&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-43" value="theoasis&gt;blackjack?&gt;Bob&gt;hit&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5;" parent="1" vertex="1">
           <mxGeometry x="-30.310000000000002" y="1080" width="470.09" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-44" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-44" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="479.78" y="1160" as="sourcePoint" />
             <mxPoint x="-79.93" y="1220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BzcTvPraR9bfcKngZZib-45" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2,hearts,12,clubs,5&gt;hearts,8,diamonds,10-clubs,8,spades,4,spades,11&gt;200&gt;First hand won, second hand lost.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" vertex="1" parent="1">
+        <mxCell id="BzcTvPraR9bfcKngZZib-45" value="theoasis&gt;blackjack!&gt;Bob&gt;true&gt;spades,2,hearts,Q,clubs,5&gt;17&gt;hearts,8,diamonds,10;&#xa;clubs,8,spades,4,spades,J&gt;18,22&gt;2&gt;200,0&gt;You won!,You lost.&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354;" parent="1" vertex="1">
           <mxGeometry x="-70.09" y="1150" width="549.65" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="zu7OV3pqGWXaZhkt9nKh" name="cho-han">
+    <mxGraphModel dx="1434" dy="796" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-1" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="360" as="sourcePoint" />
+            <mxPoint x="160" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-2" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="360" as="sourcePoint" />
+            <mxPoint x="690" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-3" value="Bob (client)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-4" value="The Oasis" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="650" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="220" as="sourcePoint" />
+            <mxPoint x="690" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-6" value="theoasis&gt;cho-han?&gt;Bob&gt;200&gt;even&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5.5;" vertex="1" parent="1">
+          <mxGeometry x="149.98000000000002" y="220.46" width="549.65" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="689.81" y="300" as="sourcePoint" />
+            <mxPoint x="159.81" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-8" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="159.71" y="410" as="sourcePoint" />
+            <mxPoint x="159.71" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-9" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="410" as="sourcePoint" />
+            <mxPoint x="690" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-10" value="theoasis&gt;cho-han!&gt;Bob&gt;true&gt;4,2&gt;400&gt;You won!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354.5;" vertex="1" parent="1">
+          <mxGeometry x="149.98000000000002" y="300" width="549.65" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-11" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="570" as="sourcePoint" />
+            <mxPoint x="160" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-12" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="570" as="sourcePoint" />
+            <mxPoint x="690" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-13" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="410" as="sourcePoint" />
+            <mxPoint x="690" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-14" value="theoasis&gt;cho-han?&gt;Bob&gt;400&gt;odd&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=5.5;" vertex="1" parent="1">
+          <mxGeometry x="189.99" y="410" width="469.63" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-15" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="689.81" y="490" as="sourcePoint" />
+            <mxPoint x="159.81" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Rx2uLpqPlmjWtH9lujZA-16" value="theoasis&gt;cho-han!&gt;Bob&gt;true&gt;3,3&gt;0&gt;You lost!&gt;" style="text;whiteSpace=wrap;fontColor=default;align=center;rotation=354.5;" vertex="1" parent="1">
+          <mxGeometry x="149.98000000000002" y="490" width="549.65" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

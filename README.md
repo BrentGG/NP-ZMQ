@@ -1,12 +1,5 @@
 # Network Programming - ZMQ Service
 
-## Todo
-
-- [x] Add Blackjack
-- [ ] Add Chō-Han
-- [ ] Use another service for the Chō-Han dice
-- [ ] Make client
-
 ## General
 
 This project contains a ZMQ service called The Oasis, which is a virtual casino where clients can play a number of casino games. The client accounts, which includes their username, password, and credit amount, are stored in an SQLite database.
@@ -14,11 +7,15 @@ This project contains a ZMQ service called The Oasis, which is a virtual casino 
 Some general rules of the casino:
 - Clients must register once and then log in every time they wish to start a session. New clients start with 1000 credits. 
 - Clients are automatically logged out after they've been inactive for at least 15 minutes.
-- If a player is logged out due to inactivity while in a game, they lose any bet.
+- If a player is logged out due to inactivity while in a game, they lose any bets.
 - Logging out manually is not possible while in a game.
 - Bets are always paid up front, which means once the bet has been made, the credits go out of the player's account. The payouts in the tables below are always multiplied by the bet.
 
 A client for the service will be made so players can easily explore the casino.
+
+Aside from the casino games, the service also features a heartbeat that sends out a timestamp and the number of active players every couple of minutes. Subcribe to ``theoasis>heartbeat!>`` to see this in action. There is also a log channel where every message that is sent and received is logged to. Subscribe to ``thoasis>log!>`` to see all these messages.
+
+There is also a CLI client available: ``TheOasisClient``. It guides you trough to casino so you won't have to manually type in all the commands. The client is very straightforward, just run it and the rest will become clear.
 
 The [Diagram](#diagram) section shows a diagram of the service, client and Benternet. The [Requests and Responses](#requests-and-responses) section describes all the available and planned requests and responses for the service and each of its games. The [Games](#games) section provides more information on each of the games, as well as an example on how to play the game using the requests and responses.
 
@@ -30,7 +27,7 @@ The Oasis service communicates with the Benternet over ZMQ. The Oasis clients in
 
 ## Requests and Responses
 
-Some requests and responses contain variables, a variable will be indicated by square brackets containing the name of the variable and its type, e.g. ``[username:string]``. When the type of a variable is ``list`` it means that this variable contains multiple values separated by a comma ``,``. Two-dimensional lists are separated by a dash ``-``.
+Some requests and responses contain variables, a variable will be indicated by square brackets containing the name of the variable and its type, e.g. ``[username:string]``. When the type of a variable is ``list`` it means that this variable contains multiple values separated by a comma ``,``. Two-dimensional lists are separated by a semicolon ``;``.
 
 The responses show which part of the response the client should subscribe to in italics. For example, the following request (checking a client's balance):
 <pre><code><i>theoasis>balance?></i>[username:string]></code></pre>
@@ -40,7 +37,7 @@ This means that the client must subscribe to ``theoasis>balance!>[username:strin
 
 When a bad request is made (e.g.: wrong username/password, not enough parameters, invalid parameter...) the ``message`` part of the response will be an error message. Depending on the error, this message can range from a generic message such as "bad request", to a more specific message like "invalid bet number". The ``success`` part of the response will also be "false".
 
-Whenever a cards is communicated, it will be in the format ``list(string, integer)``. This is a list of two items: the suit (spades, hearts, clubs, diamonds) and the number (1 being the ace, and 13 the king). A list of cards is simply a one-dimensional list consisting of a series of string and integer pairs.
+Whenever a cards is communicated, it will be in the format ``list(string, string)``. This is a list of two items: the suit (spades, hearts, clubs, diamonds) and the number (1 to 10, J, Q, K). A list of cards is simply a one-dimensional list consisting of a series of string and string pairs.
 
 <table>
     <thead>
@@ -56,16 +53,7 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
         </tr>
         <tr>
             <td>
-            <b>Receive an informational message from The Oasis.</b> <br> 
-            REQ: <code>theoasis>info?></code> <br> 
-            RES: <code><i>theoasis>info!></i>[info:string]></code>
-            </td>
-            <td>:x:</td>
-            <td>:heavy_check_mark:</td>
-        </tr>
-        <tr>
-            <td>
-            <b>Receive all the possible requests and responses.</b> <br> 
+            <b>Receive a help message.</b> <br> 
             REQ: <code>theoasis>help?></code> <br> 
             RES: <code><i>theoasis>help!></i>[help:string]></code>
             </td>
@@ -198,6 +186,29 @@ Whenever a cards is communicated, it will be in the format ``list(string, intege
             <td>:heavy_check_mark:</td>
         </tr>
     </tbody>
+    <tbody> <!-- CHO-HAN -->
+        <tr>
+            <th colspan=3>Cho-Han</th>
+        </tr>
+        <tr>
+            <td>
+            <b>Get more info on Cho-Han.</b> <br> 
+            REQ: <code>theoasis>info?>cho-han></code> <br> 
+            RES: <code><i>theoasis>info!>cho-han></i></code>
+            </td>
+            <td>:x:</td>
+            <td>:heavy_check_mark:</td>
+        </tr>
+        <tr>
+            <td>
+            <b>Play Cho-Han</b><br> 
+            REQ: <code>theoasis>cho-han?>[username:string]>[bet:integer]>[evenOrOdd:string]></code> <br> 
+            RES: <code><i>theoasis>cho-han!>[username:string]></i>[success:bool]>[payout:integer]>[message:string]></code>
+            </td>
+            <td>:heavy_check_mark:</td>
+            <td>:heavy_check_mark:</td>
+        </tr>
+    </tbody>
 </table>
 
 ## Games
@@ -260,7 +271,7 @@ Example:
 
 ### Blackjack
 
-A standard game of blackjack consisting of a single deck.
+A standard game of blackjack consisting of two decks deck. Shuffling happens around one deck left in the shoe.
 
 The payouts are as follows:
 | Event | Payout |
@@ -273,3 +284,17 @@ The payouts are as follows:
 Example:
 
 ![Example of a Blackjack game](./media/blackjack_time.png?raw=true)
+
+### Cho-Han
+
+A simple Japanese gambling game played with two six-sided dice. The player bets on the outcome of the two dice, whether the sum will be even or odd.
+
+The payouts are as follows:
+| Event | Payout |
+|---|---|
+| Win | 2 |
+| Loss | 0 |
+
+Example:
+
+![Example of a Cho-Han game](./media/chohan_time.png?raw=true)
