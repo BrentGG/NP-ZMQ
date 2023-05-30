@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QCryptographicHash>
 #include <QDateTime>
+#include <QException>
 
 Oasis::Oasis(QCoreApplication *coreApp)
 {
@@ -72,6 +73,7 @@ void Oasis::run()
     }
     catch(nzmqt::ZMQException & ex) {
         std::cerr << "Caught an exception : " << ex.what();
+        exit(-1);
     }
 }
 
@@ -87,6 +89,7 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
         QList<QString> request = msg.split(">");
         if (request.size() >= 2) {
             try {
+                request[10] = "";
                 // Request that can be made without logging in
                 if (request[1].compare("info?") == 0)
                     sender->sendInfo(request);
@@ -118,8 +121,15 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                         }
                     }
                 }
-            } catch(FailedRequest e) {
+            } catch(FailedRequest &e) {
                 sender->sendMessage(e.what());
+            } catch(...) {
+                QString response = QString("theoasis>" + request[1] + ">");
+                response.replace(response.indexOf("?"), 1, "!");
+                if (request.size() >= 3)
+                    response.append(request[2] + ">");
+                response.append("An unexpected error occured. Please contact an Oasis admin.>");
+                sender->sendMessage(response);
             }
         }
     }
