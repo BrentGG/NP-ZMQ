@@ -12,6 +12,7 @@ OasisClient::OasisClient(QCoreApplication *coreApp)
         helpRequested = false;
         infoRequested = false;
         infoTopic = "";
+        balance = -1;
 
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
@@ -58,6 +59,8 @@ void OasisClient::run()
                 else if (loggedIn) {
                     if (choice == 5)
                         this->logout();
+                    else if (choice == 6)
+                        this->slotMachine();
                 }
                 else
                     std::cout << "Log in first before doing this.\n";
@@ -118,6 +121,10 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
                     completeLogin(response);
                 else if (response[1].compare("logout!") == 0)
                     completeLogout(response);
+                else if (response[1].compare("balance!") == 0)
+                    completeBalance(response);
+                else if (response[1].compare("slotmachine!") == 0)
+                    completeSlotmachine(response);
                 else
                     continue;
                 waiting = false;
@@ -240,6 +247,8 @@ void OasisClient::completeLogin(QList<QString> response)
         subscriber->subscribeTo("theoasis>blackjack!>" + username + ">");
         subscriber->subscribeTo("theoasis>cho-han!>" + username + ">");
         std::cout << "Successfully logged in.\n";
+
+        getBalance();
     }
     else
         throw FailedRequest("Login attempt failed.");
@@ -263,4 +272,46 @@ void OasisClient::completeLogout(QList<QString> response)
     }
     else
         throw FailedRequest("Logout attempt failed.");
+}
+
+void OasisClient::getBalance()
+{
+    this->sendMessage("theoasis>balance?>" + username + ">");
+    waiting = true;
+}
+
+void OasisClient::completeBalance(QList<QString> response)
+{
+    if (response.size() > 3 && response[3].compare("true") == 0)
+        balance = response[4].toInt();
+}
+
+void OasisClient::slotMachine()
+{
+    std::cout << "\n>>> The Slot Machine <<<\n";
+    std::cout << "Balance: " << balance << " credits\n";
+    std::cout << "Bet: ";
+    QTextStream s(stdin);
+    bool isNumber = false;
+    int bet;
+    while (1) {
+        QString input = s.readLine();
+        bet = input.toInt(&isNumber);
+        if (!isNumber || bet <= 0 || bet > balance)
+            std::cout << "Please type in a bet that is higher than 0 and doesn't exceed your balance.\n";
+        else
+            break;
+    }
+    sendMessage("theoasis>slotmachine?>" + username + ">" + QString::number(bet) + ">");
+    waiting = true;
+}
+
+void OasisClient::completeSlotmachine(QList<QString> response)
+{
+    if (response.size() > 3 && response[3].compare("true") == 0) {
+        std::cout << "Payline: " << response[4].toStdString() << "\nPayout: " << response[5].toStdString() << "\n" << response[response.size() - 2].toStdString();
+        getBalance();
+    }
+    else
+        throw FailedRequest(response.last());
 }

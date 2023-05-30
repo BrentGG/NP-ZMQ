@@ -28,6 +28,7 @@ private:
     bool helpRequested;
     bool infoRequested;
     QString infoTopic;
+    int balance;
 
     int getMenuInput(int min, int max);
     void sendMessage(QString message);
@@ -41,6 +42,10 @@ private:
     void completeLogin(QList<QString> response);
     void logout();
     void completeLogout(QList<QString> response);
+    void getBalance();
+    void completeBalance(QList<QString> response);
+    void slotMachine();
+    void completeSlotmachine(QList<QString> response);
 };
 
 #endif // OASISCLIENT_H
