@@ -57,7 +57,7 @@ QString ChoHan::handleRequest(Player *player, QList<QString> request)
         QString response = QString("theoasis>cho-han!>" + request[2] + ">true>");
         for (int i = 0; i < dice.size(); ++i) {
             response.append(QString::number(dice[i]));
-            if (i < dice.size())
+            if (i < dice.size() - 1)
                 response.append(",");
         }
         response.append(">" + QString::number(payout) + ">" + (payout > 0 ? "Congratulations, you won!>" : "You lost!>"));

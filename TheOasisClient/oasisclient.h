@@ -32,6 +32,7 @@ private:
     bool inProgress;
 
     int getMenuInput(int min, int max);
+    int getBet();
     void sendMessage(QString message);
     void help();
     void completeHelp(QString response);
@@ -54,6 +55,8 @@ private:
     void blackjack();
     void completeBlackjack(QList<QString> response);
     QList<QString> blackjackActions;
+    void choHan();
+    void completeChoHan(QList<QString> response);
 };
 
 #endif // OASISCLIENT_H
