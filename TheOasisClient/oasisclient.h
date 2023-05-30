@@ -35,6 +35,8 @@ private:
     void completeHelp(QString response);
     void info();
     void completeInfo(QString response);
+    void register_();
+    void completeRegister(QList<QString> response);
     void login();
     void completeLogin(QList<QString> response);
     void logout();

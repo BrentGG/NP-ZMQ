@@ -51,6 +51,8 @@ void OasisClient::run()
                     this->help();
                 else if (choice == 2)
                     this->info();
+                else if (choice == 3)
+                    this->register_();
                 else if (choice == 4)
                     this->login();
                 else if (loggedIn) {
@@ -110,6 +112,8 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
                     completeHelp(msg);
                 else if (response[1].compare("info!") == 0 && infoRequested && response[2].compare(infoTopic) == 0)
                     completeInfo(msg);
+                else if (response[1].compare("register!") == 0)
+                    completeRegister(response);
                 else if (response[1].compare("login!") == 0)
                     completeLogin(response);
                 else if (response[1].compare("logout!") == 0)
@@ -183,6 +187,30 @@ void OasisClient::completeInfo(QString response)
     infoRequested = false;
     infoTopic = "";
     std::cout << response.last(response.size() - (response.indexOf(">", QString("theoasis>info!>").size()) + 1)).toStdString() << std::endl;
+}
+
+void OasisClient::register_()
+{
+    if (!loggedIn) {
+        QTextStream s(stdin);
+        std::cout << "Username: ";
+        username = s.readLine();
+        std::cout << "Password: ";
+        password = s.readLine();
+        subscriber->subscribeTo("theoasis>register!>" + username + ">");
+        sendMessage("theoasis>register?>" + username + ">" + password + ">");
+        waiting = true;
+    }
+    else
+        throw FailedRequest("You are already logged in. Logout first if you want to register a new account.");
+}
+
+void OasisClient::completeRegister(QList<QString> response)
+{
+    if (response.size() > 3 && response[3].compare("true") == 0)
+        std::cout << "Successfully registered. You can now log in.\n";
+    else
+        throw FailedRequest("Register attempt failed. Try using a different username.");
 }
 
 void OasisClient::login()
