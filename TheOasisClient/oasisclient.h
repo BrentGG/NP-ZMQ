@@ -44,8 +44,12 @@ private:
     void completeLogout(QList<QString> response);
     void getBalance();
     void completeBalance(QList<QString> response);
-    void slotMachine();
+    void slotmachine();
     void completeSlotmachine(QList<QString> response);
+    void roulette();
+    void completeRoulette(QList<QString> response);
+    QList<QString> rouletteBets;
+    QString getRouletteNumbers(int amount);
 };
 
 #endif // OASISCLIENT_H

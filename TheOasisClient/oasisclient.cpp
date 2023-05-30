@@ -13,6 +13,7 @@ OasisClient::OasisClient(QCoreApplication *coreApp)
         infoRequested = false;
         infoTopic = "";
         balance = -1;
+        rouletteBets = QList<QString>({"zero", "double zero", "straight up", "row", "split", "street", "corner", "basket", "double street", "first column", "second column", "third column", "first dozen", "second dozen", "third dozen", "odd", "even", "red", "black", "one to eighteen", "nineteen to thirty-six"});
 
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
@@ -60,7 +61,9 @@ void OasisClient::run()
                     if (choice == 5)
                         this->logout();
                     else if (choice == 6)
-                        this->slotMachine();
+                        this->slotmachine();
+                    else if (choice == 7)
+                        this->roulette();
                 }
                 else
                     std::cout << "Log in first before doing this.\n";
@@ -125,11 +128,14 @@ void OasisClient::handleMessage(const QList<QByteArray> &messages)
                     completeBalance(response);
                 else if (response[1].compare("slotmachine!") == 0)
                     completeSlotmachine(response);
+                else if (response[1].compare("roulette!") == 0)
+                    completeRoulette(response);
                 else
                     continue;
                 waiting = false;
             } catch(FailedRequest &e) {
                 std::cout << e.what().toStdString() << std::endl;
+                waiting = false;
             } catch(...) {
                 printf("An unexpected error occured.\n");
             }
@@ -286,9 +292,9 @@ void OasisClient::completeBalance(QList<QString> response)
         balance = response[4].toInt();
 }
 
-void OasisClient::slotMachine()
+void OasisClient::slotmachine()
 {
-    std::cout << "\n>>> The Slot Machine <<<\n";
+    std::cout << "\n>>> Slot Machine <<<\n";
     std::cout << "Balance: " << balance << " credits\n";
     std::cout << "Bet: ";
     QTextStream s(stdin);
@@ -309,9 +315,79 @@ void OasisClient::slotMachine()
 void OasisClient::completeSlotmachine(QList<QString> response)
 {
     if (response.size() > 3 && response[3].compare("true") == 0) {
-        std::cout << "Payline: " << response[4].toStdString() << "\nPayout: " << response[5].toStdString() << "\n" << response[response.size() - 2].toStdString();
+        std::cout << "Payline: " << response[4].toStdString() << "\nPayout: " << response[5].toStdString() << "\n" << response[response.size() - 2].toStdString() << "\n";
         getBalance();
     }
     else
-        throw FailedRequest(response.last());
+        throw FailedRequest(response[response.size() - 2]);
+}
+
+void OasisClient::roulette()
+{
+    std::cout << "\n>>> Roulette <<<\n";
+    std::cout << "Balance: " << balance << " credits\n";
+    QString request = QString("theoasis>roulette?>" + username + ">");
+    std::cout << "Bet: ";
+    QTextStream s(stdin);
+    bool isNumber = false;
+    int bet;
+    while (1) {
+        QString input = s.readLine();
+        bet = input.toInt(&isNumber);
+        if (!isNumber || bet <= 0 || bet > balance)
+            std::cout << "Please type in a bet that is higher than 0 and doesn't exceed your balance.\n";
+        else
+            break;
+    }
+    request.append(QString::number(bet) + ">");
+    std::cout << "Choose a bet type:\n(1) Zero\n(2) Double zero\n(3) Straight up\n(4) Row\n(5) Split\n(6) Street\n(7) Corner\n(8) Basket \n(9) Double street\n(10) First column\n(11) Second column\n(12) Third column\n(13) First dozen\n(14) Second dozen\n(15) Third dozen\n(16) Odd\n(17) Even\n(18) Red\n(19) Black\n(20) 1-18\n(21) 19-36\n";
+    int choice = getMenuInput(1, 21);
+    request.append(rouletteBets[choice - 1] + ">");
+    if (choice == 3)
+        request.append(getRouletteNumbers(1));
+    else if (choice == 5)
+        request.append(getRouletteNumbers(2));
+    else if (choice == 6)
+        request.append(getRouletteNumbers(3));
+    else if (choice == 7)
+        request.append(getRouletteNumbers(4));
+    else if (choice == 9)
+        request.append(getRouletteNumbers(6));
+    request.append(">");
+    sendMessage(request);
+    waiting = true;
+}
+
+void OasisClient::completeRoulette(QList<QString> response)
+{
+    if (response.size() > 3 && response[3].compare("true") == 0) {
+        std::cout << "Roulette number: " << response[4].toStdString() << "\nPayout: " << response[5].toStdString() << "\n" << response[response.size() - 2].toStdString() << "\n";
+        getBalance();
+    }
+    else
+        throw FailedRequest(response[response.size() - 2]);
+}
+
+QString OasisClient::getRouletteNumbers(int amount)
+{
+    std::cout << "Please provide the numbers for this bet type.\n";
+    QString numbers = "";
+    QTextStream s(stdin);
+    for (int i = 0; i < amount; ++i) {
+        int number;
+        while (1) {
+            std::cout << "Number " << i + 1 << ": ";
+            QString input = s.readLine();
+            bool isNumber = false;
+            number = input.toInt(&isNumber);
+            if (!isNumber || number < 1 || number > 36)
+                std::cout << "Please provide a number from 1 to 36.\n";
+            else
+                break;
+        }
+        numbers += QString::number(number);
+        if (i < amount - 1)
+            numbers += ",";
+    }
+    return numbers;
 }
