@@ -31,6 +31,7 @@ public:
     void playSlotMachine(QList<QString> request);
     void playRoulette(QList<QString> request);
     void playBlackjack(QList<QString> request);
+    void playChoHan(QList<QString> request);
 
 private slots:
     void handleMessage(const QList<QByteArray>& messages);

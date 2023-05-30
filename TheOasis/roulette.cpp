@@ -74,7 +74,7 @@ QString Roulette::handleRequest(Player* player, QList<QString> request)
         player->modifyCredits(payout);
 
         // Make result
-        QString response = QString("theoasis>roulette!>" + request[2] + ">true>" + QString::number(rouletteNumber) + ">" + QString::number(payout) + ">" + (payout > 0 ? "Congratulations, you won!" : "You lost!"));
+        QString response = QString("theoasis>roulette!>" + request[2] + ">true>" + QString::number(rouletteNumber) + ">" + QString::number(payout) + ">" + (payout > 0 ? "Congratulations, you won!>" : "You lost!>"));
         return response;
     }
     else

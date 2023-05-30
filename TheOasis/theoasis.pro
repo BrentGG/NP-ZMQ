@@ -15,6 +15,7 @@ INCLUDEPATH += $$PWD/../include
 
 SOURCES += \
     blackjack.cpp \
+    chohan.cpp \
     failedrequest.cpp \
     main.cpp \
     player.cpp \
@@ -31,6 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     blackjack.h \
+    chohan.h \
     failedrequest.h \
     player.h \
     oasis.h \

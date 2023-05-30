@@ -2,6 +2,7 @@
 #include "failedrequest.h"
 #include "slotmachine.h"
 #include "roulette.h"
+#include "chohan.h"
 
 #include <iostream>
 #include <QDir>
@@ -39,6 +40,7 @@ Oasis::Oasis(QCoreApplication *coreApp)
     }
     catch(nzmqt::ZMQException & ex) {
         std::cerr << "Caught an exception : " << ex.what();
+        exit(-1);
     }
 }
 
@@ -64,6 +66,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>slotmachine?>");
         subscriber->subscribeTo("theoasis>roulette?>");
         subscriber->subscribeTo("theoasis>blackjack?>");
+        subscriber->subscribeTo("theoasis>cho-han?>");
 
         context->start();
     }
@@ -110,6 +113,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                                 playRoulette(request);
                             else if (request[1].compare("blackjack?") == 0)
                                 playBlackjack(request);
+                            else if (request[1].compare("cho-han?") == 0)
+                                playChoHan(request);
                         }
                     }
                 }
@@ -248,7 +253,7 @@ void Oasis::playRoulette(QList<QString> request)
 
 /**
  * @brief Play a blackjack game
- * @param request: the request to play roulette, split into parts separated by '>'
+ * @param request: the request to play Blackjack, split into parts separated by '>'
  */
 void Oasis::playBlackjack(QList<QString> request)
 {
@@ -266,6 +271,16 @@ void Oasis::playBlackjack(QList<QString> request)
     }
     else
         throw FailedRequest(QString("theoasis>blackjack!>" + request[2] + ">false>Bad request.>"));
+}
+
+/**
+ * @brief Play a game of Cho-Han
+ * @param request: the request to play Cho-Han, split into parts separated by '>'
+ */
+void Oasis::playChoHan(QList<QString> request)
+{
+    QString response = ChoHan::handleRequest(activePlayers[request[2]], request);
+    sender->sendMessage(response);
 }
 
 /**
