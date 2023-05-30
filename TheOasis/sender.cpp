@@ -78,7 +78,7 @@ void Sender::sendHelp()
 Welcome To The Oasis!\n\n\
 The Oasis is a virtual casino. Players have an account that stores the amount of credits they have. Everyone starts with 1000 credits. \
 The available games are slotmachines, roulette, Blackjack and Cho-Han. For more information on a specific part of The Oasis, send the following: \
-'theoasis>info?>'.\nHave fun!\n\n\
+'theoasis>info?>'. To know which requests you can make, checkout the documentation on the Github repository: https://github.com/BrentGG/NP-ZMQ.\nHave fun!\n\n\
 ");
     sendMessage(response);
 }
