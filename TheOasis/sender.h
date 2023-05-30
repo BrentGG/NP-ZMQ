@@ -12,9 +12,8 @@ class Sender: public QObject
 public:
     Sender(nzmqt::ZMQSocket *pusher);
 
-    void sendMessage(QString message);
+    void sendMessage(QString message, bool log = true);
     void sendHelp();
-    void sendAd();
     void sendInfo(QList<QString> request);
     void sendLog(QString message, bool received);
 

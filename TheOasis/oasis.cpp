@@ -327,5 +327,5 @@ void Oasis::checkStatus()
 void Oasis::heartbeat()
 {
     QString msg = QString("theoasis>heartbeat!>" + QDateTime::currentDateTime().toString() + ">" + QString::number(activePlayers.size()) + ">");
-    sender->sendMessage(msg);
+    sender->sendMessage(msg, false);
 }

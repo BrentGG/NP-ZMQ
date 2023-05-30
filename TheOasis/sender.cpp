@@ -15,12 +15,13 @@ Sender::Sender(nzmqt::ZMQSocket *pusher): pusher(pusher)
  * @brief Sends a message using the pusher.
  * @param message: the message to be sent
  */
-void Sender::sendMessage(QString message)
+void Sender::sendMessage(QString message, bool log)
 {
     nzmqt::ZMQMessage messageZmq = nzmqt::ZMQMessage(message.toUtf8());
     pusher->sendMessage(messageZmq);
     std::cout << "Sent: " << message.toStdString() << std::endl;
-    sendLog(message, false);
+    if (log)
+        sendLog(message, false);
 }
 
 /**
@@ -52,11 +53,11 @@ void Sender::sendInfo(QList<QString> request)
 
 void Sender::sendLog(QString message, bool received)
 {
-    /*QString logMsg = QString("theoasis>log!>");
+    QString logMsg = QString("theoasis>log!>");
     logMsg.append(received ? "received>" : "sent>");
     logMsg.append("[" + message + "]>");
     nzmqt::ZMQMessage logMsgZmq = nzmqt::ZMQMessage(logMsg.toUtf8());
-    pusher->sendMessage(logMsgZmq);*/
+    pusher->sendMessage(logMsgZmq);
 }
 
 /**
@@ -72,12 +73,4 @@ The available games are slotmachines, roulette, Blackjack and Cho-Han. For more 
 'theoasis>info?>'. To know which requests you can make, checkout the documentation on the Github repository: https://github.com/BrentGG/NP-ZMQ.\nHave fun!\n\n\
 ");
     sendMessage(response);
-}
-
-/**
- * @brief Send out an ad for The Oasis (unused)
- */
-void Sender::sendAd()
-{
-    sendMessage(QString("Join The Oasis Now! Request 'theoasis>info?>' and subscribe to 'theoasis>info!>'."));
 }

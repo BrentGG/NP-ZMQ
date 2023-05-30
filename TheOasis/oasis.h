@@ -20,8 +20,6 @@ public:
 
     void run();
 
-    void sendMessage(QString message);
-
     void sendInfo(QList<QString> request);
     void sendHelp();
     bool registerPlayer(QList<QString> request);
