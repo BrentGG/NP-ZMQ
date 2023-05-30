@@ -24,6 +24,7 @@ public:
     static QString getInfo();
     QString handleRequest(QList<QString> request);
     Player* getPlayer();
+    void leave();
 
 private:
     Player* player;

@@ -32,7 +32,7 @@ Oasis::Oasis(QCoreApplication *coreApp)
         // Send heartbeat every X minutes
         QTimer *heartbeatTimer = new QTimer(this);
         QObject::connect(heartbeatTimer, &QTimer::timeout, this, &Oasis::heartbeat);
-        heartbeatTimer->start(60000 * 0.5);
+        heartbeatTimer->start(60000 * 2);
 
         // Check online status
         QTimer *statusTimer = new QTimer(this);
@@ -307,6 +307,13 @@ void Oasis::checkStatus()
         if (currentTime - i.value()->getOnlineSince() > 15 * 60) {
             std::cout << "Timed out player: " << i.value()->getName().toStdString() << std::endl;
             dbManager->setCredits(i.value()->getName(), i.value()->getCredits());
+            for (int k = 0; k < blackjackInstances.size(); ++k) {
+                if (blackjackInstances[k]->getPlayer() != nullptr && blackjackInstances[k]->getPlayer() == i.value()) {
+                    blackjackInstances[k]->leave();
+                    break;
+                }
+            }
+            delete i.value();
             i = activePlayers.erase(i);
         }
         else
@@ -314,8 +321,10 @@ void Oasis::checkStatus()
     }
     QList<Blackjack*>::iterator j = blackjackInstances.begin();
     while (j != blackjackInstances.end()) {
-        if ((*j)->getPlayer() == nullptr || !activePlayers.contains((*j)->getPlayer()->getName()))
+        if ((*j)->getPlayer() == nullptr || !activePlayers.contains((*j)->getPlayer()->getName())) {
+            delete (*j);
             j = blackjackInstances.erase(j);
+        }
         else
             ++j;
     }

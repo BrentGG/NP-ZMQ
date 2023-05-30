@@ -6,7 +6,6 @@
 /**
  * @brief Play the slot machine
  * @param bet: the bet to place
- * @return the credits won, calculated as if the bet was actually paid (so a return of 0 means the bet was lost)
  */
 QString SlotMachine::getInfo()
 {

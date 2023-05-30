@@ -10,6 +10,10 @@ Blackjack::Blackjack(Player* player, int decks) : player(player), decks(decks)
     insured = false;
 }
 
+/**
+ * @brief Get info on the blackjack game
+ * @return A string containing the info
+ */
 QString Blackjack::getInfo()
 {
     return QString("theoasis>info!>blackjack>\n\
@@ -79,6 +83,11 @@ QString Blackjack::handleRequest(QList<QString> request)
 Player *Blackjack::getPlayer()
 {
     return player;
+}
+
+void Blackjack::leave()
+{
+    player = nullptr;
 }
 
 /**
