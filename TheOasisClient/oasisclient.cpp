@@ -50,7 +50,7 @@ void OasisClient::run()
             while(1)
             {
                 if (!inProgress) {
-                    std::cout << "\nWhat would you like to do?\n(1) Help\n(2) Info\n(3) Register\n(4) Login\n(5) Logout\n(6) Play slotmachine\n(7) Play Roulette\n(8) Play Blackjack\n(9) Play Cho-Han\n(10) Exit\n";
+                    std::cout << "\nWhat would you like to do?\n(1) Help\n(2) Info\n(3) Register\n(4) Login\n(5) Logout\n(6) Play Slotmachine\n(7) Play Roulette\n(8) Play Blackjack\n(9) Play Cho-Han\n(10) Exit\n";
                     int choice = getMenuInput(1, 10);
                     if (choice == 1)
                         this->help();
