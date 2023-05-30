@@ -73,45 +73,9 @@ void Sender::sendHelp()
     QString response = QString("theoasis>help!>\n\
 >>> The Oasis: Help <<<\n\n\
 Welcome To The Oasis!\n\n\
-The Oasis is a virtual casino. Here are the requests you can make to The Oasis, as well as the responses you can expect.\n\
-The response might contain some variables, these will be indicated by square brackets '[]'.\n\
-Additionally, curly brackets '{}' are used to signify which part of the response is the topic you should subscribe to.\n\
-Variables that are lists have the elements separated by a comma (,)\n\n\
-All passwords that are sent to the service should be hashed for your own security(see https://doc.qt.io/qt-5/qcryptographichash.html). \
-However, passwords will also be hashed again in the service.\n\n\
-These requests are available to anyone:\n\
-- Receive an informational message from The Oasis.\n\
-  REQ: theoasis>info?>\n\
-  RES: {theoasis>info!>}[info:string]>\n\
-- Receive all the possible requests and responses (a.k.a. the message you're reading right now).\n\
-  REQ: theoasis>help?>\n\
-  RES: {theoasis>help!>}[help:string]>\n\
-- Register to The Oasis. A unique username is required, if this is not the case the 'success' variable will be false.\n\
-  REQ: theoasis>register?>[username:string]>[password:string]>\n\
-  RES: {theoasis>register!>[username:string]>}[success:bool]>[message:string]>\n\
-- Login to The Oasis. Must be registered first.\n\
-  REQ: theoasis>login?>[username:string]>[password:string]>\n\
-  RES: {theoasis>login!>[username:string]>}[success:bool]>[message:string]>\n\
-- Get more info on the slot machines.\n\
-  REQ: theoasis>info?>slotmachine>\n\
-  RES: {theoasis>info!>slotmachine>}\n\
-\nThese requests are only available after registering and logging in: \n\
-- Logout of The Oasis. Must be logged in.\n\
-  REQ: theoasis>logout?>[username:string]>[password:string]>\n\
-  RES: {theoasis>logout!>[username:string]>}[success:bool]>[message:string]>\n\
-- Get your credit balance.\n\
-  REQ: theoasis>balance?>[username:string]>\n\
-  RES: {theoasis>balance!>[username:string]>}[success:bool]>[balance:int]>[message:string]>\n\
-- Play a three-reel, single-payline slot machine. The bet is the amount of money you put into the slot machine, which must be \
-lower than player's balance and larger than 0. The payline is the three symbols you got. The payout is the amount of money you \
-get back (if this is 0, you lost your bet).\n\
-  REQ: theoasis>slotmachine?>[username:string]>[bet:integer]>\n\
-  RES: {theoasis>slotmachine!>[username:string]>}[success:bool]>[payline:list<string>]>[payout:integer]>[message:string]>\n\
-- Play American, double-zero roulette. Bet must be lower than your balance and higher than 0. The betName is the name of the \
-bet you're placing (list can be found at 'theoasis>info?>roulette>'). Some bets require you to specify some numbers, these should \
-be provided in betNumbers.\n\
-  REQ: theoasis>roulette?>[username:string]>[bet:integer]>[betName:string]>[betNumbers:list<int>]>\n\
-  RES: {theoasis>roulette!>[username:string]>}[success:bool]>[rouletteNumber:string]>[payout:integer]>[message:string]>\n\
+The Oasis is a virtual casino. Players have an account that stores the amount of credits they have. Everyone starts with 1000 credits. \
+The available games are slotmachines, roulette, Blackjack and Cho-Han. For more information on a specific part of The Oasis, send the following: \
+'theoasis>info?>'.\nHave fun!\n\n\
 ");
     sendMessage(response);
 }
