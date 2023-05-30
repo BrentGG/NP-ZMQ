@@ -27,11 +27,6 @@ void Sender::sendMessage(QString message, bool log)
 /**
  * @brief Sends an informational message about The Oasis or one of its activities.
  * @param request: the request to register, split into parts seperated by '>'
- * REQ: theoasis>info?>
- * RES: {theoasis>info!>}[info:string]>
- * or
- * REQ: theoasis>info?>[about:string]
- * RES: {theoasis>info!>[about:string]>}[info:string]>
  */
 void Sender::sendInfo(QList<QString> request)
 {
@@ -51,6 +46,11 @@ void Sender::sendInfo(QList<QString> request)
         throw FailedRequest(QString("theoasis>info!>" + request[2] + ">false>Specify a subject to get more info on.>"));
 }
 
+/**
+ * @brief Send a message on the log channel
+ * @param message: the message to send
+ * @param received: true if this is a message that was received
+ */
 void Sender::sendLog(QString message, bool received)
 {
     QString logMsg = QString("theoasis>log!>");
