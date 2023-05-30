@@ -37,6 +37,8 @@ private:
     void completeInfo(QString response);
     void login();
     void completeLogin(QList<QString> response);
+    void logout();
+    void completeLogout(QList<QString> response);
 };
 
 #endif // OASISCLIENT_H
