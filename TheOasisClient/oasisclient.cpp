@@ -60,6 +60,8 @@ void OasisClient::run()
                         this->register_();
                     else if (choice == 4)
                         this->login();
+                    else if (choice == 10)
+                        this->exitClient();
                     else if (loggedIn) {
                         if (choice == 5)
                             this->logout();
@@ -475,3 +477,12 @@ void OasisClient::completeChoHan(QList<QString> response)
     else
         throw FailedRequest(response[response.size() - 2]);
 }
+
+void OasisClient::exitClient()
+{
+    sendMessage("theoasis>logout?>" + username + ">" + password + ">");
+    std::cout << "Bye!\n";
+    exit(0);
+}
+
+

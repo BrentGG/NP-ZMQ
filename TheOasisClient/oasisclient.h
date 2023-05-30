@@ -57,6 +57,7 @@ private:
     QList<QString> blackjackActions;
     void choHan();
     void completeChoHan(QList<QString> response);
+    void exitClient();
 };
 
 #endif // OASISCLIENT_H
