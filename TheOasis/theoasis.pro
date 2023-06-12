@@ -1,6 +1,7 @@
 QT -= gui
 QT += sql
 QT += core
+QT += network
 
 CONFIG += c++17 console
 CONFIG -= app_bundle
@@ -18,11 +19,11 @@ SOURCES += \
     chohan.cpp \
     failedrequest.cpp \
     main.cpp \
+    oasissender.cpp \
     player.cpp \
     oasis.cpp \
     dbmanager.cpp \
     roulette.cpp \
-    sender.cpp \
     slotmachine.cpp
 
 # Default rules for deployment.
@@ -34,9 +35,9 @@ HEADERS += \
     blackjack.h \
     chohan.h \
     failedrequest.h \
+    oasissender.h \
     player.h \
     oasis.h \
     dbmanager.h \
     roulette.h \
-    sender.h \
     slotmachine.h

@@ -1,4 +1,6 @@
 #include "oasis.h"
+#include <QtCore>
+#include "./simpleSMTP/SimpleMail"
 #include "failedrequest.h"
 #include "slotmachine.h"
 #include "roulette.h"
@@ -11,8 +13,31 @@
 #include <QDateTime>
 #include <QException>
 
+
 Oasis::Oasis(QCoreApplication *coreApp)
 {
+    /*SimpleMail::Sender smtp(QLatin1String("smtp.gmail.com"), 465, SimpleMail::Sender::SslConnection);
+    smtp.setUser(QLatin1String("brent.gerets@gmail.com"));
+    smtp.setPassword(QLatin1String("ljpingicmqynpwos"));
+
+    SimpleMail::MimeMessage message;
+    SimpleMail::EmailAddress mailSender(QLatin1String("brent.gerets@gmail.com"), QLatin1String("The Oasis"));
+    message.setSender(mailSender);
+    SimpleMail::EmailAddress mailTo(QLatin1String("12103407@student.pxl.be"), QLatin1String("Brent"));
+    message.addTo(mailTo);
+    message.setSubject(QLatin1String("The Oasis password recovery"));
+
+    auto text = new SimpleMail::MimeText;
+    text->setText(QLatin1String("Password for the account Brent is 12345\n"));
+    message.addPart(text);
+
+    if (!smtp.sendMail(message)) {
+        qDebug() << "Failed to send mail" << smtp.lastError();
+    }
+
+    smtp.quit();
+    exit(0);*/
+
     try {
         dbManager = new DbManager(QDir("../TheOasis/oasis_db.db").absolutePath());
         if (dbManager->isConnected())
@@ -25,7 +50,7 @@ Oasis::Oasis(QCoreApplication *coreApp)
         context = nzmqt::createDefaultContext(coreApp);
         pusher = context->createSocket(nzmqt::ZMQSocket::TYP_PUSH, context);
         subscriber = context->createSocket(nzmqt::ZMQSocket::TYP_SUB, context);
-        sender = new Sender(pusher);
+        sender = new OasisSender(pusher);
 
         QObject::connect(subscriber, &nzmqt::ZMQSocket::messageReceived, this, &Oasis::handleMessage);
 
@@ -63,6 +88,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>register?>");
         subscriber->subscribeTo("theoasis>login?>");
         subscriber->subscribeTo("theoasis>logout?>");
+        subscriber->subscribeTo("theoasis>forgot?>");
         subscriber->subscribeTo("theoasis>users?>");
         subscriber->subscribeTo("theoasis>balance?>");
         subscriber->subscribeTo("theoasis>slotmachine?>");
@@ -111,6 +137,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                             activePlayers[request[2]]->setOnlineSince(QDateTime::currentSecsSinceEpoch());
                             if (request[1].compare("logout?") == 0)
                                 logoutPlayer(request);
+                            else if (request[1].compare("forgot?") == 0)
+                                sendRecoveryEmail(request);
                             else if (request[1].compare("balance?") == 0)
                                 getBalance(request);
                             else if (request[1].compare("slotmachine?") == 0)
@@ -150,8 +178,7 @@ bool Oasis::registerPlayer(QList<QString> request) {
     if (request.size() >= 4) {
         if (request[3].compare("") == 0)
             throw FailedRequest(QString("theoasis>register!>" + request[2] + ">false>Registration failed, you must provide a password.>"));
-        QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
-        bool success = dbManager->addPlayer(new Player(request[2]), hashedPassword);
+        bool success = dbManager->addPlayer(new Player(request[2]), request[3], request[4]);
         if (success) {
             std::cout << "Registered new player: " << request[2].toStdString() << std::endl;
             sender->sendMessage(QString("theoasis>register!>" + request[2] + ">true>Successfully registered! Welcome to The Oasis!>"));
@@ -179,8 +206,7 @@ bool Oasis::loginPlayer(QList<QString> request)
             sender->sendMessage(QString("theoasis>login!>" + request[2] + ">true>Already logged in.>"));
             return true;
         }
-        QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
-        player = dbManager->getPlayerByNameAndPassword(request[2], hashedPassword);
+        player = dbManager->getPlayerByNameAndPassword(request[2], request[3]);
         if (player != nullptr) {
             std::cout << "Logged in player: " << request[2].toStdString() << std::endl;
             activePlayers[player->getName()] = player;
@@ -205,8 +231,7 @@ bool Oasis::loginPlayer(QList<QString> request)
 bool Oasis::logoutPlayer(QList<QString> request)
 {
     if (request.size() >= 4) {
-        QString hashedPassword(QCryptographicHash::hash(QByteArrayView(request[3].toUtf8().constData()), QCryptographicHash::Md5).toHex().constData());
-        if (dbManager->checkPassword(request[2], hashedPassword)) {
+        if (dbManager->checkPassword(request[2], request[3])) {
             Player *player = activePlayers[request[2]];
             std::cout << "Logged out player: " << request[2].toStdString() << std::endl;
             std::cout << player->getCredits() << std::endl;
@@ -220,6 +245,17 @@ bool Oasis::logoutPlayer(QList<QString> request)
     }
     throw FailedRequest(QString("theoasis>logout!>" + request[2] + ">false>Bad request.>"));
     return false;
+}
+
+/**
+ * @brief Send the user's password to their email
+ * @param request: the request to recover password, split into parts separated by '>'
+ */
+void Oasis::sendRecoveryEmail(QList<QString> request)
+{
+    if (request.size() >= 4) {
+        /**/
+    }
 }
 
 /**

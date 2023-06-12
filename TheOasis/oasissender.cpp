@@ -1,4 +1,4 @@
-#include "sender.h"
+#include "oasissender.h"
 #include "slotmachine.h"
 #include "roulette.h"
 #include "blackjack.h"
@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Sender::Sender(nzmqt::ZMQSocket *pusher): pusher(pusher)
+OasisSender::OasisSender(nzmqt::ZMQSocket *pusher): pusher(pusher)
 {
 }
 
@@ -15,7 +15,7 @@ Sender::Sender(nzmqt::ZMQSocket *pusher): pusher(pusher)
  * @brief Sends a message using the pusher.
  * @param message: the message to be sent
  */
-void Sender::sendMessage(QString message, bool log)
+void OasisSender::sendMessage(QString message, bool log)
 {
     nzmqt::ZMQMessage messageZmq = nzmqt::ZMQMessage(message.toUtf8());
     pusher->sendMessage(messageZmq);
@@ -28,7 +28,7 @@ void Sender::sendMessage(QString message, bool log)
  * @brief Sends an informational message about The Oasis or one of its activities.
  * @param request: the request to register, split into parts seperated by '>'
  */
-void Sender::sendInfo(QList<QString> request)
+void OasisSender::sendInfo(QList<QString> request)
 {
     if (request.size() > 3) {
         if (request[2].compare("slotmachine") == 0)
@@ -51,7 +51,7 @@ void Sender::sendInfo(QList<QString> request)
  * @param message: the message to send
  * @param received: true if this is a message that was received
  */
-void Sender::sendLog(QString message, bool received)
+void OasisSender::sendLog(QString message, bool received)
 {
     QString logMsg = QString("theoasis>log!>");
     logMsg.append(received ? "received>" : "sent>");
@@ -63,7 +63,7 @@ void Sender::sendLog(QString message, bool received)
 /**
  * @brief Sends a help message for those unfamiliar with The Oasis.
  */
-void Sender::sendHelp()
+void OasisSender::sendHelp()
 {
     QString response = QString("theoasis>help!>\n\
 >>> The Oasis: Help <<<\n\n\

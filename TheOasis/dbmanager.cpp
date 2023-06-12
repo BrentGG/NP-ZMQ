@@ -12,14 +12,15 @@ DbManager::DbManager(QString path)
     db.open();
 }
 
-bool DbManager::addPlayer(Player *player, QString password)
+bool DbManager::addPlayer(Player *player, QString password, QString email)
 {
     bool success = false;
     QSqlQuery query;
-    query.prepare("INSERT INTO Players (name, password, credits) VALUES (:name, :password, :credits)");
+    query.prepare("INSERT INTO Players (name, password, credits, email) VALUES (:name, :password, :credits, :email)");
     query.bindValue(":name", player->getName());
     query.bindValue(":password", password);
     query.bindValue(":credits", player->getCredits());
+    query.bindValue(":email", email);
     if(query.exec())
        success = true;
     else
@@ -73,6 +74,36 @@ QList<QString> DbManager::getAllPlayerNames()
         return names;
     }
     std::cout << "getAllPlayerNames error: " << query.lastError().text().toStdString() << std::endl;
+}
+
+QString DbManager::getPlayerEmail(QString username)
+{
+    QSqlQuery query;
+    query.prepare("SELECT email FROM Players WHERE name=:name");
+    query.bindValue(":name", username);
+    if(query.exec()) {
+        query.first();
+        if (query.isValid())
+            return query.value(0).toString();
+        return "";
+    }
+    std::cout << "getPlayerEmail error: " << query.lastError().text().toStdString() << std::endl;
+    return "";
+}
+
+QString DbManager::getPlayerPassword(QString username)
+{
+    QSqlQuery query;
+    query.prepare("SELECT password FROM Players WHERE name=:name");
+    query.bindValue(":name", username);
+    if(query.exec()) {
+        query.first();
+        if (query.isValid())
+            return query.value(0).toString();
+        return "";
+    }
+    std::cout << "getPlayerPassword error: " << query.lastError().text().toStdString() << std::endl;
+    return "";
 }
 
 bool DbManager::isConnected()

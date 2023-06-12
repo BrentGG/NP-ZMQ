@@ -2,7 +2,7 @@
 #define THEOASIS_H
 
 #include "dbmanager.h"
-#include "sender.h"
+#include "oasissender.h"
 #include "blackjack.h"
 #include "player.h"
 
@@ -25,6 +25,7 @@ public:
     bool registerPlayer(QList<QString> request);
     bool loginPlayer(QList<QString> request);
     bool logoutPlayer(QList<QString> request);
+    void sendRecoveryEmail(QList<QString> request);
     void showUsers();
     bool getBalance(QList<QString> request);
     void playSlotMachine(QList<QString> request);
@@ -44,7 +45,7 @@ private:
     nzmqt::ZMQSocket *pusher;
     nzmqt::ZMQSocket *subscriber;
 
-    Sender *sender;
+    OasisSender *sender;
     QMap<QString, Player*> activePlayers;
 
     QList<Blackjack*> blackjackInstances;

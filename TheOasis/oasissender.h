@@ -1,5 +1,5 @@
-#ifndef SENDER_H
-#define SENDER_H
+#ifndef OASISSENDER_H
+#define OASISSENDER_H
 
 #include <QString>
 #include <nzmqt/nzmqt.hpp>
@@ -7,10 +7,10 @@
 #include <QObject>
 
 
-class Sender: public QObject
+class OasisSender: public QObject
 {
 public:
-    Sender(nzmqt::ZMQSocket *pusher);
+    OasisSender(nzmqt::ZMQSocket *pusher);
 
     void sendMessage(QString message, bool log = true);
     void sendHelp();
@@ -21,4 +21,4 @@ private:
     nzmqt::ZMQSocket *pusher;
 };
 
-#endif // SENDER_H
+#endif // OASISSENDER_H
