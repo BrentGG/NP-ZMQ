@@ -63,6 +63,7 @@ void Oasis::run()
         subscriber->subscribeTo("theoasis>register?>");
         subscriber->subscribeTo("theoasis>login?>");
         subscriber->subscribeTo("theoasis>logout?>");
+        subscriber->subscribeTo("theoasis>users?>");
         subscriber->subscribeTo("theoasis>balance?>");
         subscriber->subscribeTo("theoasis>slotmachine?>");
         subscriber->subscribeTo("theoasis>roulette?>");
@@ -99,6 +100,8 @@ void Oasis::handleMessage(const QList<QByteArray> &messages)
                     registerPlayer(request);
                 else if (request[1].compare("login?") == 0)
                     loginPlayer(request);
+                else if (request[1].compare("users?") == 0)
+                    showUsers();
                 else {
                     // Request that can only be made when logged in
                     if (request.size() >= 3) {
@@ -217,6 +220,22 @@ bool Oasis::logoutPlayer(QList<QString> request)
     }
     throw FailedRequest(QString("theoasis>logout!>" + request[2] + ">false>Bad request.>"));
     return false;
+}
+
+/**
+ * @brief Send a list of all the existing accounts in The Oasis
+ */
+void Oasis::showUsers()
+{
+    QList<QString> userNames = dbManager->getAllPlayerNames();
+    QString response = QString("theoasis>users!>");
+    for (int i = 0; i < userNames.size(); ++i) {
+        response.append(userNames[i]);
+        if (i < userNames.size() - 1)
+            response.append(",");
+    }
+    response.append(">");
+    sender->sendMessage(response);
 }
 
 /**

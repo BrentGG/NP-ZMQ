@@ -25,6 +25,7 @@ public:
     bool registerPlayer(QList<QString> request);
     bool loginPlayer(QList<QString> request);
     bool logoutPlayer(QList<QString> request);
+    void showUsers();
     bool getBalance(QList<QString> request);
     void playSlotMachine(QList<QString> request);
     void playRoulette(QList<QString> request);

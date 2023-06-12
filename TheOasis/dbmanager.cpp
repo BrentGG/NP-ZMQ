@@ -62,6 +62,19 @@ bool DbManager::setCredits(QString username, int credits)
     return success;
 }
 
+QList<QString> DbManager::getAllPlayerNames()
+{
+    QList<QString> names = QList<QString>();
+    QSqlQuery query;
+    query.prepare("SELECT name FROM Players");
+    if(query.exec()) {
+        while(query.next())
+            names.append(query.value(0).toString());
+        return names;
+    }
+    std::cout << "getAllPlayerNames error: " << query.lastError().text().toStdString() << std::endl;
+}
+
 bool DbManager::isConnected()
 {
     return db.isOpen();

@@ -5,7 +5,7 @@
 
 #include <QString>
 #include <QSqlDatabase>
-
+#include <QList>
 
 class DbManager
 {
@@ -16,6 +16,7 @@ public:
     Player* getPlayerByNameAndPassword(QString name, QString password);
     bool checkPassword(QString name, QString password);
     bool setCredits(QString username, int credits);
+    QList<QString> getAllPlayerNames();
 
     bool isConnected();
 
